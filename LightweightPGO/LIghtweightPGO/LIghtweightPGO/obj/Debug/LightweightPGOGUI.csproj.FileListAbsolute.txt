@@ -1,0 +1,9 @@
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\bin\Debug\LIghtweightPGO.exe.config
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\bin\Debug\LIghtweightPGO.exe
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\bin\Debug\LIghtweightPGO.pdb
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LightweightPGOGUI.csprojResolveAssemblyReference.cache
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LightweightPGO.Form1.resources
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LIghtweightPGO.Properties.Resources.resources
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LightweightPGOGUI.csproj.GenerateResource.Cache
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LIghtweightPGO.exe
+C:\Users\mdshah\Desktop\Project\LightweightPGO\LIghtweightPGO\LIghtweightPGO\obj\Debug\LIghtweightPGO.pdb
