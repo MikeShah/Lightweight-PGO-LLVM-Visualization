@@ -18,42 +18,80 @@ namespace {
         FunctionBlockCounts() : FunctionPass(ID){
         }
 
-        bool runOnFunction(Function &F) override {
-
-        // Function* targetFunc = ... Could be this instruction 'F'
-
-        outs() << F.getName() << " has " << F.size() << "\n";
-        outs() << F.getName() << "arguments: \n";
-
-        // Loop through Basic Blocks
-        Function::iterator b = F.begin();
-        BasicBlock::iterator i;
-        BasicBlock::iterator e;
-
-        for(i = b->begin(), e = b->end(); i != e; ++i){
-            outs() << "\tBasic:" << b->size() << "\n";
-            if(CallInst* callInst = dyn_cast<CallInst>(&*i)){
-                Function* calledFunction = callInst->getCalledFunction(); // Function we are calling
-                outs() << "calledFunction: " << calledFunction->getName() << "\n";
-            }
+        virtual void getAnalysisUsage(AnalysisUsage &AU) const {
+            AU.setPreservesCFG();
+            AU.addRequired<LoopInfoWrapperPass>();
         }
 
-        //for(Function::iterator i = )
-        /*
-            for(Module::const_iterator i = M->getFunctionList().begin(),
-                                       e = M->getFunctionList().end(); i != e; ++i){
-                if(!i->isDeclaration()){
-                    /// outs() - This returns a reference to a raw_ostream for standard output.
-                    outs() << i->getName() << " has " << i->size() << " basic block(s).\n";
-               }
+        virtual bool runOnFunction(Function &F) override {
+            // Function* targetFunc = ... Could be this instruction 'F'
+            outs() << F.getName() << " has size of " << F.size() << "\n";
+            outs() << "\t============("<< F.getArgumentList().size() << ") arguments============\n";
+            if(F.getArgumentList().size()>0){
+                Function::arg_iterator f_i = F.arg_begin();
+                Function::arg_iterator f_e = F.arg_end();
+
+                for(; f_i != f_e; ++f_i){
+                    Argument *Arg = f_i;
+                    outs() << "\t" << Arg->getArgNo() << "\t" << Arg->getName() << "\t" << Arg->getType() << "\n" ;
+                }
             }
-        */
+
+            outs() << "\t============================================================\n";
+            outs() << "\tUses variable sized arguments: " << F.isVarArg() << "\n";
+            outs() << "\tIs function streamed in from disk(or other source): " << F.isMaterializable() << "\n";
+            outs() << "\tIs function intrinsic (specially handled by compiler): " << F.isIntrinsic() << "\n";
+            outs() << "\tFunction does NOT read memory: " << F.doesNotAccessMemory() << "\n";
+            outs() << "\t============================================================\n";
+
+
+
+
+            // Loop through Basic Blocks
+            Function::iterator b = F.begin();
+            BasicBlock::iterator i;
+            BasicBlock::iterator e;
+
+            outs() << "\t has " << b->size() << " in iterator collection.\n";
+            outs() << "\t====================Functions Called=====================\n";
+            for(i = b->begin(), e = b->end(); i != e; ++i){
+                if(CallInst* callInst = dyn_cast<CallInst>(&*i)){
+                    Function* calledFunction = callInst->getCalledFunction(); // Function we are calling
+                    outs() << "\tcalledFunction: " << calledFunction->getName() << "\n";
+                }
+            }
+
+            // Gather loop information
+            LoopInfo *LI = &getAnalysis<LoopInfoWrapperPass>().getLoopInfo();
+            for(Loop *L : *LI){
+                countBlocksInLoop(L,0);
+            }
+
             return false;
         }
+
+
+        void countBlocksInLoop(Loop *L, unsigned nest){
+            unsigned num_Blocks = 0;
+            Loop::block_iterator bb;
+            for(bb = L->block_begin(); bb != L->block_end(); ++bb){
+                num_Blocks++;
+            }
+
+            // Output a number of tabs to format output
+            for(unsigned int indentation = 0; indentation < nest; indentation++){
+                errs() << "\t";
+            }
+            errs() << "\tLoop Level " << nest << " has " << num_Blocks << " blocks\n";
+
+            std::vector<Loop*> subLoops = L->getSubLoops();
+            Loop::iterator j,f;
+            for(j = subLoops.begin(), f = subLoops.end(); j != f; ++j){
+                countBlocksInLoop(*j, nest + 1);
+            }
+        }
+
     };
-
-
-
 }
 
 char FunctionBlockCounts::ID = 0;

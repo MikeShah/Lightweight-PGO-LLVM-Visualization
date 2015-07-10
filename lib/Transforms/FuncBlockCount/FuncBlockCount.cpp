@@ -1,3 +1,4 @@
+
 #include "llvm/Pass.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
@@ -10,16 +11,18 @@
 
 using namespace llvm;
 
+
 namespace {
-    struct FuncBlockCount : public FunctionPass {
+    struct FuncBlockCount2 : public FunctionPass {
         static char ID;
 
-        FuncBlockCount() : FunctionPass(ID){
-        }
+        FuncBlockCount2() : FunctionPass(ID)
+        {}
 
-        //LICM::getAnalysisUsage(Analysis &AU) const{
-        //    AU.setPreservedCFG();
-        //}
+
+        void getAnalysisUsage(AnalysisUsage &AU) const override{
+            AU.addRequired<LoopInfoWrapperPass>();
+        }
 
         bool runOnFunction(Function &F) override {
             //LoopInfo *LI = &getAnalysis<LoopInfo>();
@@ -51,5 +54,5 @@ namespace {
 
 }
 
-char FuncBlockCount::ID = 0;
-static RegisterPass<FuncBlockCount> X("funcblockcount", "Function Block Count",false,false);
+char FuncBlockCount2::ID = 0;
+static RegisterPass<FuncBlockCount2> X("funcblockcount2", "Function Block Count2",false,false);
