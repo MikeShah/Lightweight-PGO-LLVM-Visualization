@@ -46,3 +46,13 @@ os.system('../llvm/bin/opt -load ../llvm/lib/funcblockcount.so -funcblockcount .
 # Command line to run FunctionBlockCounts
 print('|==========Running "functionblockcounts"==========|')
 os.system('../llvm/bin/opt -load ../llvm/lib/functionblockcounts.so -functionblockcounts ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+PROGRAM_1_OUT+'.bc')
+
+
+# Command line to count opcodes in an analysis pass
+print('|==========Running "myopcodecounter"===========|')
+os.system('../llvm/bin/opt -load ../llvm/lib/myopcodecounter.so -myopcodecounter ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+PROGRAM_1_OUT+'.bc')
+
+# Command line to run pass that adds counters to program
+print('|==========Instrumenting binary and going to re-run===========|')
+os.system('../llvm/bin/opt -load ../llvm/lib/myaddcounter.so -myaddcounter ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+PROGRAM_1_OUT+'.bc')
+

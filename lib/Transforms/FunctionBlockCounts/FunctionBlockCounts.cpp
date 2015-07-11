@@ -8,6 +8,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/InstIterator.h"
 
+#include <map>
 
 using namespace llvm;
 
