@@ -8,6 +8,8 @@ PROGRAM_1 = 'randprog1'
 PROGRAM_1_GENERATE = PROGRAM_1+'.cpp' # Name of the .cpp file generated
 PROGRAM_1_OUT = PROGRAM_1+'.ll'       # The textual bitcode representation output
 
+DIR = './RandomPrograms/'
+
 # Generate a random program
 print('Generating Random Program')
 os.system('~/Desktop/Csmith/csmith/src/csmith --lang-cpp --no-comma-operators --no-longlong --no-int8 --no-uint8 --no-int8 --no-uint8 --no-math64 --no-packed-struct --no-pointers --quiet --no-volatile-pointers --no-consts --concise --output ./RandomPrograms/deleteme.cpp')
@@ -55,4 +57,21 @@ os.system('../llvm/bin/opt -load ../llvm/lib/myopcodecounter.so -myopcodecounter
 # Command line to run pass that adds counters to program
 print('|==========Instrumenting binary and going to re-run===========|')
 os.system('../llvm/bin/opt -load ../llvm/lib/myaddcounter.so -myaddcounter ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+PROGRAM_1_OUT+'.bc')
+
+
+# Build an instrumented version of program with Coverage Mapping
+print('|==========Performing Code Coverage========|')
+
+os.system('../llvm/bin/clang -o '+DIR+'randprog1 -fprofile-instr-generate -fcoverage-mapping ./RandomPrograms/randprog1.cpp')
+
+# Run the program
+os.system(DIR+PROGRAM_1)
+
+# Merge the data
+os.system('../llvm/bin/llvm-profdata merge -o '+DIR+PROGRAM_1+'.profdata default.profraw')
+print('Code output to randprog1_code_coverage_report.txt')
+# Output the code coverage
+os.system('../llvm/bin/llvm-cov show '+DIR+PROGRAM_1+' -instr-profile='+DIR+PROGRAM_1+'.profdata '+DIR+PROGRAM_1_GENERATE+' > '+DIR+PROGRAM_1+'_code_coverage_report.txt')
+
+
 
