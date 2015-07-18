@@ -29,7 +29,7 @@ namespace {
             //Instruction *newInst = new Instruction(ai);
 
 
-
+/*
             // For all of our functions, get the basic blocks
             for(Function::iterator bb = F.begin(), e = F.end(); bb != e; ++bb){
                 // Grab all of the basic blocks, and then iterate through their opcodes
@@ -44,19 +44,21 @@ namespace {
 //                    i->getInstList().insert(createAddInstruction(F);)
            //     }
             }
-
+*/
 
             return true;
         }
-
+/*
         static BasicBlock *createAddInstruction(Function& F, BasicBlock &b)
         {
+
             // Function::getContext returns a mutable reference to LLVMContext. By assigning it in:
             // http://stackoverflow.com/questions/30267023/llvm-functiongetcontext-private-within-this-context
             BasicBlock* bb = BasicBlock::Create(F.getContext(), "EntryBlock",F,b);
 
             return bb;
         }
+*/
 
     };
 }
