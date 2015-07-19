@@ -12,6 +12,7 @@ class treeNode{
     String name;
     float size;
     color c;
+    int level;
     
     Vector<treeNode> children; 
     float totalSizeOfSubtree;
@@ -23,8 +24,7 @@ class treeNode{
        this.totalSizeOfSubtree = size;
        this.c = color(random(128)+64,50);
        children = null; 
-       
-       
+       level = 0;
     }
     
     // Copy Constructor for treeNode
@@ -57,14 +57,20 @@ class treeNode{
                   // Add our root to the tree by default
                   bfs.add(this);
                   // Perform a breadth-first search of our treemap
+                  int nodeLevel = 0;
                   while(bfs.peek()!=null){
                     treeNode head = bfs.remove(); 
+                    //head.level += nodeLevel;
+                    
+                    // If it's a node, then compute the size of this branch.
                     if(head.isLeaf())
                       {totalSizeOfSubtree += head.getSize();}
-                    
-                    // Add all of the children
+                      
+                    // Add all of the children and then increase the node level of our
+                    // leve-order traversal
                     if(head.children!=null){
                       for(int i =0; i < head.children.size();i++){
+                        head.children.get(i).level = head.level+1;
                         bfs.add(head.children.get(i));
                       }
                     }
@@ -92,7 +98,7 @@ class treeNode{
           namesOfChildren += children.get(i).getName()+"("+children.get(i).getSize()+"),";
         }
       }
-      return name + ": \tsize:"+size+"\ttotal size:"+totalSizeOfSubtree+" children:"+namesOfChildren;
+      return name + ": \tsize:"+size+"\ttotal size:"+totalSizeOfSubtree+" children:"+namesOfChildren+"\tlevel:"+level;
     }
     
     boolean isLeaf(){
@@ -238,7 +244,7 @@ class TreeMap{
                     float move = y1;
                       if(i>0){
                         for(int j =0; j < i;j++){
-                          move+= nodeYSizes[j];
+                          move += nodeYSizes[j];
                         }
                       }
                     
@@ -286,6 +292,6 @@ void setup() {
 
 void draw() {
 
-myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,2,0);
+  myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,2,0);
    
 }
