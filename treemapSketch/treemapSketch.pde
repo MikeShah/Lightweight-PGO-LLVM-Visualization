@@ -58,8 +58,9 @@ class treeNode{
                   bfs.add(this);
                   // Perform a breadth-first search of our treemap
                   while(bfs.peek()!=null){
-                    treeNode head = bfs.remove();  
-                    totalSizeOfSubtree += head.getSize();
+                    treeNode head = bfs.remove(); 
+                    if(head.isLeaf())
+                      {totalSizeOfSubtree += head.getSize();}
                     
                     // Add all of the children
                     if(head.children!=null){
@@ -94,28 +95,18 @@ class treeNode{
       return name + ": \tsize:"+size+"\ttotal size:"+totalSizeOfSubtree+" children:"+namesOfChildren;
     }
     
+    boolean isLeaf(){
+      if(children == null){
+        return true;
+      }else{
+        return false;
+      }
+      
+    }
   
 }
 
-class Point{
-  float x;
-  float y;
-  
-  Point(){
-    x =0;
-    y =0;
-  }
-  
-  void set(int x, int y){
-    this.x = x;
-    this.y = y;
-  }
-  
-  Point get(){
-    return this;
-  }
-  
-}
+
 class TreeMap{
     
     // TotalSize is the size of all of the trees children.
@@ -166,20 +157,40 @@ class TreeMap{
     void loadFile(){
         // Build a dummy tree
         
-        treeNode a = new treeNode("a",50);   a.c = color(255,0,0); // red
+        treeNode a = new treeNode("a",50);   a.c = color(123,0,143); // red
         treeNode b = new treeNode("b",50);   b.c = color(204,102,0); // orange
-        treeNode bb = new treeNode("bb",50); bb.c = color(0,102,204); // green
+        treeNode bb = new treeNode("bb",50); bb.c = color(0,255,0); // green
         treeNode c = new treeNode("c",50);   c.c = color(0,204,204); // sky blue
         treeNode d = new treeNode("d",50);   d.c = color(0,0,255);    // blue
         treeNode e = new treeNode("e",50);   e.c = color(255,103,255); // pink
+        treeNode f = new treeNode("f",50);   f.c = color(0,0,192); // light blue
+        treeNode g = new treeNode("g",50);   g.c = color(200,200,200); // white
+        treeNode h = new treeNode("h",50);   h.c = color(210,210,210); // white
+        treeNode i = new treeNode("i",50);   i.c = color(220,0,0); // white
+        treeNode j = new treeNode("j",50);   j.c = color(230,0,0); // white
+        treeNode k = new treeNode("k",50);   k.c = color(230,230,230); // white
+        treeNode l = new treeNode("L",50);   l.c = color(230,230,230); // white
+        treeNode m = new treeNode("m",50);   m.c = color(0,230,0); // white
+        treeNode n = new treeNode("n",50);   n.c = color(230,0,0); // white
+        treeNode o = new treeNode("o",50);   o.c = color(230,0,0); // white
         
-        c.addChild(d);
-        b.addChild(e);
-        b.addChild(bb);
-        a.addChild(b);
-        a.addChild(c);
+           
+           l.addChild(m);
+           c.addChild(l);
+           c.addChild(k);
+           h.addChild(o);
+           h.addChild(n);
+           h.addChild(j);
+           h.addChild(i);
+           g.addChild(h);
+           f.addChild(g);
+           d.addChild(f);
+           b.addChild(bb);
+           a.addChild(e);
+           a.addChild(d);
         root.addChild(a);
-        
+        root.addChild(b);
+        root.addChild(c);
         
         root.size = root.computeChildrenSize();
     }
@@ -195,46 +206,46 @@ class TreeMap{
     // border - How much to grow the cushion at each level of the tree
     void drawTreeMap(treeNode root, float x1, float y1, float x2, float y2, int axis,int cushion, int border){
         
-      // This is where we draw our actual node
-        fill(root.c,128);
-        rect(x1+cushion,y1+cushion,x2-x1-cushion-cushion,y2-y1-cushion-cushion);  // Background layer of treemap
-             
-        stroke(255);
-        textSize(16);
-        fill(16);
-        text(root.name,x1+cushion,y2-cushion);
-        
-        // Debug line for figuring out where boundaries are drawn
-        println("\n"+root.getName()+"--start("+x1+","+y1+")"+"--end("+x2+","+y2+") axis--"+axis);
-        println("\t"+root.getName()+": draw rect("+x1+","+y1+","+(x2-x1)+","+(y2-y1)+")");
-
         
         if(root.children != null){
                   // In this if-conditional, the goal is to flip the axis (x or y) that we are partioning
                   // and drawing new slices
-
+            float[] nodeXSizes = new float[root.children.size()];
+            float[] nodeYSizes = new float[root.children.size()];
+            for(int i =0; i < root.children.size();i++){
+              treeNode child = root.children.get(i);
+              nodeXSizes[i] = x1+((x2-x1) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
+              nodeYSizes[i] = y1+((y2-y1) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
+            }
+            
             for(int i =0; i < root.children.size();i++){
                   treeNode child = root.children.get(i);
-                  
-                  float x3 = x2-x1;
-                  float y3 = y2-y1;
-                  
-                  float x_width = x3 * (child.totalSizeOfSubtree / root.totalSizeOfSubtree);
-                  float y_width = x3 * (child.totalSizeOfSubtree / root.totalSizeOfSubtree);
 
                   
                   if (axis == 0){
-                    // x3 is where we are drawing on the x-axis
-                    // Making slices on the x-axis
-                    print("\tNext node placed at--x3:"+x3);
-                    drawTreeMap(child, x_width, y1, x2, y2, 1,cushion+border,border); //<>//
-                    x1 = x3;
+                    float move = x1;
+                    if(i>0){
+                      for(int j =0; j < i;j++){
+                        move+= nodeXSizes[j];
+                      }
+                    }
+                    fill(child.c,128); rect(move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);  // Background layer of treemap 
+                    stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",move+cushion,y1+16+border+cushion);
+                    
+                    drawTreeMap(child, move, y1, nodeXSizes[i], y2, 1,cushion+border,border); 
                   }
                   else{
-                    // Making slices on the y-axis
-                    print("\tNext node placed at--y3:"+y3);
-                    drawTreeMap(child, x1, y_width, x2, y2, 0,cushion+border,border); //<>//
-                    y1 = y3;
+                    float move = y1;
+                      if(i>0){
+                        for(int j =0; j < i;j++){
+                          move+= nodeYSizes[j];
+                        }
+                      }
+                    
+                    fill(child.c,128); rect(x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);  // Background layer of treemap    
+                    stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",x1+cushion,move+16+border+cushion);
+                    
+                    drawTreeMap(child, x1, move, x2, nodeYSizes[i], 0,cushion+border,border);
                   }
             }
         }
@@ -253,7 +264,7 @@ void setup() {
   
   
   if(frame != null){
-    //frame.setResizable(true);
+    frame.setResizable(true);
   }
   
   myTreeMap = new TreeMap(0,0,200,200);
@@ -266,7 +277,8 @@ void setup() {
   P[0] = 0;    P[1] = 0;
   Q[0] = 480;  Q[1] = 240;
   
-  myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,0,0);
+  myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,4,4);
+  
   //myTreeMap.drawTreeMap2(myTreeMap.root,P,Q,0,0,0);
 }
 
@@ -274,6 +286,6 @@ void setup() {
 
 void draw() {
 
-    
+myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,2,0);
    
 }
