@@ -8,9 +8,11 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/InstIterator.h"
 
-
+#include "llvm/IR/DebugInfo.h"
+#include "llvm/IR/DebugInfoMetadata.h"
 
 #include <map>
+#include "llvm/Support/raw_ostream.h"
 
 using namespace llvm;
 
@@ -24,11 +26,19 @@ namespace {
 
 
         MyOpCodeCounter() : FunctionPass(ID){
+
         }
 
         virtual bool runOnFunction(Function &F) override {
-            llvm::outs() << "====Function " << F.getName() << "====\n";
 
+            std::string s;
+            llvm::raw_string_ostream ss(s);
+
+            ss  << "{\n"
+                << "\"functionName\": \"" << F.getName() << "\",\n"
+                << "\"size\": "<< F.size() << ",\n";
+
+            ss << "\"InstructionData\":[";
             // For all of our functions, get the basic blocks
             for(Function::iterator bb = F.begin(), e = F.end(); bb != e; ++bb){
                 // Grab all of the basic blocks, and then iterate through their opcodes
@@ -40,57 +50,148 @@ namespace {
                         opcodeCounter[i->getOpcodeName()] += 1;
                     }
 
-//                    outputInstructionData(i);
+                    // !i==e is a clever-ish way of saying
+                    // 'hey man, if we're going to be on our last instruction
+                    // then just don't emit that last comma so JSON doesn't complain.
+                    // No, this code is not readable, but making an annoying if-condition is annoying.
+                    // The ternary operator would also make this code too long to fit on my screen.
+                    ss << outputInstructionData(i,!(i==e)); // move iterator back after incrementing
+
                 }
             }
+            ss << "\t]\n}\n";
 
+            // Output instruction breakdown
+            /*
             std::map<std::string, int>::iterator i = opcodeCounter.begin();
             std::map<std::string, int>::iterator e = opcodeCounter.end();
+            ss << "\t{\"instructionCounts\": [\n";
             while(i != e){
-                llvm::outs() << i->first << ": " << i->second << "\n";
+                ss << "\t\t \"{"<< i->first << "\" : " << i->second << "},\n";
                 i++;
             }
-            llvm::outs() << "\n";
+            ss << "\t]}\n";
+            */
+
+            // outs() << "\t============("<< F.getArgumentList().size() << ") arguments============\n";
+            //ss << outputFunctionArguments(F);
+
+            // Just perform one write to the buffer
+            outs() << ss.str();
 
 
-            outs() << "\t============("<< F.getArgumentList().size() << ") arguments============\n";
-            if(F.getArgumentList().size()>0){
-                Function::arg_iterator f_i = F.arg_begin();
-                Function::arg_iterator f_e = F.arg_end();
-
-
-                for(; f_i != f_e; ++f_i){
-                    Argument *Arg = f_i;
-//                    outs() << "\t" << Arg->getArgNo() << "\t" << Arg->getName() << "\t" <<  Arg->getType() << "\n" ;
-                }
-            }
-
+/*
+            // Categories based on: http://llvm.org/docs/doxygen/html/Instruction_8cpp_source.html
+            llvm::outs()    << "Binary Op\t|Logical Op\t|Memory Instr\t|Convert Insrt\t|Other\t|Invalid\n";
+            llvm::outs()    << counts[0] << "\t\t" << counts[1] << "\t\t" << counts[2] << "\t\t"
+                            << counts[3] << "\t\t" << counts[4] << "\t\t" << counts[5] << "\t\t"<< counts[6] << '\n';
+*/
             opcodeCounter.clear();
-
 
             return false;
         }
 
-        void outputInstructionData(Instruction* i) const {
+        // Output debugging informaiton
+        // See function: void DebugLoc::print(raw_ostream &OS) const
+        // for example on printng out data
+        //
+        // The emit_comma is a workaround for printing out nice JSON data
+        //
+        std::string outputInstructionData(Instruction* i, bool emit_comma) const {
+                    std::string s;
+                    llvm::raw_string_ostream ss(s);
 
                     // Found these values from lib\IR\Instruction.cpp
-                    outs() << *i << '\n';
-                    outs() << "mayReadFromMemory:" << i->mayReadFromMemory() << '\n';
-                    outs() << "mayWriteToMemory:" << i->mayWriteToMemory() << '\n';
-                    outs() << "isAtomic:" << i->isAtomic() << '\n';
-                    outs() << "mayThrow:" << i->mayThrow() << '\n';
-                    outs() << "mayReturn:" << i->mayReturn() << '\n';
-                    outs() << "isAssociative:" << i->isAssociative() << '\n';
+                    ss << "\t{\n\t\"Instruction\":\"" << i->getOpcodeName() << "\",";
+
+                    ss << "\n\t\"context\":\"" <<*i << "\",";
+                    ss << "\n\t\"mayReadFromMemory\":" << i->mayReadFromMemory() << ",";
+                    ss << "\n\t\"mayWriteToMemory\":" << i->mayWriteToMemory() << ",";
+                    ss << "\n\t\"isAtomic\":" << i->isAtomic() << ",";
+                    ss << "\n\t\"mayThrow\":" << i->mayThrow() << ",";
+                    ss << "\n\t\"mayReturn\":" << i->mayReturn() << ",";
+                    ss << "\n\t\"isAssociative\":" << i->isAssociative() << ",";
+
+                    std::string callsFunction = "n/a";
+                    if(CallInst* c = dyn_cast<CallInst> (i)){
+                        Function* f2 = c->getCalledFunction	();
+                        if(f2){
+                            callsFunction = f2->getName();
+                        }
+                    }
+                    ss << "\n\t\"callsfunction\": \"" << callsFunction << "\"\n";
+
+                    //if (MDNode *N = i->getMetadata("dbg")) {  // Here I is an LLVM instruction
+
+                    DebugLoc DL = i->getDebugLoc();
+                    std::string filename = "";
+                    unsigned int line = -1;
+                    unsigned int column = -1;
+                    if(DL){
+                        DIScope *Scope = DL->getScope();
+/*                      Not sure this is needed yet
+                        if(DL.getInlinedAt()){
+                            ss() << "Inlined:" << DL.getInlinedAt();
+                        }
+*/
+                        // If we have additional debuggin info available
+                        // then output that data.
+                        filename = Scope->getFilename();
+                        line = DL.getLine();
+                        column = DL.getCol();
+                    }
+
+                    // Output data in JSon format
+                    ss  << "\t,\"DebugData\": [{\"File\": \"" << filename
+                    << "\" , \"Line Number\": " << line
+                    << " , \"Column\": " << column << "}]}";
+
+                    if(emit_comma){
+                        ss << ",\n";
+                    }
+                    else{
+                        ss << "\n";
+                    }
+
+
+
+            return ss.str();
         }
 
+        // Outputs all of the function arguments
+        std::string outputFunctionArguments(Function& F){
+            std::string s;
+            llvm::raw_string_ostream ss(s);
+                if(F.getArgumentList().size()>0){
+                    Function::arg_iterator f_i = F.arg_begin();
+                    Function::arg_iterator f_e = F.arg_end();
 
-        /*
-                    // Categories based on: http://llvm.org/docs/doxygen/html/Instruction_8cpp_source.html
-            llvm::outs()    << "Binary Op\t|Logical Op\t|Memory Instr\t|Convert Insrt\t|Other\t|Invalid\n";
-            llvm::outs()    << counts[0] << "\t\t" << counts[1] << "\t\t" << counts[2] << "\t\t"
-                            << counts[3] << "\t\t" << counts[4] << "\t\t" << counts[5] << "\t\t"<< counts[6] << '\n';
+                    ss << "\t{'arguments':\n";
+                    for(; f_i != f_e; ++f_i){
+                        Argument *Arg = f_i;
+                        ss << "\t\t'getArgNo': '" << Arg->getArgNo() << "', 'name': '" << Arg->getName() << "', 'type': '" <<  Arg->getType() << "',\n" ;
+                    }
+                    ss << "\t}\n";
+                }
+            return s;
+        }
+
+    }; // end struct MyOpCodeCounter : public FunctionPass {
+}
+
+char MyOpCodeCounter::ID = 0;
+static RegisterPass<MyOpCodeCounter> X("myopcodecounter", "Analysis Pass to Count Op Codes",false,false);
+
+
+
+
+
+
+
+
 
         // Not useufl to do in C++, do this step in post-processing
+        /*
         void buildOpCodeTable(std::string OpCode, int& counts){
 
               // Terminators
@@ -191,9 +292,3 @@ namespace {
 
             } // end  void buildOpCodeTable(unsigned OpCode)
             */
-    }; // end struct MyOpCodeCounter : public FunctionPass {
-}
-
-char MyOpCodeCounter::ID = 0;
-static RegisterPass<MyOpCodeCounter> X("myopcodecounter", "Analysis Pass to Count Op Codes",false,false);
-
