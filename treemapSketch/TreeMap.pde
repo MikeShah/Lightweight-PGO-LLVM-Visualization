@@ -1,3 +1,22 @@
+// Class that is to be used within a treeNode.
+// The purpose is to be able to store more information
+// than just the size, but perhaps other meta-data that can be queried.
+//
+// A good alias-name for this class would be 'data'
+//
+// 
+class attributes{
+  
+  
+  attributes(){
+  }
+  
+  void loadData(String filename){
+    
+  }
+  
+}
+
 class treeNode{
 
     String name;
@@ -50,17 +69,17 @@ class treeNode{
                   // Perform a breadth-first search of our treemap
                   while(bfs.peek()!=null){
                     treeNode head = bfs.remove(); 
-                    //head.level += nodeLevel;
                     
                     // If it's a node, then compute the size of this branch.
-                    if(head.isLeaf())
-                      {totalSizeOfSubtree += head.getSize();}
+                    if(head.isLeaf()){
+                        totalSizeOfSubtree += head.getSize();
+                    }
                       
                     // Add all of the children and then increase the node level of our
                     // leve-order traversal
                     if(head.children!=null){
                       for(int i =0; i < head.children.size();i++){
-                        head.children.get(i).level = head.level+1;
+                        head.children.get(i).level = head.level+1;  // Children will always be 1 more than their parent
                         bfs.add(head.children.get(i));
                       }
                     }
@@ -138,6 +157,7 @@ class TreeMap{
       // Add our root to the tree by default
       bfs.add(root);
       // Perform a breadth-first search of our treemap
+      root.level = 0;
       while(bfs.peek()!=null){
         treeNode head = bfs.remove();  
         totalSize += head.getSize();
@@ -213,6 +233,45 @@ class TreeMap{
         
         this.walkTree();
 
+    }
+    
+    // Loads up a JSON File
+    // sets up various properties of the
+    void loadJSON(String fileName){
+      
+      // Giant JSONArray that will hold our values
+      JSONArray values;
+      // Testing json
+      values = new JSONArray();
+      values = loadJSONArray(fileName);
+      
+      //Get all of our functions at the top level
+      for (int i = 0; i < values.size(); i++) {
+        // Obtain one of these functions from our values collection
+        JSONObject function = values.getJSONObject(i); 
+    
+        String functionName = function.getString("functionName");
+        int functionSize = function.getInt("size");
+        // Create a node from the top level
+        treeNode temp = new treeNode(functionName,functionSize);   temp.c = color(random(255),0,0); // red
+
+        JSONArray InstructionData = function.getJSONArray("InstructionData");
+            
+        for(int j = 0; j < InstructionData.size();j++){
+            JSONObject iData = InstructionData.getJSONObject(j); 
+            String Instruction = iData.getString("Instruction");
+          
+            treeNode instructionNode = new treeNode(Instruction,1);   temp.c = color(random(255),0,0); // red
+            temp.addChild(instructionNode);
+        }
+        
+        
+        root.addChild(temp);
+        this.walkTree();
+      }
+      
+      
+      
     }
     
     

@@ -42,7 +42,9 @@ TreeMap myTreeMap;
 
 int keyIndex = 9;
 
+
 void setup() {
+
   size(640, 360,P3D);
   background(102);
   
@@ -53,8 +55,9 @@ void setup() {
   }
   
   myTreeMap = new TreeMap(0,0,200,200);
-  myTreeMap.loadFile();
-  myTreeMap.walkTree();
+  //myTreeMap.loadFile();
+  myTreeMap.loadJSON("test.json");
+  //myTreeMap.walkTree();
   
   float[] P = new float[2];
   float[] Q = new float[2];
@@ -71,14 +74,30 @@ void setup() {
   //f.setTitle("second window");
 }
 
-
+boolean startFade = true;
+int fadeCounter = 0;
+int transitionsFrames = 0;
+int transitionFramesMax = 24;
 
 void draw() {
   //s.setGhostCursor(mouseX, mouseY);
   
   //background(0);
   
-
+  if(startFade){
+    fadeCounter++;
+    if(fadeCounter > 5){
+      myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,1,0,keyIndex);
+      fadeCounter = 0;
+      transitionsFrames++;
+    }
+  }
+  
+  if(transitionsFrames > transitionFramesMax){
+    startFade = false;
+    transitionsFrames = 0;
+    fadeCounter = 0;
+  }
   
   
 }
@@ -93,17 +112,7 @@ void keyPressed() {
     println(key-'0');
   }
   
-    if(keyIndex=='q'){
-    myTreeMap.drawTreeMap(myTreeMap.root.children.get(0),0,0,width,height,0,1,0,10);
-  }
-  else if(keyIndex=='w'){
-    myTreeMap.drawTreeMap(myTreeMap.root.children.get(0).children.get(1),0,0,width,height,0,1,0,10);
-  }
-  else if(keyIndex=='e'){
-    myTreeMap.drawTreeMap(myTreeMap.root.children.get(2),0,0,width,height,0,1,0,10);
-  }
-  else{
-    myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,1,0,keyIndex);
-  }
-
+  startFade = true;
+  
+    
 }
