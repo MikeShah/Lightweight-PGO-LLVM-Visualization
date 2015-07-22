@@ -1,54 +1,21 @@
 
 import java.util.*;
-import javax.swing.*; 
- //<>//
+import javax.swing.*;  //<>//
 
-
-/*
-public class PFrame extends JFrame {
-  
-  public PFrame(int width, int height) {
-    setBounds(100, 100, width, height);
-    //s = new SecondApplet();
-    //add(s);
-    //s.init();
-    //show();
-  }
-}
-
-public class SecondApplet extends PApplet {
-  int ghostX, ghostY;
-  public void setup() {
-    background(0);
-    noStroke();
-  }
-
-  public void draw() {
-    background(50);
-    fill(255);
-    ellipse(mouseX, mouseY, 10, 10);
-    fill(0);
-    ellipse(ghostX, ghostY, 10, 10);
-  }
-  public void setGhostCursor(int ghostX, int ghostY) {
-    this.ghostX = ghostX;
-    this.ghostY = ghostY;
-  }
-}
-*/
-
-//SecondApplet s;
+ChildApplet DataView;
 TreeMap myTreeMap;
 
 int keyIndex = 9;
 
+void settings(){
+  size(640, 360,P3D);
+}
 
 void setup() {
 
-  size(640, 360,P3D);
-  background(102);
+  frame.setTitle("Primary Visualization - Explore");
   
-  frame.setTitle("first window");
+  DataView = new ChildApplet();
   
   if(frame != null){
     frame.setResizable(true);
@@ -59,19 +26,8 @@ void setup() {
   myTreeMap.loadJSON("test.json");
   //myTreeMap.walkTree();
   
-  float[] P = new float[2];
-  float[] Q = new float[2];
-  
-  P[0] = 0;    P[1] = 0;
-  Q[0] = 480;  Q[1] = 240;
-  
   myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,0,0,keyIndex);
-  
-  //myTreeMap.drawTreeMap2(myTreeMap.root,P,Q,0,0,0);
-  
-  // Setup the second window
-  //PFrame f = new PFrame(width, height);
-  //f.setTitle("second window");
+
 }
 
 boolean startFade = true;
@@ -79,10 +35,13 @@ int fadeCounter = 0;
 int transitionsFrames = 0;
 int transitionFramesMax = 24;
 
+// Main drawing routine for the treemap
 void draw() {
-  //s.setGhostCursor(mouseX, mouseY);
-  
+  // No need to refresh yet...
   //background(0);
+  
+  // Pass a data string to our child applet
+  DataView.setDataString(myTreeMap.dataString.getString());
   
   if(startFade){
     fadeCounter++;
@@ -91,6 +50,8 @@ void draw() {
       fadeCounter = 0;
       transitionsFrames++;
     }
+  }else{
+    myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,1,0,keyIndex);
   }
   
   if(transitionsFrames > transitionFramesMax){
@@ -99,9 +60,11 @@ void draw() {
     fadeCounter = 0;
   }
   
-  
+
+    
 }
 
+// Determine how deep in the tree we go.
 void keyPressed() {
   
   if (key >= '0' && key <= '9') {
@@ -113,6 +76,4 @@ void keyPressed() {
   }
   
   startFade = true;
-  
-    
 }

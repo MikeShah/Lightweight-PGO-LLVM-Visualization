@@ -5,8 +5,25 @@
 // A good alias-name for this class would be 'data'
 //
 // 
+
+import java.util.*;
+import java.io.*;
+
+
 class attributes{
   
+  String Instruction;
+  String context;          
+  int mayReadFromMemory;
+  int mayWriteToMemory;
+  int isAtomic;
+  int mayThrow;
+  int mayReturn;
+  int isAssociative;
+  String callsfunction;
+  String File;
+  int Line;  // default value is set to 1
+  int Column; // default value is set to 1
   
   attributes(){
   }
@@ -15,25 +32,33 @@ class attributes{
     
   }
   
+  String dumpAttributes(){
+    return Instruction + "\t" + context + "\t" + File + " " + Line + ":" + Column;
+  }
+  
+  
 }
 
 class treeNode{
 
     String name;
     float size;
+    attributes _attributes;
     color c;
     int level;
     
     Vector<treeNode> children; 
     float totalSizeOfSubtree;
-  
+    
     // Add a node that has a known name and a size.
     treeNode(String name, float size){
        this.name = name;
        this.size = size;
        this.totalSizeOfSubtree = size;
-       this.c = color(random(128)+64,50);
+       this.c = color(255-size,0,0);
        children = null; 
+       
+       this._attributes = new attributes();
        level = 0;
     }
     
@@ -133,6 +158,9 @@ class TreeMap{
     int y1;
     int w;
     int h;
+    
+    // At any give time, the dataString will be loaded and can be acquired from.
+    DataString dataString;
 
     // The root tree node
     // Special node that always gives us the top-level access to our tree.
@@ -147,6 +175,8 @@ class TreeMap{
       this.h = h;
             
       this.root = new treeNode("root",0);
+      dataString = new DataString();
+      dataString.setText("default text");
     }
     
     // We print out the tree
@@ -156,6 +186,9 @@ class TreeMap{
       Queue<treeNode> bfs = new LinkedList<treeNode>();
       // Add our root to the tree by default
       bfs.add(root);
+      
+
+      
       // Perform a breadth-first search of our treemap
       root.level = 0;
       while(bfs.peek()!=null){
@@ -190,7 +223,7 @@ class TreeMap{
         treeNode j = new treeNode("j",50);   j.c = color(230,0,0); // white
         treeNode k = new treeNode("k",50);   k.c = color(230,230,230); // white
         treeNode l = new treeNode("L",50);   l.c = color(230,230,230); // white
-        treeNode m = new treeNode("m",50);   m.c = color(0,230,0); // white
+        treeNode m = new treeNode("m",50);   m.c = color(0,230,0); // whites
         treeNode n = new treeNode("n",50);   n.c = color(230,0,0); // white
         treeNode o = new treeNode("o",50);   o.c = color(230,0,0); // white
         
@@ -206,17 +239,10 @@ class TreeMap{
            h.addChild(j); // j
            h.addChild(i); // i
            
-           
-           
-           o.addChild(p);
-           o.addChild(q);
-           o.addChild(p);
+           o.addChild(p);o.addChild(q);o.addChild(p);o.addChild(p);
            o.addChild(p);o.addChild(p);o.addChild(p);o.addChild(p);
            
-           p.addChild(r);
-           p.addChild(r);
-           p.addChild(r);
-           p.addChild(r);
+           p.addChild(r);p.addChild(r);p.addChild(r);p.addChild(r);
            
            g.addChild(h);
            f.addChild(g);
@@ -232,7 +258,6 @@ class TreeMap{
         root.addChild(c);
         
         this.walkTree();
-
     }
     
     // Loads up a JSON File
@@ -255,13 +280,28 @@ class TreeMap{
         // Create a node from the top level
         treeNode temp = new treeNode(functionName,functionSize);   temp.c = color(random(255),0,0); // red
 
-        JSONArray InstructionData = function.getJSONArray("InstructionData");
-            
+        JSONArray InstructionData = function.getJSONArray("InstructionData"); //<>//
+        // For each of the instructions get the data    
         for(int j = 0; j < InstructionData.size();j++){
             JSONObject iData = InstructionData.getJSONObject(j); 
+
+            // Name node after instruction and by default a size of 1
             String Instruction = iData.getString("Instruction");
-          
             treeNode instructionNode = new treeNode(Instruction,1);   temp.c = color(random(255),0,0); // red
+            // Populate node with
+            instructionNode._attributes.Instruction = Instruction;
+            instructionNode._attributes.context = iData.getString("context");
+            instructionNode._attributes.mayReadFromMemory = iData.getInt("mayReadFromMemory");
+            instructionNode._attributes.mayWriteToMemory = iData.getInt("mayWriteToMemory");
+            instructionNode._attributes.isAtomic = iData.getInt("isAtomic");;
+            instructionNode._attributes.mayThrow = iData.getInt("mayThrow");;
+            instructionNode._attributes.mayReturn = iData.getInt("mayReturn");;
+            instructionNode._attributes.isAssociative = iData.getInt("isAssociative");;
+            instructionNode._attributes.callsfunction = iData.getString("callsfunction");
+            instructionNode._attributes.File = iData.getString("File");
+            instructionNode._attributes.Line = iData.getInt("Line Number");
+            instructionNode._attributes.Column = iData.getInt("Column");
+            
             temp.addChild(instructionNode);
         }
         
@@ -274,8 +314,41 @@ class TreeMap{
       
     }
     
-    
 
+    
+    // Function that gets called in the TreeMap
+    // when you hover within a region.
+    void mouseOnHover(treeNode node, float x, float y, float _w, float _h){
+      if(mouseX > x && mouseX < x+_w){
+        if(mouseY > y && mouseY < y+_h){
+          // Highlight the block
+          fill(255,192);
+          rect(x,y,_w,_h);
+
+          dataString.setText("Function:"+node.name+"\n"+node._attributes.Line);
+          // What to do when the mouse is pressed
+          if(mousePressed && (mouseButton == LEFT)){
+            println("mouse fired:");
+            println(node._attributes.dumpAttributes());
+            // Set our data string which can be displayed around other windows
+            // or used for help
+            // Note that Java is annoying and always passes in copies, so we have to write our function here.
+            
+
+             String[] params = {"gnome-terminal", "-e","/usr/bin/vim +"+node._attributes.Line+" "+node._attributes.File};
+             
+             int time = millis();
+             int delay = 3000;
+             // Loop that stalls the program so we don't click too many times
+             while(millis() - time <= delay){}
+             exec(params);
+             
+          }
+        }
+      }
+    }
+    
+    
     
     // Draws a tree map
     //
@@ -324,8 +397,8 @@ class TreeMap{
                     }
                     fill(child.c,alpha); rect(move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);  // Background layer of treemap 
                     stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",move+cushion,y1+16+border+cushion);
-                    
                     drawTreeMap(child, move, y1, nodeXSizes[i], y2, 1,cushion+border,border,levels); 
+                    mouseOnHover(child,move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);
                   }
                   else{
                     float move = y1;
@@ -341,8 +414,8 @@ class TreeMap{
                     }
                     fill(child.c,alpha); rect(x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);  // Background layer of treemap    
                     stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",x1+cushion,move+16+border+cushion);
-                    
                     drawTreeMap(child, x1, move, x2, nodeYSizes[i], 0,cushion+border,border,levels);
+                    mouseOnHover(child,x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);
                   }
             }
         }
