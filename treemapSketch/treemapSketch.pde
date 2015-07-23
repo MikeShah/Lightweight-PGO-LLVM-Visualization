@@ -14,6 +14,7 @@ void settings(){
 void setup() {
 
   frame.setTitle("Primary Visualization - Explore");
+  frame.setLocation(0, 0);
   
   DataView = new ChildApplet();
   
@@ -23,7 +24,9 @@ void setup() {
   
   myTreeMap = new TreeMap(0,0,200,200);
   //myTreeMap.loadFile();
-  myTreeMap.loadJSON("test.json");
+  println("about to load");
+  myTreeMap.loadJSON("a.json");
+  println("finsihe.");
   //myTreeMap.walkTree();
   
   myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,0,0,keyIndex);

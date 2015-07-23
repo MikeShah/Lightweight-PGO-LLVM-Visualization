@@ -13,11 +13,12 @@ class ChildApplet extends PApplet {
   }
 
   public void settings() {
-    size(400, 400, P3D);
+    size(800, 200, P3D);
     smooth();
   }
   public void setup() { 
     surface.setTitle("Data View");
+    frame.setLocation(0, 800);
   }
 
   public void draw() {

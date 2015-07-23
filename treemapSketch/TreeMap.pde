@@ -33,7 +33,7 @@ class attributes{
   }
   
   String dumpAttributes(){
-    return Instruction + "\t" + context + "\t" + File + " " + Line + ":" + Column;
+    return Instruction + "\n" + context + "\n" + File + "\n" + Line + ":" + Column;
   }
   
   
@@ -196,7 +196,7 @@ class TreeMap{
         totalSize += head.getSize();
         head.computeChildrenSize();  // As we walk the tree, make sure each node also computes it's size. NOTE: this is expensive
         
-        println(head.getName()+"\t"+head.outputNodeData());
+        //--//--println(head.getName()+"\t"+head.outputNodeData());
         if(head.children!=null){
           for(int i =0; i < head.children.size();i++){
             bfs.add(head.children.get(i));
@@ -302,6 +302,11 @@ class TreeMap{
             instructionNode._attributes.Line = iData.getInt("Line Number");
             instructionNode._attributes.Column = iData.getInt("Column");
             
+            if(instructionNode._attributes.File!="null"){
+              temp.c = color(255,255,255);
+            }else{
+              temp.c = color(255,0,0);
+            }
             temp.addChild(instructionNode);
         }
         
@@ -318,34 +323,40 @@ class TreeMap{
     
     // Function that gets called in the TreeMap
     // when you hover within a region.
-    void mouseOnHover(treeNode node, float x, float y, float _w, float _h){
+    //
+    // Returns true or false if we click
+    boolean mouseOnHover(treeNode node, float x, float y, float _w, float _h){
       if(mouseX > x && mouseX < x+_w){
         if(mouseY > y && mouseY < y+_h){
           // Highlight the block
           fill(255,192);
           rect(x,y,_w,_h);
 
-          dataString.setText("Function:"+node.name+"\n"+node._attributes.Line);
+          dataString.setText("Function:"+node.name+"\n"+node._attributes.dumpAttributes());
           // What to do when the mouse is pressed
-          if(mousePressed && (mouseButton == LEFT)){
-            println("mouse fired:");
-            println(node._attributes.dumpAttributes());
+          if(mousePressed && (mouseButton == LEFT) && node._attributes.File!="null"){
+            //--("mouse fired:");
+            dataString.setText("Function:"+node.name+"\n"+node._attributes.dumpAttributes());
+            //--(node._attributes.dumpAttributes());
             // Set our data string which can be displayed around other windows
             // or used for help
             // Note that Java is annoying and always passes in copies, so we have to write our function here.
             
-
+            
              String[] params = {"gnome-terminal", "-e","/usr/bin/vim +"+node._attributes.Line+" "+node._attributes.File};
              
              int time = millis();
-             int delay = 3000;
+             int delay = 1500;
              // Loop that stalls the program so we don't click too many times
              while(millis() - time <= delay){}
-             exec(params);
-             
+             if(node._attributes.File!=null){
+               exec(params);
+             }
+             return true;
           }
         }
       }
+      return false;
     }
     
     
@@ -366,22 +377,23 @@ class TreeMap{
         
         if(root.children != null){
             
-            // pre-compute how big each slice is going to be
+          boolean didWeClick;  
+          // pre-compute how big each slice is going to be
             int debug =0;
             if(root.name=="h"){
-              debug =1;
+              debug =0;
             }
             
-            float[] nodeXSizes = new float[root.children.size()];
-            float[] nodeYSizes = new float[root.children.size()];
-            for(int i =0; i < root.children.size();i++){
-              treeNode child = root.children.get(i);
-              nodeXSizes[i] = ((x2) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
-              nodeYSizes[i] =((y2) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
-              if(debug==1){
-                  println(child.name+" subtree size:"+child.totalSizeOfSubtree+"root size:"+root.totalSizeOfSubtree+" nodeYSizes[i]:"+nodeYSizes[i]);
+              float[] nodeXSizes = new float[root.children.size()];
+              float[] nodeYSizes = new float[root.children.size()];
+              for(int j =0; j < root.children.size();j++){
+                treeNode child = root.children.get(j);
+                nodeXSizes[j] = ((x2) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
+                nodeYSizes[j] =((y2) * (child.totalSizeOfSubtree / root.totalSizeOfSubtree));
+                if(debug==1){
+                    //--(child.name+" subtree size:"+child.totalSizeOfSubtree+"root size:"+root.totalSizeOfSubtree+" nodeYSizes[j]:"+nodeYSizes[j]);
+                }
               }
-            }
             
             for(int i =0; i < root.children.size();i++){
                   treeNode child = root.children.get(i);
@@ -397,8 +409,9 @@ class TreeMap{
                     }
                     fill(child.c,alpha); rect(move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);  // Background layer of treemap 
                     stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",move+cushion,y1+16+border+cushion);
+                    didWeClick = mouseOnHover(child,move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);
                     drawTreeMap(child, move, y1, nodeXSizes[i], y2, 1,cushion+border,border,levels); 
-                    mouseOnHover(child,move+cushion,y1+cushion,nodeXSizes[i]-cushion-cushion,y2-cushion-cushion);
+                    
                   }
                   else{
                     float move = y1;
@@ -408,14 +421,14 @@ class TreeMap{
                         }
                       }
                     if(debug==1){
-                       println("y1:"+y1);
-                       println("y2:"+y2);
-                       println("move"+move);
+                       //--//--println("y1:"+y1);
+                       //--//--println("y2:"+y2);
+                       //--//--println("move"+move);
                     }
                     fill(child.c,alpha); rect(x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);  // Background layer of treemap    
                     stroke(255,255);textSize(16);fill(16,255);text("|"+child.name+"|",x1+cushion,move+16+border+cushion);
+                    didWeClick = mouseOnHover(child,x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);
                     drawTreeMap(child, x1, move, x2, nodeYSizes[i], 0,cushion+border,border,levels);
-                    mouseOnHover(child,x1+cushion,move+cushion,x2-cushion-cushion,nodeYSizes[i]-cushion-cushion);
                   }
             }
         }
