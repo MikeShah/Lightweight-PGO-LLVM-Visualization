@@ -1,4 +1,4 @@
 LEVEL = ../../..
-LIBRARYNAME = FuncBlockCount
+LIBRARYNAME = MyModulePass
 LOADABLE_MODULE = 1
 include $(LEVEL)/Makefile.common

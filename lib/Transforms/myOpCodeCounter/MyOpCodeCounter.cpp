@@ -12,7 +12,14 @@
 #include "llvm/IR/DebugInfoMetadata.h"
 
 #include <map>
+#include <fstream>
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/raw_os_ostream.h"
+
+// Used for making directories
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 using namespace llvm;
 
@@ -25,14 +32,17 @@ namespace {
 
 
 
-        MyOpCodeCounter() : FunctionPass(ID){
 
+        MyOpCodeCounter() : FunctionPass(ID){
+            outs() << "[";
         }
 
         virtual bool runOnFunction(Function &F) override {
 
             std::string s;
             llvm::raw_string_ostream ss(s);
+
+            int temp_int_for_counting_instructions = 0; // delete me later
 
             ss  << "{\n"
                 << "\"functionName\": \"" << F.getName() << "\",\n"
@@ -50,16 +60,17 @@ namespace {
                         opcodeCounter[i->getOpcodeName()] += 1;
                     }
 
-                    // !i==e is a clever-ish way of saying
-                    // 'hey man, if we're going to be on our last instruction
-                    // then just don't emit that last comma so JSON doesn't complain.
-                    // No, this code is not readable, but making an annoying if-condition is annoying.
-                    // The ternary operator would also make this code too long to fit on my screen.
-                    ss << outputInstructionData(i,!(i==e)); // move iterator back after incrementing
+                    if(bb!=F.begin() || i!=bb->begin()){
+                        ss << ",\n"; // emit a trailing commaafter each Instruction output.
+                    }else{
+                        ss << "\n";
+                    }
+                    ss << outputInstructionData(i); // move iterator back after incrementing
 
+                    temp_int_for_counting_instructions++;
                 }
             }
-            ss << "\t]\n}\n";
+            ss << "\t]\n},\n";
 
             // Output instruction breakdown
             /*
@@ -78,14 +89,68 @@ namespace {
 
             // Just perform one write to the buffer
             outs() << ss.str();
-
-
 /*
             // Categories based on: http://llvm.org/docs/doxygen/html/Instruction_8cpp_source.html
             llvm::outs()    << "Binary Op\t|Logical Op\t|Memory Instr\t|Convert Insrt\t|Other\t|Invalid\n";
             llvm::outs()    << counts[0] << "\t\t" << counts[1] << "\t\t" << counts[2] << "\t\t"
                             << counts[3] << "\t\t" << counts[4] << "\t\t" << counts[5] << "\t\t"<< counts[6] << '\n';
 */
+
+
+
+
+
+
+
+            // Simple trick to preview how functions will look in treemap
+            // Directory is the function name, and each .txt file within it
+            // is the allocation. The .txt file allocates a certain number of bytes
+            // which symbolize how large the file is for that particular instruction
+            // e.g. alloca: 6 bytes for 6 instructions, call 8 bytes if 8 calls are made within function, etc.
+            // show content:
+/* Experiment 1
+            struct stat st = {0};
+            std::map<std::string, int>::iterator i = opcodeCounter.begin();
+            std::map<std::string, int>::iterator e = opcodeCounter.end();
+            std::string myDir = "/home/mdshah/Desktop/LLVMSample/RandomPrograms/temp/"+F.getName().str();
+            while(i != e){
+
+                std::string myFile = myDir+"/"+(std::string)(i->first)+".txt";
+
+                if (stat(myDir.c_str(), &st) == -1) {
+                    mkdir(myDir.c_str(), 0700);
+                }
+
+                char bytes[i->second];
+                std::ofstream ofs;
+                ofs.open (myFile.c_str(), std::ofstream::out | std::ofstream::app);
+                ofs.write(bytes,temp_int_for_counting_instructions);;
+                ofs.close();
+                ++i;
+            }
+*/
+            struct stat st = {0};
+            std::map<std::string, int>::iterator i = opcodeCounter.begin();
+            std::map<std::string, int>::iterator e = opcodeCounter.end();
+            unsigned int size_of_data = 0;
+            std::string myDir = "/home/mdshah/Desktop/LLVMSample/RandomPrograms/temp/"+F.getName().str();
+            while(i != e){
+
+
+
+                if (stat(myDir.c_str(), &st) == -1) {
+                    mkdir(myDir.c_str(), 0700);
+                }
+                size_of_data += i->second;
+                ++i;
+            }
+                char bytes[size_of_data];
+                std::ofstream ofs;
+                std::string myFile = myDir+"/"+"bytes.txt";
+                ofs.open (myFile.c_str(), std::ofstream::out | std::ofstream::app);
+                ofs.write(bytes,temp_int_for_counting_instructions);;
+                ofs.close();
+
             opcodeCounter.clear();
 
             return false;
@@ -97,14 +162,16 @@ namespace {
         //
         // The emit_comma is a workaround for printing out nice JSON data
         //
-        std::string outputInstructionData(Instruction* i, bool emit_comma) const {
+        std::string outputInstructionData(Instruction* i) const {
                     std::string s;
                     llvm::raw_string_ostream ss(s);
 
                     // Found these values from lib\IR\Instruction.cpp
                     ss << "\t{\n\t\"Instruction\":\"" << i->getOpcodeName() << "\",";
 
-                    ss << "\n\t\"context\":\"" <<*i << "\",";
+/* Do not need this right now
+                    //ss << "\n\t\"context\":\"" <<*i << "\",";
+                    ss << "\n\t\"context\":\" null" << "\",";
                     ss << "\n\t\"mayReadFromMemory\":" << i->mayReadFromMemory() << ",";
                     ss << "\n\t\"mayWriteToMemory\":" << i->mayWriteToMemory() << ",";
                     ss << "\n\t\"isAtomic\":" << i->isAtomic() << ",";
@@ -120,13 +187,15 @@ namespace {
                         }
                     }
                     ss << "\n\t\"callsfunction\": \"" << callsFunction << "\"\n";
+*/
 
                     //if (MDNode *N = i->getMetadata("dbg")) {  // Here I is an LLVM instruction
 
                     DebugLoc DL = i->getDebugLoc();
-                    std::string filename = "";
-                    unsigned int line = -1;
-                    unsigned int column = -1;
+                    std::string filename = ".";
+                    std::string directory = "";
+                    unsigned int line = 1; // default values set to 1
+                    unsigned int column = 1; // default value set to 1
                     if(DL){
                         DIScope *Scope = DL->getScope();
 /*                      Not sure this is needed yet
@@ -136,24 +205,17 @@ namespace {
 */
                         // If we have additional debuggin info available
                         // then output that data.
+                        directory = Scope->getDirectory();
                         filename = Scope->getFilename();
                         line = DL.getLine();
                         column = DL.getCol();
+                        // DL.get
                     }
 
                     // Output data in JSon format
-                    ss  << "\t,\"DebugData\": [{\"File\": \"" << filename
+                    ss  << "\t,\"File\": \"" << (directory+filename.substr(1))  // have to ignore the first '.' character ommitted from filename, thus use substr
                     << "\" , \"Line Number\": " << line
-                    << " , \"Column\": " << column << "}]}";
-
-                    if(emit_comma){
-                        ss << ",\n";
-                    }
-                    else{
-                        ss << "\n";
-                    }
-
-
+                    << " , \"Column\": " << column << "}";
 
             return ss.str();
         }
