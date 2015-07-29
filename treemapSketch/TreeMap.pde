@@ -26,6 +26,7 @@ class attributes{
   int Column; // default value is set to 1
   
   attributes(){
+    String context = "omitted";
   }
   
   void loadData(String filename){
@@ -290,14 +291,14 @@ class TreeMap{
             treeNode instructionNode = new treeNode(Instruction,1);   temp.c = color(random(255),0,0); // red
             // Populate node with
             instructionNode._attributes.Instruction = Instruction;
-            instructionNode._attributes.context = iData.getString("context");
-            instructionNode._attributes.mayReadFromMemory = iData.getInt("mayReadFromMemory");
-            instructionNode._attributes.mayWriteToMemory = iData.getInt("mayWriteToMemory");
-            instructionNode._attributes.isAtomic = iData.getInt("isAtomic");;
-            instructionNode._attributes.mayThrow = iData.getInt("mayThrow");;
-            instructionNode._attributes.mayReturn = iData.getInt("mayReturn");;
-            instructionNode._attributes.isAssociative = iData.getInt("isAssociative");;
-            instructionNode._attributes.callsfunction = iData.getString("callsfunction");
+            //instructionNode._attributes.context = iData.getString("context");
+            //instructionNode._attributes.mayReadFromMemory = iData.getInt("mayReadFromMemory");
+            //instructionNode._attributes.mayWriteToMemory = iData.getInt("mayWriteToMemory");
+            //instructionNode._attributes.isAtomic = iData.getInt("isAtomic");;
+            //instructionNode._attributes.mayThrow = iData.getInt("mayThrow");;
+            //instructionNode._attributes.mayReturn = iData.getInt("mayReturn");;
+            //instructionNode._attributes.isAssociative = iData.getInt("isAssociative");;
+            //instructionNode._attributes.callsfunction = iData.getString("callsfunction");
             instructionNode._attributes.File = iData.getString("File");
             instructionNode._attributes.Line = iData.getInt("Line Number");
             instructionNode._attributes.Column = iData.getInt("Column");

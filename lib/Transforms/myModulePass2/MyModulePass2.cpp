@@ -40,18 +40,18 @@ namespace {
                   Vals.insert(*OI);
               }
             */
-            Module &module = M;
-            for (Function &fun : module) {
+            for (Function &fun : M) {
                 for (BasicBlock &bb : fun) {
+                    outs() << "\t: " << bb.getName() << "\n";
                     for (Instruction &i : bb) {
                          CallSite cs(&i);
                          if (!cs.getInstruction()) {
                             continue;
                          }
-                         outs() << "Found a function call: " << i << "\n";
+                         outs() << "\t\tFound a function call: " << i << "\n";
                          Value *called = cs.getCalledValue()->stripPointerCasts();
                          if (Function *f = dyn_cast<Function>(called)) {
-                            outs() << "Direct call to function: " << f->getName() << "\n";
+                            outs() << "\t\tDirect call to function: " << f->getName() << "\n";
                          }
                     }
                 }
@@ -63,9 +63,12 @@ namespace {
             for(Module::FunctionListType::iterator it = functions.begin(), it_end = functions.end(); it != it_end; ++it){
                 outs() << it->getName() << "\n";
             }
+
+            int howManyFunctionsDidIFind = 0;
             outs () << "===^ Getting functions from module ^===\n";
                 // Get the function name
                 for(Module::iterator I = M.begin(), E = M.end(); I != E; ++I){
+                    howManyFunctionsDidIFind++;
                     if(!I->isDeclaration()){
                         outs() << "Function name: " << I->getName() << "\n";
                         // Get the arguments of that function
@@ -77,7 +80,6 @@ namespace {
                             outs() << "\tblock name? " << FI->getName() << "\n";
                         }
                     }
-
                 /*
                Vals.insert(&*I);
                 if(!I->isDeclaration()) {
@@ -92,6 +94,8 @@ namespace {
                 }
                 */
               }
+
+              outs() << "I found: " << howManyFunctionsDidIFind << " functions\n";
 
 /*
             for(Function::iterator bb = F.begin(), e = F.end(); bb != e; ++bb){

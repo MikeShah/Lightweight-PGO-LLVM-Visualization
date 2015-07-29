@@ -1,0 +1,1268 @@
+[
+    {
+        "functionName": "main",
+        "size": 14,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 32,
+                "Column": 15
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 32,
+                "Column": 27
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 34,
+                "Column": 9
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 34,
+                "Column": 12
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 35,
+                "Column": 9
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 35,
+                "Column": 9
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 9
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 14
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 19
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 29
+            },
+            {
+                "Instruction": "getelementptr",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 29
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 29
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 22
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 43
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 9
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 66
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 36,
+                "Column": 49
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 37,
+                "Column": 5
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 38,
+                "Column": 5
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 39,
+                "Column": 5
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 12
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 10
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 17
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 19
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 5
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 16
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 14
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 21
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 23
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 9
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 36
+            },
+            {
+                "Instruction": "sext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 33
+            },
+            {
+                "Instruction": "sext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "getelementptr",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "getelementptr",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 29
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 53
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 44,
+                "Column": 13
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 17
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 17
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 17
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 64
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 67
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 35
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 45,
+                "Column": 35
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 47,
+                "Column": 9
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 30
+            },
+            {
+                "Instruction": "add",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 30
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 30
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 42,
+                "Column": 9
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 48,
+                "Column": 5
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 26
+            },
+            {
+                "Instruction": "add",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 26
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 26
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 40,
+                "Column": 5
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 23
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 23
+            },
+            {
+                "Instruction": "xor",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 37
+            },
+            {
+                "Instruction": "trunc",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 23
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 53
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 49,
+                "Column": 5
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 50,
+                "Column": 5
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL19platform_main_beginv",
+        "size": 1,
+        "InstructionData": [
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 46,
+                "Column": 1
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL12crc32_gentabv",
+        "size": 12,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 53,
+                "Column": 11
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 54,
+                "Column": 17
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 54,
+                "Column": 17
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 55,
+                "Column": 6
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 55,
+                "Column": 9
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 9
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 7
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 14
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 16
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 58,
+                "Column": 9
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 58,
+                "Column": 7
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 10
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 8
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 15
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 17
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 3
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 60,
+                "Column": 8
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 60,
+                "Column": 12
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 60,
+                "Column": 8
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 60,
+                "Column": 8
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 61,
+                "Column": 12
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 61,
+                "Column": 16
+            },
+            {
+                "Instruction": "xor",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 61,
+                "Column": 22
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 61,
+                "Column": 9
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 62,
+                "Column": 4
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 63,
+                "Column": 9
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 63,
+                "Column": 9
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 63,
+                "Column": 9
+            },
+            {
+                "Instruction": "br",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 65,
+                "Column": 3
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 23
+            },
+            {
+                "Instruction": "add",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 23
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 23
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 59,
+                "Column": 3
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 66,
+                "Column": 18
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 66,
+                "Column": 13
+            },
+            {
+                "Instruction": "sext",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 66,
+                "Column": 3
+            },
+            {
+                "Instruction": "getelementptr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 66,
+                "Column": 3
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 66,
+                "Column": 16
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 67,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 24
+            },
+            {
+                "Instruction": "add",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 24
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 24
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 57,
+                "Column": 2
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 68,
+                "Column": 1
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL6func_1v",
+        "size": 1,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 23,
+                "Column": 13
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 23,
+                "Column": 13
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 24,
+                "Column": 11
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 24,
+                "Column": 11
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 24,
+                "Column": 9
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 25,
+                "Column": 12
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 25,
+                "Column": 12
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSample/RandomPrograms/randprog1.cpp",
+                "Line Number": 25,
+                "Column": 5
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL15transparent_crcjPci",
+        "size": 3,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 88,
+                "Column": 27
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 88,
+                "Column": 38
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 88,
+                "Column": 49
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 90,
+                "Column": 15
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 90,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 91,
+                "Column": 6
+            },
+            {
+                "Instruction": "icmp",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 91,
+                "Column": 6
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 91,
+                "Column": 6
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 92,
+                "Column": 51
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 92,
+                "Column": 58
+            },
+            {
+                "Instruction": "xor",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 92,
+                "Column": 72
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 92,
+                "Column": 5
+            },
+            {
+                "Instruction": "br",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 93,
+                "Column": 2
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 94,
+                "Column": 1
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL17platform_main_endji",
+        "size": 1,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 49,
+                "Column": 28
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 49,
+                "Column": 37
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 56,
+                "Column": 29
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 56,
+                "Column": 2
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/platform_generic.h",
+                "Line Number": 120,
+                "Column": 1
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL12crc32_8bytesj",
+        "size": 1,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 79,
+                "Column": 24
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 81,
+                "Column": 15
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 81,
+                "Column": 18
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 81,
+                "Column": 23
+            },
+            {
+                "Instruction": "trunc",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 81,
+                "Column": 14
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 81,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 82,
+                "Column": 15
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 82,
+                "Column": 18
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 82,
+                "Column": 23
+            },
+            {
+                "Instruction": "trunc",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 82,
+                "Column": 14
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 82,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 83,
+                "Column": 15
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 83,
+                "Column": 18
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 83,
+                "Column": 24
+            },
+            {
+                "Instruction": "trunc",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 83,
+                "Column": 14
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 83,
+                "Column": 2
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 84,
+                "Column": 15
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 84,
+                "Column": 18
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 84,
+                "Column": 24
+            },
+            {
+                "Instruction": "trunc",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 84,
+                "Column": 14
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 84,
+                "Column": 2
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 85,
+                "Column": 1
+            }
+        ]
+    },
+    {
+        "functionName": "_ZL10crc32_byteh",
+        "size": 1,
+        "InstructionData": [
+            {
+                "Instruction": "alloca",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "store",
+                "File": "",
+                "Line Number": 1,
+                "Column": 1
+            },
+            {
+                "Instruction": "call",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 71,
+                "Column": 21
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 73,
+                "Column": 5
+            },
+            {
+                "Instruction": "lshr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 73,
+                "Column": 19
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 73,
+                "Column": 25
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 14
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 30
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 30
+            },
+            {
+                "Instruction": "xor",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 28
+            },
+            {
+                "Instruction": "and",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 33
+            },
+            {
+                "Instruction": "zext",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 3
+            },
+            {
+                "Instruction": "getelementptr",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 3
+            },
+            {
+                "Instruction": "load",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 74,
+                "Column": 3
+            },
+            {
+                "Instruction": "xor",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 73,
+                "Column": 39
+            },
+            {
+                "Instruction": "store",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 72,
+                "Column": 16
+            },
+            {
+                "Instruction": "ret",
+                "File": "/home/mdshah/Desktop/LLVMSamplehome/mdshah/Desktop/Csmith/csmith/runtime/csmith.h",
+                "Line Number": 75,
+                "Column": 1
+            }
+        ]
+    }
+]
