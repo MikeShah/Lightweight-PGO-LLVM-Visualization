@@ -25,8 +25,8 @@ void setup() {
   myTreeMap = new TreeMap(0,0,200,200);
   //myTreeMap.loadFile();
   println("about to load");
-  myTreeMap.loadJSON("small.json");
-  println("finsihe."); //<>//
+  myTreeMap.loadJSON("horde3D.json");
+  println("finished."); //<>//
   //myTreeMap.walkTree();
   
   myTreeMap.drawTreeMap(myTreeMap.root,0,0,width,height,0,0,0,keyIndex);
