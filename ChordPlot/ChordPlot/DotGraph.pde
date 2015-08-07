@@ -5,38 +5,7 @@
 import java.util.Hashtable;
 import java.util.*;
 
-class nodeMetaData implements Comparable<nodeMetaData>{
-  
-  String name;
-  public nodeMetaData(String name){
-    this.name = name;
-  }
-  
-  public int compareTo(nodeMetaData d){
-    if(d.name == this.name){
-      return 1;
-    }
-    return 0;    
-  }
-  
-  // Use the name of the node as the hashcode
-  @Override
-  public int hashCode(){
-    return name.hashCode();
-  }
-  
-  // Test for string equality. This maintains 3 properties: reflexive, symmetric, and transitivity.
-  @Override
-  public boolean equals(Object obj){
-    if(!(obj instanceof nodeMetaData)){
-      return false;
-    }
-    nodeMetaData temp = (nodeMetaData)obj;
-    return (temp.name == this.name);
-  }
-  
-  
-} // ends class nodeMetaData implements Comparable<nodeMetaData>{
+
 
 
 
@@ -60,8 +29,9 @@ class DotGraph{
         // assuming there are spaces and an arrow, and no extra data
         String[] tokens = lines[i].split(" ");
         
-        nodeMetaData src = new nodeMetaData(tokens[0]);
-        nodeMetaData dst = new nodeMetaData(tokens[2]);
+        // Add nodes with associated meta-data
+        nodeMetaData src = new nodeMetaData(tokens[0],tokens[3]);
+        nodeMetaData dst = new nodeMetaData(tokens[2],tokens[3]);
         // Lazily attempt to add everything to our set
         // DataStructure is a Set, thus guareenteeing only one unique copy
         fullNodeList.add(src);

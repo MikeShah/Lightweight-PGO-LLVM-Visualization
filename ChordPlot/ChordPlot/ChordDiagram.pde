@@ -1,90 +1,48 @@
-class LocPoint{
- float x;
- float y;
- LocPoint(float x, float y){
-   this.x = x;
-   this.y = y;
- }
-}
-
-// Node class consits of a source
-class ChordNode{
-  float x;
-  float y;
-  public nodeMetaData metaData;
-  int nodeSize = 4;
-  
-  boolean selected = false;
-  
-  ArrayList<LocPoint> LocationPoints;
-  
-  public ChordNode(String name, float x, float y){
-    this.metaData = new nodeMetaData(name);
-    this.x = x;
-    this.y = y;
-    
-    LocationPoints = new ArrayList<LocPoint>();
-  }
-  
-  void addPoint(float x, float y){
-    LocationPoints.add(new LocPoint(x,y));
-  }
-  
-  public void render(){
-       
-     if( dist(x,y,mouseX,mouseY) < nodeSize || selected){
-        fill(0);
-        if(selected){fill(255,0,0);}
-        ellipse(x,y,nodeSize*2,nodeSize*2);
-        
-        fill(255,0,0);
-        drawToCallees();
-        fill(255);
-        text(metaData.name,x,y);
-        
-        if(mousePressed && dist(x,y,mouseX,mouseY) < nodeSize){
-          selected = !selected;
-        }
-     }
-     else{
-        fill(192);
-        ellipse(x,y,8,8);
-     }
-     
-  }
-  
-  // Draw to all of the callee locations
-  public void drawToCallees(){
-    fill(255,0,0);
-    for(int i =0; i < LocationPoints.size();i++){
-      line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
-    }
-  }
-  
-    
-}
 
 
+// Purpose of this class is to
+// 
 class ChordDiagram{
   
-  float radius = 300;
+  float radius;
+  int layout;
   float centerx = width/2;
   float centery = height/2;
   
   DotGraph dotGraph;
   ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
       
-  public ChordDiagram(String file){
+  public ChordDiagram(float radius, String file,int layout){
+    // How are we going to render the scene.
+    this.layout = layout;
+    // Set the size of our visualization
+    this.radius = radius;
     // Load up data
     dotGraph = new DotGraph(file);
     // Print out to console (for debugging-purposes only)
  //   dotGraph.printGraph();
     // Create a list of all of our nodes that will be in the visualization
     nodeList = new ArrayList<ChordNode>();
-    // Plot points on the circle
-    plotPointsOnCircle(dotGraph.fullNodeList.size());
-    // Quick hack so the visualization can render quickly
-    storeLineDrawings();
+    regenerateLayout(layout);
+  }
+  
+  void generateHeatForCalleeAttribute(){
+    // Find the max and min from the ChordNode metadata
+    float themin = 0;
+    float themax =0;
+    for(int i =0; i < nodeList.size();i++){
+      themin = min(themin,nodeList.get(i).metaData.callees);
+      themax = max(themax,nodeList.get(i).metaData.callees);
+    }
+    println("themin:"+themin);
+    println("themax:"+themax);
+    // Then map that value into the ChordNode so that it can render correctly.
+    // We scale from 
+    for(int i =0; i < nodeList.size();i++){
+                                   // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
+      nodeList.get(i).metaData.c = map(nodeList.get(i).metaData.callees, themin, themax, 0, 255);
+    }
+    
   }
   
     /*
@@ -96,12 +54,14 @@ class ChordDiagram{
    
   */
   public void plotPointsOnCircle(float numberOfPoints){
+    // Emptry the nodeList;
+    nodeList.clear();
     
     float steps = 360/numberOfPoints; // Based on how many points we have, 
                                       // draw a new point at each step
     float theta = 0; // angle to increase each loop
     
-    
+    println("before iterator");
     Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
     println("Items:"+dotGraph.fullNodeList.size());
     while(theta<360){
@@ -114,6 +74,28 @@ class ChordDiagram{
     
   }
   
+  public void plotPointsOnGrid(float numberOfPoints){
+    // Emptry the nodeList;
+    nodeList.clear();
+    
+    float xSize = 800;
+    float ySize = 800;
+    
+    float steps = 8; // Based on how many points we have, 
+                                              // draw a new point at each step
+    
+    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
+
+    for(  float yPos = 0; yPos < ySize; yPos+=steps){
+      for(float xPos = 0; xPos < xSize; xPos+=steps){
+        if(nodeListIter.hasNext()){
+          nodeList.add(new ChordNode(nodeListIter.next().name,xPos+20,yPos+20));
+        }
+      }
+    }
+    
+  }
+  
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
   // For each of the nodes that are a destination in the source
@@ -122,6 +104,7 @@ class ChordDiagram{
   // so that when we render we can do it quickly.
   //
   private void storeLineDrawings(){
+    
       for(int i =0; i < nodeList.size(); i++){
         // Search to see if our node has outcoming edges
         nodeMetaData nodeName = nodeList.get(i).metaData;        // This is the node we are interested in finding sources
@@ -133,6 +116,8 @@ class ChordDiagram{
               for(int k =0; k < nodeList.size(); k++){
                 if(dests.get(j).name==nodeList.get(k).metaData.name){
                   nodeList.get(i).addPoint(nodeList.get(k).x,nodeList.get(k).y);          // Add to our source node the locations
+                  // Store some additional information
+                  nodeList.get(i).metaData.callees++;
                   break;
                 }
               }
@@ -141,9 +126,29 @@ class ChordDiagram{
       }
   }
   
+  public void regenerateLayout(int layout){
+    this.layout = layout;
+      // Plot points on the circle
+      
+    if(layout<=0){
+      plotPointsOnCircle(dotGraph.fullNodeList.size());
+    }else if(layout==1){
+      plotPointsOnGrid(dotGraph.fullNodeList.size());
+    }
+    
+    // Quick hack so the visualization can render quickly
+    storeLineDrawings();
+    // Draw the mapping of the visualization (Different layouts may need different 
+    generateHeatForCalleeAttribute();
+  }
+  
   public void draw(){
       fill(192);
-      ellipse(centerx,centery,radius*2,radius*2);
+      
+      if(layout==0){
+        ellipse(centerx,centery,radius*2,radius*2);
+      }
+      
       for(int i =0; i < nodeList.size();i++){
         ChordNode temp = (ChordNode)nodeList.get(i);
         temp.render();
