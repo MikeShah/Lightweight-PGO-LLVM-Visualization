@@ -213,7 +213,7 @@ namespace {
                     }
 
                     // Output data in JSon format
-                    ss  << "\t,\"File\": \"" << (directory+filename.substr(1))  // have to ignore the first '.' character ommitted from filename, thus use substr
+                    ss  << "\t\"File\": \"" << (directory+filename.substr(1))  // have to ignore the first '.' character ommitted from filename, thus use substr
                     << "\" , \"Line Number\": " << line
                     << " , \"Column\": " << column << "}";
 
