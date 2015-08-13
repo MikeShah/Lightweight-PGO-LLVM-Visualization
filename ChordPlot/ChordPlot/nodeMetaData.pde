@@ -23,7 +23,15 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     c = 0;
   }
  
-  
+  // Copies in the metadata from another node into this one.
+  // Generally this is used for making new instances (i.e. we need a copy constructor)
+  // 
+  public void copyMetaData(nodeMetaData n){
+    n.name              = this.name;
+    n.extra_information = this.extra_information;
+    n.callees           = this.callees;
+    n.c                 = this.c;  // the color of the node
+  }
  
   public int compareTo(nodeMetaData other){
     /*

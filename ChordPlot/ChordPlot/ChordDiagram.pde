@@ -2,7 +2,7 @@
 
 // Purpose of this class is to
 // 
-class ChordDiagram{
+class ChordDiagram implements VisualizationLayout{
   
   float radius;
   int layout;
@@ -11,7 +11,8 @@ class ChordDiagram{
   
   DotGraph dotGraph;
   ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
-      
+       
+     
   public ChordDiagram(float radius, String file,int layout){
     // How are we going to render the scene.
     this.layout = layout;
@@ -23,7 +24,9 @@ class ChordDiagram{
  //   dotGraph.printGraph();
     // Create a list of all of our nodes that will be in the visualization
     nodeList = new ArrayList<ChordNode>();
-    regenerateLayout(layout);
+    
+    // Plot the points in some default configuration
+    this.regenerateLayout(layout);
   }
   
   void generateHeatForCalleeAttribute(){
@@ -53,7 +56,7 @@ class ChordDiagram{
    numberOfPoints = How many points to draw on the circle
    
   */
-  public void plotPointsOnCircle(float numberOfPoints){
+  private void plotPointsOnCircle(float numberOfPoints){
     // Emptry the nodeList;
     nodeList.clear();
     
@@ -67,34 +70,67 @@ class ChordDiagram{
     while(theta<360){
       float xPos = centerx + radius*cos(theta);
       float yPos = centery - radius*sin(theta);
-      nodeList.add(new ChordNode(nodeListIter.next().name,xPos,yPos));
+      nodeList.add(new ChordNode(nodeListIter.next().name,xPos,yPos,0));
       theta = theta + steps;
       println("iterations");
     }
     
   }
   
-  public void plotPointsOnGrid(float numberOfPoints){
+  private void plotPointsOnGrid(float numberOfPoints){
     // Emptry the nodeList;
     nodeList.clear();
     
-    float xSize = 800;
-    float ySize = 800;
+    float padding = 10; // padding on the screen
+    float xSize = width-padding;
+    float ySize = height-padding;
     
-    float steps = 8; // Based on how many points we have, 
+    float steps = 7; // Based on how many points we have, 
                                               // draw a new point at each step
     
     Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
 
-    for(  float yPos = 0; yPos < ySize; yPos+=steps){
-      for(float xPos = 0; xPos < xSize; xPos+=steps){
+    for(  float yPos = 0; yPos < ySize-padding; yPos+=steps){
+      for(float xPos = 0; xPos < xSize-padding; xPos+=steps){
         if(nodeListIter.hasNext()){
-          nodeList.add(new ChordNode(nodeListIter.next().name,xPos+20,yPos+20));
+          nodeList.add(new ChordNode(nodeListIter.next().name,xPos+padding,yPos+padding,0));
         }
       }
     }
     
   }
+  
+  private void plotPointsOnSphere(float numberOfPoints){
+    // Emptry the nodeList;
+    nodeList.clear();
+    
+    float steps = 360/numberOfPoints; // Based on how many points we have, 
+                                      // draw a new point at each step
+    float theta = 0; // angle to increase each loop
+    
+    println("before iterator");
+    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
+    println("Items:"+dotGraph.fullNodeList.size());
+    while(theta<360){
+      
+      float p = radius;
+      float phi = PI/3;
+      
+      float xPos = centerx + p*sin(phi)*cos(theta);
+      float yPos = centery + p*sin(phi)*sin(theta);
+      float zPos = p*cos(phi);
+      /*
+      float xPos = centerx + radius*cos(theta);
+      float yPos = centery - radius*sin(theta);
+      float zPos = radius*sin(theta);
+      */
+      nodeList.add(new ChordNode(nodeListIter.next().name,xPos,yPos,zPos));
+      theta = theta + steps;
+      println("iterations");
+    }
+    
+  }
+
   
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
@@ -134,15 +170,24 @@ class ChordDiagram{
       plotPointsOnCircle(dotGraph.fullNodeList.size());
     }else if(layout==1){
       plotPointsOnGrid(dotGraph.fullNodeList.size());
+    }else if(layout>=2){
+      plotPointsOnSphere(dotGraph.fullNodeList.size());
     }
     
-    // Quick hack so the visualization can render quickly
+    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     storeLineDrawings();
     // Draw the mapping of the visualization (Different layouts may need different 
+    // functions called.
     generateHeatForCalleeAttribute();
   }
   
-  public void draw(){
+  
+  public void setPosition(float x, float y){
+    centerx = x;
+    centery = y;
+  }
+  
+  public void draw(int mode){
       fill(192);
       
       if(layout==0){
@@ -151,7 +196,7 @@ class ChordDiagram{
       
       for(int i =0; i < nodeList.size();i++){
         ChordNode temp = (ChordNode)nodeList.get(i);
-        temp.render();
+        temp.render(mode);
       }
   }
   
