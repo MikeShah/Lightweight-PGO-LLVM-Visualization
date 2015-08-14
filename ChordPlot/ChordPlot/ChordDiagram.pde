@@ -2,32 +2,18 @@
 
 // Purpose of this class is to
 // 
-class ChordDiagram implements VisualizationLayout{
+class ChordDiagram extends DataLayer{
   
   float radius;
-  int layout;
-  float centerx = width/2;
-  float centery = height/2;
-  
-  DotGraph dotGraph;
-  ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
-       
      
   public ChordDiagram(float radius, String file,int layout){
-    // How are we going to render the scene.
-    this.layout = layout;
-    // Set the size of our visualization
     this.radius = radius;
-    // Load up data
-    dotGraph = new DotGraph(file);
-    // Print out to console (for debugging-purposes only)
- //   dotGraph.printGraph();
-    // Create a list of all of our nodes that will be in the visualization
-    nodeList = new ArrayList<ChordNode>();
+    this.layout = layout;
+    // Calls init() which is from the DataLayer calss, and basically runs as a constructor
+    init(file,0,0,layout);
     
-    // Plot the points in some default configuration
-    this.regenerateLayout(layout);
   }
+  
   
   void generateHeatForCalleeAttribute(){
     // Find the max and min from the ChordNode metadata
@@ -48,8 +34,7 @@ class ChordDiagram implements VisualizationLayout{
     
   }
   
-    /*
-  
+  /*
    h = center
    k = center
    r = radius
@@ -57,61 +42,61 @@ class ChordDiagram implements VisualizationLayout{
    
   */
   private void plotPointsOnCircle(float numberOfPoints){
-    // Emptry the nodeList;
-    nodeList.clear();
     
     float steps = 360/numberOfPoints; // Based on how many points we have, 
                                       // draw a new point at each step
     float theta = 0; // angle to increase each loop
     
-    println("before iterator");
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
-    println("Items:"+dotGraph.fullNodeList.size());
+    int counter = 0;
+    
+    float xPos = 0;
+    float yPos = 0;
     while(theta<360){
-      float xPos = centerx + radius*cos(theta);
-      float yPos = centery - radius*sin(theta);
-      nodeList.add(new ChordNode(nodeListIter.next().name,xPos,yPos,0));
+      xPos = centerx + radius*cos(theta);
+      yPos = centery - radius*sin(theta);
+
       theta = theta + steps;
-      println("iterations");
+
+      if(counter < nodeList.size()){
+        nodeList.get(counter).x = xPos;
+        nodeList.get(counter).y = yPos;
+      }
+      counter++;
     }
     
   }
   
   private void plotPointsOnGrid(float numberOfPoints){
-    // Emptry the nodeList;
-    nodeList.clear();
-    
+  
     float padding = 10; // padding on the screen
-    float xSize = width-padding;
+    float xSize = width-padding-200; // FIXME: 200 is because the GUI's width is 200
     float ySize = height-padding;
     
     float steps = 7; // Based on how many points we have, 
                                               // draw a new point at each step
-    
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
-
+    int counter = 0;
     for(  float yPos = 0; yPos < ySize-padding; yPos+=steps){
       for(float xPos = 0; xPos < xSize-padding; xPos+=steps){
-        if(nodeListIter.hasNext()){
-          nodeList.add(new ChordNode(nodeListIter.next().name,xPos+padding,yPos+padding,0));
+        if(counter < nodeList.size()){
+          nodeList.get(counter).x = xPos+padding;
+          nodeList.get(counter).y = yPos+padding;
+          counter++;
         }
       }
     }
     
   }
   
-  private void plotPointsOnSphere(float numberOfPoints){
-    // Emptry the nodeList;
-    nodeList.clear();
-    
+  private void plotPointsOnSphere(float numberOfPoints){   
     float steps = 360/numberOfPoints; // Based on how many points we have, 
                                       // draw a new point at each step
     float theta = 0; // angle to increase each loop
     
-    println("before iterator");
+
     Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
-    println("Items:"+dotGraph.fullNodeList.size());
-    while(theta<360){
+
+    int counter = 0;
+    while(counter < nodeList.size()){
       
       float p = radius;
       float phi = PI/3;
@@ -124,50 +109,33 @@ class ChordDiagram implements VisualizationLayout{
       float yPos = centery - radius*sin(theta);
       float zPos = radius*sin(theta);
       */
-      nodeList.add(new ChordNode(nodeListIter.next().name,xPos,yPos,zPos));
+      nodeList.get(counter).x = xPos;
+      nodeList.get(counter).y = yPos;
+      nodeList.get(counter).z = zPos;
+      
       theta = theta + steps;
-      println("iterations");
+      counter++;
     }
     
   }
 
-  
-  // The goal of this function is to look through every node
-  // in the DotGraph that is a source.
-  // For each of the nodes that are a destination in the source
-  // figure out which position they have been assigned in 'plotPointsOnCircle'
-  // Then we need to store each of these in that ChordNode's list of lines to draw
-  // so that when we render we can do it quickly.
-  //
-  private void storeLineDrawings(){
-    
-      for(int i =0; i < nodeList.size(); i++){
-        // Search to see if our node has outcoming edges
-        nodeMetaData nodeName = nodeList.get(i).metaData;        // This is the node we are interested in finding sources
-        if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-          // If we do find that our node is a source(with targets)
-          // then search to get all of the destination names and their positions
-          ArrayList<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          for(int j = 0; j < dests.size(); j++){
-              for(int k =0; k < nodeList.size(); k++){
-                if(dests.get(j).name==nodeList.get(k).metaData.name){
-                  nodeList.get(i).addPoint(nodeList.get(k).x,nodeList.get(k).y);          // Add to our source node the locations
-                  // Store some additional information
-                  nodeList.get(i).metaData.callees++;
-                  break;
-                }
-              }
-          }
-        }
-      }
-  }
+
   
   public void regenerateLayout(int layout){
+    // Emptry the nodeList and regenerate it from the data
+    nodeList.clear();
     this.layout = layout;
-      // Plot points on the circle
-      
+    
+    // Go through our nodeList and grab all of the nodes
+    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
+    while(nodeListIter.hasNext()){
+          // Create a new node for every node that was loaded from our instance of dotGraph
+          nodeList.add(new ChordNode(nodeListIter.next().name,0,0,0));
+    }
+    
+    // Modify all of the positions in our nodeList
     if(layout<=0){
-      plotPointsOnCircle(dotGraph.fullNodeList.size());
+      plotPointsOnCircle(dotGraph.fullNodeList.size()); // Plot points on the circle
     }else if(layout==1){
       plotPointsOnGrid(dotGraph.fullNodeList.size());
     }else if(layout>=2){
@@ -181,7 +149,7 @@ class ChordDiagram implements VisualizationLayout{
     generateHeatForCalleeAttribute();
   }
   
-  
+  @Override
   public void setPosition(float x, float y){
     centerx = x;
     centery = y;
@@ -190,7 +158,7 @@ class ChordDiagram implements VisualizationLayout{
   public void draw(int mode){
       fill(192);
       
-      if(layout==0){
+      if(this.layout==0){
         ellipse(centerx,centery,radius*2,radius*2);
       }
       

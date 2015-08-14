@@ -1,0 +1,5 @@
+If you have trouble building this on Linux:
+
+Read the associated notes here:
+(These notes explain about downloading an appropriate version of Java and not using OpenJDK).
+https://github.com/processing/processing/wiki/Supported-Platforms

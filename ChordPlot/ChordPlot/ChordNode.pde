@@ -137,7 +137,7 @@ class ChordNode{
         
         drawToCallees();
         fill(255);
-        text(metaData.name,x,y+rectHeight);
+        text(metaData.name,x,y-rectHeight);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
         if(mousePressed &&  (mouseX > x && mouseX < (x+rectWidth) && mouseY < y && mouseY > (y-rectHeight))){

@@ -36,4 +36,5 @@ interface VisualizationLayout{
   
   /* Every visualization needs a draw method with at least one mode */
   public void draw(int mode);
+  
 }
