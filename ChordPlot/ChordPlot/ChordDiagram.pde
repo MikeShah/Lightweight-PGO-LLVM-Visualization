@@ -10,10 +10,10 @@ class ChordDiagram extends DataLayer{
     this.radius = radius;
     this.layout = layout;
     // Calls init() which is from the DataLayer calss, and basically runs as a constructor
-    init(file,0,0,layout);
-    
+    super.init(file,0,0,layout);
+    // Set a layout
+    this.setLayout(layout);
   }
-  
   
   void generateHeatForCalleeAttribute(){
     // Find the max and min from the ChordNode metadata
@@ -63,37 +63,36 @@ class ChordDiagram extends DataLayer{
       }
       counter++;
     }
+    println("Nodes edited:"+counter);
     
   }
   
   private void plotPointsOnGrid(float numberOfPoints){
   
     float padding = 10; // padding on the screen
-    float xSize = width-padding-200; // FIXME: 200 is because the GUI's width is 200
+    float xSize = width-padding-200; // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
     float ySize = height-padding;
     
+    xBounds = xSize; // Set the bounds
+    
     float steps = 7; // Based on how many points we have, 
-                                              // draw a new point at each step
-    int counter = 0;
-    for(  float yPos = 0; yPos < ySize-padding; yPos+=steps){
-      for(float xPos = 0; xPos < xSize-padding; xPos+=steps){
+    int counter = 0; // draw a new point at each step
+    for(  float yPos = padding; yPos < ySize-padding; yPos+=steps){
+      for(float xPos = padding; xPos < xSize-padding; xPos+=steps){
         if(counter < nodeList.size()){
-          nodeList.get(counter).x = xPos+padding;
-          nodeList.get(counter).y = yPos+padding;
-          counter++;
+          nodeList.get(counter).x = xPos;
+          nodeList.get(counter).y = yPos;
+          yBounds = yPos+padding; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
         }
+        counter++;
       }
     }
-    
   }
   
   private void plotPointsOnSphere(float numberOfPoints){   
     float steps = 360/numberOfPoints; // Based on how many points we have, 
                                       // draw a new point at each step
     float theta = 0; // angle to increase each loop
-    
-
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
 
     int counter = 0;
     while(counter < nodeList.size()){
@@ -119,35 +118,35 @@ class ChordDiagram extends DataLayer{
     
   }
 
-
-  
-  public void regenerateLayout(int layout){
-    // Emptry the nodeList and regenerate it from the data
-    nodeList.clear();
+  public void setLayout(int layout){
+    // Set our layout
     this.layout = layout;
     
-    // Go through our nodeList and grab all of the nodes
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
-    while(nodeListIter.hasNext()){
-          // Create a new node for every node that was loaded from our instance of dotGraph
-          nodeList.add(new ChordNode(nodeListIter.next().name,0,0,0));
-    }
-    
-    // Modify all of the positions in our nodeList
-    if(layout<=0){
-      plotPointsOnCircle(dotGraph.fullNodeList.size()); // Plot points on the circle
-    }else if(layout==1){
-      plotPointsOnGrid(dotGraph.fullNodeList.size());
-    }else if(layout>=2){
-      plotPointsOnSphere(dotGraph.fullNodeList.size());
-    }
-    
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
     // Draw the mapping of the visualization (Different layouts may need different 
     // functions called.
+    // This function cycles through all of the nodes and generates a numerical value that can be sorted by
+    // for some attribute that we care about
     generateHeatForCalleeAttribute();
+    
+    sortNodesByCallee();
+    
+    // Modify all of the positions in our nodeList
+    if(layout<=0){
+      plotPointsOnCircle(nodeList.size()); // Plot points on the circle
+    }else if(layout==1){
+      plotPointsOnGrid(nodeList.size());
+    }else if(layout>=2){
+      plotPointsOnSphere(nodeList.size());
+    }
+       
+    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // This is called after we have positioned all of our nodes in the visualization
+    storeLineDrawings();
   }
+
   
   @Override
   public void setPosition(float x, float y){
@@ -156,12 +155,19 @@ class ChordDiagram extends DataLayer{
   }
   
   public void draw(int mode){
-      fill(192);
+     // Draw a background
+      drawBounds(192,192,192);
+      
+      fill(0);
       
       if(this.layout==0){
         ellipse(centerx,centery,radius*2,radius*2);
       }
       
+      // What is interesting about the drawing, is that it is all happening in the
+      // ChordNode itself. This way we can have any arbritrary shape in ChordNode
+      // drawn and handle all of the selection there. It also would allow us to have
+      // different types of shaped nodes mixed in a visualization much more easily.
       for(int i =0; i < nodeList.size();i++){
         ChordNode temp = (ChordNode)nodeList.get(i);
         temp.render(mode);

@@ -61,7 +61,7 @@ class ChordNode{
   */
   public void render(int mode){
     if(mode<=0){
-      render2D();
+      render2D(0);
     }else if(mode==1){
       sphereDetail(6);
       render3D();
@@ -73,15 +73,21 @@ class ChordNode{
   
   // Render 2D Ellipses
   // Implements onHover and Selection for 2D Cirlces
-  private void render2D(){
+  // renderShape (0) = ellipse
+  // renderShape (1) = rect
+  private void render2D(int renderShape){
      if( dist(x,y,mouseX,mouseY) < nodeSize || selected){
         fill(0);
         if(selected){fill(0,255,0);}
-        ellipse(x,y,nodeSize*2,nodeSize*2);
+        if (renderShape==0){
+          ellipse(x,y,nodeSize*2,nodeSize*2);
+        }else{
+          rect(x,y,nodeSize*2,nodeSize*2);
+        }
         
         fill(0,255,0);
         drawToCallees();
-        fill(255);
+        fill(0);
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
@@ -92,7 +98,13 @@ class ChordNode{
      else{
         // Color nodes based on callees
         fill(255-metaData.c);
-        ellipse(x,y,nodeSize*2,nodeSize*2);
+        stroke(255-metaData.c);
+        
+        if (renderShape==0){
+          ellipse(x,y,nodeSize*2,nodeSize*2);
+        }else{
+          rect(x,y,nodeSize*2,nodeSize*2);
+        }
      }
   }
   
@@ -109,7 +121,7 @@ class ChordNode{
         
         fill(0,255,0);
         drawTo3DCallees();
-        fill(255);
+        fill(0);
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
@@ -147,13 +159,15 @@ class ChordNode{
      else{
         // Color nodes based on callees
         fill(255-metaData.c);
+        stroke(255-metaData.c);
         rect(x,y-rectHeight,rectWidth,rectHeight);
      }
   }
   
   // Draw to all of the callee locations in 2D
   public void drawToCallees(){
-    fill(255,0,0);
+    fill(0,0,0);
+    stroke(0);
     for(int i =0; i < LocationPoints.size();i++){
       line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
     }

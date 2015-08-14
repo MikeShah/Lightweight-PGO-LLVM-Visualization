@@ -14,6 +14,13 @@ public class DataLayer implements VisualizationLayout{
   public float centery = height/2;
   
   public float defaultWidth = 4; // The default width of the bars in the histogram
+  // Bounds
+  // Stores how big the visualization is. Useful if we need to select items
+  // or draw a background panel
+  float xBounds = 0;
+  float yBounds = 0;
+  float zBounds = 0;
+  
   
   public DotGraph dotGraph;
   public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
@@ -30,8 +37,7 @@ public class DataLayer implements VisualizationLayout{
     
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
-    // Sort the nodes
-    sortNodesByCallee();
+
   }
   
   public void sortNodesByCallee(){
@@ -46,7 +52,8 @@ public class DataLayer implements VisualizationLayout{
           //return item1.metaData.name.compareTo(item2.metaData.name); // uncomment this to sort based on 'string' value
       }
     });
-
+    
+      
   }
   
   /*
@@ -56,6 +63,7 @@ public class DataLayer implements VisualizationLayout{
       // What it does is
   */
   public void regenerateLayout(int layout){
+    // Empty our list if it has not previously been emptied
     nodeList.clear();
     this.layout = layout;
     
@@ -114,6 +122,7 @@ public class DataLayer implements VisualizationLayout{
       for(int i =0; i < nodeList.size(); i++){
         // Search to see if our node has outcoming edges
         nodeMetaData nodeName = nodeList.get(i).metaData;        // This is the node we are interested in finding sources
+        nodeList.get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
         if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
@@ -121,7 +130,7 @@ public class DataLayer implements VisualizationLayout{
           for(int j = 0; j < dests.size(); j++){
               for(int k =0; k < nodeList.size(); k++){
                 if(dests.get(j).name==nodeList.get(k).metaData.name){
-                  nodeList.get(i).addPoint(nodeList.get(k).x,nodeList.get(k).y);          // Add to our source node the locations
+                  nodeList.get(i).addPoint(nodeList.get(k).x,nodeList.get(k).y);          // Add to our source node the locations that we can point to
                   // Store some additional information
                   nodeList.get(i).metaData.callees++;
                   break;
@@ -132,6 +141,11 @@ public class DataLayer implements VisualizationLayout{
       }
   }
   
+  public void drawBounds(float r, float g, float b){
+    fill(r,g,b);
+    stroke(r,g,b);
+    rect(xPosition+1,yPosition+1,xBounds,yBounds);
+  }
   
   public void draw(int mode){
     // Do nothing, this method needs to be overridden

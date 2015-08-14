@@ -6,8 +6,8 @@ ControlP5 filtersPanel;
 Accordion accordion;
 
 /* Create our visualizations */
-DataLayer cd;
-DataLayer h;
+ChordDiagram cd;
+Histogram h;
 
 
 void initGUI(){
@@ -146,7 +146,7 @@ void controlEvent(ControlEvent theEvent) {
 void draw(){
   println("FPS :"+frameRate);
    
-   background(192);
+   background(128);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
@@ -164,7 +164,7 @@ void keyPressed() {
   if (key >= '0' && key <= '9') {
     keyIndex = key - '0';
     println(key-'0');
-    cd.regenerateLayout(keyIndex);
+    cd.setLayout(keyIndex);
     
     // Reset the camera
     MySimpleCamera.cameraX = 0;

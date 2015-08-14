@@ -3,6 +3,8 @@ class Histogram extends DataLayer{
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
     init(file, xPosition, yPosition,layout);
+    // Set a layout
+    this.setLayout(layout);
   }
   
 
@@ -14,36 +16,35 @@ class Histogram extends DataLayer{
       nodeList.get(i).x = xPos;
       nodeList.get(i).y = yPosition;
       xPos += defaultWidth;
+      xBounds = xPos;
     }
   }
   
   
-  public void regenerateLayout(int layout){
-    nodeList.clear();
+  public void setLayout(int layout){
     this.layout = layout;
+        
+    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // This is called after we have positioned all of our nodes in the visualization
+    storeLineDrawings();
+    // Draw the mapping of the visualization (Different layouts may need different 
+    // functions called.
+    // This function cycles through all of the nodes and generates a numerical value that can be sorted by
+    // for some attribute that we care about
+    this.generateHeatForCalleeAttribute(350);
     
-    // Populate the node list
-    // Get access to all of our nodes
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
-    while(nodeListIter.hasNext()){
-      nodeMetaData m = nodeListIter.next();
-      ChordNode temp = new ChordNode(m.name,xPosition,yPosition,0);
-      temp.metaData.callees = m.callees;
-      nodeList.add(temp);
-    }
-      
+    sortNodesByCallee();
+    
     if(layout<=0){
       plotPoints2D();
     }else{
     }
     
-    // Quick hack so the visualization can render quickly as well as calculates the callees
-    // This needs to be called after we've replotted our visualization
+    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
-    // Draw the mapping of the visualization (Different layouts may need different 
-    generateHeatForCalleeAttribute(500);
   }
-  
+    
   
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
@@ -55,6 +56,10 @@ class Histogram extends DataLayer{
       themin = min(themin,nodeList.get(i).metaData.callees);
       themax = max(themax,nodeList.get(i).metaData.callees);
     }
+    
+    // Set the yBounds to the max value that our visualization scales to.
+    yBounds = (int)map(themax, themin, themax, 0, maxHeight);
+    
     println("themin:"+themin);
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
@@ -62,16 +67,24 @@ class Histogram extends DataLayer{
     for(int i =0; i < nodeList.size();i++){
       // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
       nodeList.get(i).metaData.callees = (int)map(nodeList.get(i).metaData.callees, themin, themax, 0, maxHeight);
-      
+      nodeList.get(i).metaData.c = nodeList.get(i).metaData.callees;
       // Our shapes are rectangular, so we need to set this in the ChordNode
       nodeList.get(i).rectWidth = defaultWidth;
       nodeList.get(i).rectHeight = nodeList.get(i).metaData.callees;
     }
   }
   
+  @Override
+    public void drawBounds(float r, float g, float b){
+    fill(r,g,b);
+    stroke(r,g,b);
+    rect(xPosition+1,yPosition-yBounds,xBounds,yBounds);
+  }
   
   // Draw using our rendering modes
   public void draw(int mode){
+       // Draw a background
+      drawBounds(192,192,192);
       // What is interesting about the drawing, is that it is all happening in the
       // ChordNode itself. This way we can have any arbritrary shape in ChordNode
       // drawn and handle all of the selection there. It also would allow us to have
