@@ -1,6 +1,8 @@
 /*
     This is a class that other classes can extend from to get data from
     The goal of this class is to store all common information from a visualization.
+    
+    This class should not be instantiated (It should just be considered abstract with some functionality implemented)
 */
 public class DataLayer implements VisualizationLayout{
   
@@ -28,7 +30,11 @@ public class DataLayer implements VisualizationLayout{
   public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
   // Create a stack of the nodes
   NodeListStack nodeListStack; 
-      
+  
+  /*
+      Function that constructs this object.
+      This class should only be extended on, and serves as a base class for other visualizations.
+  */
   public void init(String file, float xPosition, float yPosition, int layout){ //DataLayer(String file, float xPosition, float yPosition){
      this.xPosition = xPosition;
      this.yPosition = yPosition;
@@ -37,6 +43,7 @@ public class DataLayer implements VisualizationLayout{
     // Note that the dotGraph contains the entire node list, and all of the associated meta-data with it.
     dotGraph = new DotGraph(file);
     // Create a list of all of our nodes that will be in the visualization
+    // We eventually push a copy of this to the stack
     nodeList = new ArrayList<ChordNode>();
     
     // Plot the points in some default configuration
@@ -45,10 +52,11 @@ public class DataLayer implements VisualizationLayout{
     nodeListStack = new NodeListStack();
     // Push the nodeList onto the stack
     nodeListStack.push(nodeList);
+    
   }
   
   public void sortNodesByCallee(){
-    Collections.sort(nodeList, new Comparator<ChordNode>(){
+    Collections.sort(nodeListStack.peek(), new Comparator<ChordNode>(){
       @Override
       public int compare(ChordNode item1, ChordNode item2){
           Integer val1 = item1.metaData.callees;
@@ -99,21 +107,21 @@ public class DataLayer implements VisualizationLayout{
     // Find the max and min from the ChordNode metadata
     float themin = 0;
     float themax = 0;
-    for(int i =0; i < nodeList.size();i++){
-      themin = min(themin,nodeList.get(i).metaData.callees);
-      themax = max(themax,nodeList.get(i).metaData.callees);
+    for(int i =0; i < nodeListStack.peek().size();i++){
+      themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
+      themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
     }
     println("themin:"+themin);
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
-    for(int i =0; i < nodeList.size();i++){
+    for(int i =0; i < nodeListStack.peek().size();i++){
       // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
-      nodeList.get(i).metaData.callees = (int)map(nodeList.get(i).metaData.callees, themin, themax, 0, maxHeight);
+      nodeListStack.peek().get(i).metaData.callees = (int)map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, maxHeight);
       
       // Our shapes are rectangular, so we need to set this in the ChordNode
-      nodeList.get(i).rectWidth = defaultWidth;
-      nodeList.get(i).rectHeight = nodeList.get(i).metaData.callees;
+      nodeListStack.peek().get(i).rectWidth = defaultWidth;
+      nodeListStack.peek().get(i).rectHeight = nodeListStack.peek().get(i).metaData.callees;
     }
   }
   
@@ -126,20 +134,20 @@ public class DataLayer implements VisualizationLayout{
   //
   public void storeLineDrawings(){
     
-      for(int i =0; i < nodeList.size(); i++){
+      for(int i =0; i < nodeListStack.peek().size(); i++){
         // Search to see if our node has outcoming edges
-        nodeMetaData nodeName = nodeList.get(i).metaData;        // This is the node we are interested in finding sources
-        nodeList.get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
+        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+        nodeListStack.peek().get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
         if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
           ArrayList<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
           for(int j = 0; j < dests.size(); j++){
-              for(int k =0; k < nodeList.size(); k++){
-                if(dests.get(j).name==nodeList.get(k).metaData.name){
-                  nodeList.get(i).addPoint(nodeList.get(k).x,nodeList.get(k).y);          // Add to our source node the locations that we can point to
+              for(int k =0; k < nodeListStack.peek().size(); k++){
+                if(dests.get(j).name==nodeListStack.peek().get(k).metaData.name){
+                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y);          // Add to our source node the locations that we can point to
                   // Store some additional information
-                  nodeList.get(i).metaData.callees++;
+                  nodeListStack.peek().get(i).metaData.callees++;
                   break;
                 }
               }

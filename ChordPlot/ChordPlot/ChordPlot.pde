@@ -30,7 +30,7 @@ void initGUI(){
                        .setGroup(filterSet1)
                        ;
                        
-                    filtersPanel.addRange("Call sites")
+                    filtersPanel.addRange("CallSites")
                        // disable broadcasting since setRange and setRangeValues will trigger an event
                        .setBroadcast(false) 
                        .setPosition(10,100)
@@ -103,7 +103,6 @@ void initGUI(){
   }
   
   filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
-
 }
 
 /*
@@ -111,8 +110,8 @@ void initGUI(){
 */
 void setup(){
   size(1200 , 900,P3D);
-  String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
-  //String filename = "output.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
+  String filename = "output.dot";
   
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-100,0);
@@ -155,6 +154,7 @@ public void Histogram(int theValue) {
 // Microarray
 public void Microarray(int theValue) {
   cd.showData = !cd.showData;
+  cd.nodeListStack.filterCallSites(5, 100);
 }
 
 void draw(){

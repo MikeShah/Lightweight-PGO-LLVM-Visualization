@@ -27,7 +27,7 @@ class ChordNode{
   float rectHeight =0; // needed if we are rendering 2D rectangular shapes
 
   // Selecting nodes
-  boolean selected = false;
+  boolean selected = false; // By default, we show everything, so we render all nodes
   
   // Active node
   // Active nodes are nodes that are considered part of the visualization.

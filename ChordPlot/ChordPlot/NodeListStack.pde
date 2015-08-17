@@ -20,7 +20,28 @@ public class NodeListStack{
       Default Constructor
   */
   public NodeListStack(){
+    // Instantiate our stack
     stack = new ArrayDeque<ArrayList<ChordNode>>();
+    // Instantiate summary statistics
+    summaryStatistics = new SummaryStatistics();
+  }
+  
+  /*
+      Filter Design pattern
+      
+      1.) Create a new ArrayList<ChordNode>
+      2.) Loop through all nodes that are on the top of the stack
+      3.) If they do not meet the criteria, then do not add them to the list.
+      4.) Push the arrayList we have built on top of the stack
+  */
+  public void filterCallSites(int min, int max){
+      ArrayList<ChordNode> filteredNodes = new ArrayList<ChordNode>();
+      for(int i =0; i < stack.peek().size();i++){
+        if(stack.peek().get(i).metaData.callees >= min && stack.peek().get(i).metaData.callees <= max){
+          filteredNodes.add(stack.peek().get(i));
+        }
+      }
+      stack.push(filteredNodes);
   }
   
   
@@ -42,11 +63,24 @@ public class NodeListStack{
     computeSummaryStatistics();
   }
   
+  /*
+    Peek at the top of our stack
+  */
+  public ArrayList<ChordNode> peek(){
+    if(stack.size() >0){
+      return (ArrayList<ChordNode>)stack.peek();
+    }else
+    {
+      return null;
+    }
+  }
+  
   
   // Update the summary statistics based on the active nodes.
   public void computeSummaryStatistics(){
    summaryStatistics.callers = 0; // Total number of caller functions
    summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+   printStack();
   }
   
   /*  Returns how many active nodes there are on the visualization by getting the
@@ -54,6 +88,18 @@ public class NodeListStack{
   */
   public int totalActiveNodes(){
       return stack.peek().size();
+  }
+  
+  // Outputs the stack from top to bottom
+  public void printStack(){
+      Iterator<ArrayList<ChordNode>> iter = stack.iterator();
+      
+      int counter = 0;
+      while (iter.hasNext()){
+          System.out.println(counter+".) nodeList");
+          counter++;
+          iter.next();
+      }
   }
   
   

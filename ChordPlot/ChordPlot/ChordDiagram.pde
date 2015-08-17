@@ -9,7 +9,7 @@ class ChordDiagram extends DataLayer{
   public ChordDiagram(float radius, String file,int layout){
     this.radius = radius;
     this.layout = layout;
-    // Calls init() which is from the DataLayer calss, and basically runs as a constructor
+    // Calls init() which is from the DataLayer class, and basically runs as a constructor
     super.init(file,0,0,layout);
     // Set a layout
     this.setLayout(layout);
@@ -22,17 +22,17 @@ class ChordDiagram extends DataLayer{
     // Find the max and min from the ChordNode metadata
     float themin = 0;
     float themax =0;
-    for(int i =0; i < nodeList.size();i++){
-      themin = min(themin,nodeList.get(i).metaData.callees);
-      themax = max(themax,nodeList.get(i).metaData.callees);
+    for(int i =0; i < nodeListStack.peek().size();i++){
+      themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
+      themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
     }
     println("themin:"+themin);
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
-    for(int i =0; i < nodeList.size();i++){
+    for(int i =0; i < nodeListStack.peek().size();i++){
                                    // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
-      nodeList.get(i).metaData.c = map(nodeList.get(i).metaData.callees, themin, themax, 0, 255);
+      nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, 255);
     }
     
   }
@@ -60,9 +60,9 @@ class ChordDiagram extends DataLayer{
 
       theta = theta + steps;
 
-      if(counter < nodeList.size()){
-        nodeList.get(counter).x = xPos;
-        nodeList.get(counter).y = yPos;
+      if(counter < nodeListStack.peek().size()){
+        nodeListStack.peek().get(counter).x = xPos;
+        nodeListStack.peek().get(counter).y = yPos;
       }
       counter++;
     }
@@ -85,9 +85,9 @@ class ChordDiagram extends DataLayer{
     int counter = 0; // draw a new point at each step
     for(  float yPos = padding; yPos < ySize-padding; yPos+=steps){
       for(float xPos = padding; xPos < xSize-padding; xPos+=steps){
-        if(counter < nodeList.size()){
-          nodeList.get(counter).x = xPos;
-          nodeList.get(counter).y = yPos;
+        if(counter < nodeListStack.peek().size()){
+          nodeListStack.peek().get(counter).x = xPos;
+          nodeListStack.peek().get(counter).y = yPos;
           yBounds = yPos+padding; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
           counter++;
         }
@@ -104,7 +104,7 @@ class ChordDiagram extends DataLayer{
     float theta = 0; // angle to increase each loop
 
     int counter = 0;
-    while(counter < nodeList.size()){
+    while(counter < nodeListStack.peek().size()){
       
       float p = radius;
       float phi = PI/3;
@@ -117,9 +117,9 @@ class ChordDiagram extends DataLayer{
       float yPos = centery - radius*sin(theta);
       float zPos = radius*sin(theta);
       */
-      nodeList.get(counter).x = xPos;
-      nodeList.get(counter).y = yPos;
-      nodeList.get(counter).z = zPos;
+      nodeListStack.peek().get(counter).x = xPos;
+      nodeListStack.peek().get(counter).y = yPos;
+      nodeListStack.peek().get(counter).z = zPos;
       
       theta = theta + steps;
       counter++;
@@ -144,11 +144,11 @@ class ChordDiagram extends DataLayer{
     
     // Modify all of the positions in our nodeList
     if(layout<=0){
-      plotPointsOnCircle(nodeList.size()); // Plot points on the circle
+      plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
     }else if(layout==1){
-      plotPointsOnGrid(nodeList.size());
+      plotPointsOnGrid(nodeListStack.peek().size());
     }else if(layout>=2){
-      plotPointsOnSphere(nodeList.size());
+      plotPointsOnSphere(nodeListStack.peek().size());
     }
        
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
@@ -178,8 +178,8 @@ class ChordDiagram extends DataLayer{
           // ChordNode itself. This way we can have any arbritrary shape in ChordNode
           // drawn and handle all of the selection there. It also would allow us to have
           // different types of shaped nodes mixed in a visualization much more easily.
-          for(int i =0; i < nodeList.size();i++){
-            ChordNode temp = (ChordNode)nodeList.get(i);
+          for(int i =0; i < nodeListStack.peek().size();i++){
+            ChordNode temp = (ChordNode)nodeListStack.peek().get(i);
             temp.render(mode);
           }
       }

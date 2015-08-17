@@ -2,7 +2,7 @@ class Histogram extends DataLayer{
   
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
-    init(file, xPosition, yPosition,layout);
+    super.init(file, xPosition, yPosition,layout);
     // Set a layout
     this.setLayout(layout);
   }
@@ -12,9 +12,9 @@ class Histogram extends DataLayer{
   private void plotPoints2D(){
     float xPos = xPosition;
     
-    for(int i =0; i < nodeList.size();i++){
-      nodeList.get(i).x = xPos;
-      nodeList.get(i).y = yPosition;
+    for(int i =0; i < nodeListStack.peek().size();i++){
+      nodeListStack.peek().get(i).x = xPos;
+      nodeListStack.peek().get(i).y = yPosition;
       xPos += defaultWidth;
       xBounds = xPos;
     }
@@ -52,9 +52,9 @@ class Histogram extends DataLayer{
     // Find the max and min from the ChordNode metadata
     float themin = 0;
     float themax = 0;
-    for(int i =0; i < nodeList.size();i++){
-      themin = min(themin,nodeList.get(i).metaData.callees);
-      themax = max(themax,nodeList.get(i).metaData.callees);
+    for(int i =0; i < nodeListStack.peek().size();i++){
+      themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
+      themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
     }
     
     // Set the yBounds to the max value that our visualization scales to.
@@ -64,13 +64,13 @@ class Histogram extends DataLayer{
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
-    for(int i =0; i < nodeList.size();i++){
+    for(int i =0; i < nodeListStack.peek().size();i++){
       // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
-      nodeList.get(i).metaData.callees = (int)map(nodeList.get(i).metaData.callees, themin, themax, 0, maxHeight);
-      nodeList.get(i).metaData.c = nodeList.get(i).metaData.callees;
+      nodeListStack.peek().get(i).metaData.callees = (int)map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, maxHeight);
+      nodeListStack.peek().get(i).metaData.c = nodeListStack.peek().get(i).metaData.callees;
       // Our shapes are rectangular, so we need to set this in the ChordNode
-      nodeList.get(i).rectWidth = defaultWidth;
-      nodeList.get(i).rectHeight = nodeList.get(i).metaData.callees;
+      nodeListStack.peek().get(i).rectWidth = defaultWidth;
+      nodeListStack.peek().get(i).rectHeight = nodeListStack.peek().get(i).metaData.callees;
     }
   }
   
@@ -90,8 +90,8 @@ class Histogram extends DataLayer{
           // ChordNode itself. This way we can have any arbritrary shape in ChordNode
           // drawn and handle all of the selection there. It also would allow us to have
           // different types of shaped nodes mixed in a visualization much more easily.
-          for(int i =0; i < nodeList.size();i++){
-            ChordNode temp = (ChordNode)nodeList.get(i);
+          for(int i =0; i < nodeListStack.peek().size();i++){
+            ChordNode temp = (ChordNode)nodeListStack.peek().get(i);
             temp.render(2);
           }
     
