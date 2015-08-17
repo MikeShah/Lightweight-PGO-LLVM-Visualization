@@ -89,8 +89,8 @@ class ChordDiagram extends DataLayer{
           nodeList.get(counter).x = xPos;
           nodeList.get(counter).y = yPos;
           yBounds = yPos+padding; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
+          counter++;
         }
-        counter++;
       }
     }
   }

@@ -28,6 +28,13 @@ class ChordNode{
 
   // Selecting nodes
   boolean selected = false;
+  
+  // Active node
+  // Active nodes are nodes that are considered part of the visualization.
+  // They will not be drawn if they are not marked as 'isActive'.
+  // This will often be a result of filtering out the nodes.
+  boolean isActive = true;
+  
   // These three values take into account the mouseX,mouseY positions, and camera orientation
   float xSelection;
   float ySelection;

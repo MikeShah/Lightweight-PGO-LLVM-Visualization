@@ -26,7 +26,9 @@ public class DataLayer implements VisualizationLayout{
   
   public DotGraph dotGraph;
   public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
-       
+  // Create a stack of the nodes
+  NodeListStack nodeListStack; 
+      
   public void init(String file, float xPosition, float yPosition, int layout){ //DataLayer(String file, float xPosition, float yPosition){
      this.xPosition = xPosition;
      this.yPosition = yPosition;
@@ -39,7 +41,10 @@ public class DataLayer implements VisualizationLayout{
     
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
-
+    
+    nodeListStack = new NodeListStack();
+    // Push the nodeList onto the stack
+    nodeListStack.push(nodeList);
   }
   
   public void sortNodesByCallee(){
@@ -155,6 +160,7 @@ public class DataLayer implements VisualizationLayout{
     text("Visualization not rendering",xPosition,yPosition);
   }
   
+
 
   
 }

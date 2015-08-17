@@ -106,6 +106,9 @@ void initGUI(){
 
 }
 
+/*
+  Processing program initialization
+*/
 void setup(){
   size(1200 , 900,P3D);
   String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
