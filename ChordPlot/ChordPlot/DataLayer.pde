@@ -21,6 +21,8 @@ public class DataLayer implements VisualizationLayout{
   float yBounds = 0;
   float zBounds = 0;
   
+  // Toggle for showing the Visualization
+  boolean showData = true;
   
   public DotGraph dotGraph;
   public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph

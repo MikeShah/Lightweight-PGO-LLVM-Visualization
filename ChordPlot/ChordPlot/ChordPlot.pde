@@ -108,8 +108,9 @@ void initGUI(){
 
 void setup(){
   size(1200 , 900,P3D);
-  String filename = "output.dot";
-   
+  String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
+  //String filename = "output.dot";
+  
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-100,0);
   
@@ -143,10 +144,21 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
+// Histogram
+public void Histogram(int theValue) {
+  h.showData = !h.showData;
+}
+
+// Microarray
+public void Microarray(int theValue) {
+  cd.showData = !cd.showData;
+}
+
 void draw(){
-  println("FPS :"+frameRate);
-   
    background(128);
+   
+   text("FPS :"+frameRate,5,height-10);
+   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

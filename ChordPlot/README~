@@ -1,5 +1,25 @@
+Built using Processing 3.0b3 (Any later version will likely work)
+
 If you have trouble building this on Linux:
 
 Read the associated notes here:
 (These notes explain about downloading an appropriate version of Java and not using OpenJDK).
 https://github.com/processing/processing/wiki/Supported-Platforms
+
+External Dependencies:
+-This program relies on the ControlP5 Library. It itself is implemented in Processing and can be installed by
+ going to Sketch->Import Library->Add Library ControlP5
+
+- You need to run mymodulepass2 (name subject to change) to generate a dot file with appropriate meta-data as of 8/17/15.
+  In theory any dot file will at least give you a microarray with the callsites.
+
+
+
+
+
+Input Formats
+- For now the input format is .dot file
+
+
+Output Formats
+- None currently. Perhaps .dot file for selected nodes in the future.

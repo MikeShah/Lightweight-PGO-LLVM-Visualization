@@ -26,8 +26,13 @@ class ChordNode{
   float rectWidth = 0; // needed if we are rendering 2D rectangular shapes
   float rectHeight =0; // needed if we are rendering 2D rectangular shapes
 
-  
+  // Selecting nodes
   boolean selected = false;
+  // These three values take into account the mouseX,mouseY positions, and camera orientation
+  float xSelection;
+  float ySelection;
+  float zSelection;
+  
   
   ArrayList<LocPoint> LocationPoints;
   
@@ -60,8 +65,15 @@ class ChordNode{
     A mode of 2 renders as lines
   */
   public void render(int mode){
+    // Setup the mouse
+    // Translate the mouse coordinates to the pixel-space coordinates appropriately, so if we move the camera we can see everything.
+    xSelection = (mouseX-MySimpleCamera.cameraX);
+    ySelection = (mouseY-MySimpleCamera.cameraY);
+    zSelection = MySimpleCamera.cameraZ;
+  
+    // Determine how to render the nodes
     if(mode<=0){
-      render2D(0);
+      render2D(1);
     }else if(mode==1){
       sphereDetail(6);
       render3D();
@@ -76,7 +88,7 @@ class ChordNode{
   // renderShape (0) = ellipse
   // renderShape (1) = rect
   private void render2D(int renderShape){
-     if( dist(x,y,mouseX,mouseY) < nodeSize || selected){
+     if( dist(x,y,xSelection,ySelection) < nodeSize || selected){
         fill(0);
         if(selected){fill(0,255,0);}
         if (renderShape==0){
@@ -91,7 +103,7 @@ class ChordNode{
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
-        if(mousePressed && dist(x,y,mouseX,mouseY) < nodeSize){
+        if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize){
           selected = !selected;
         }
      }
@@ -110,7 +122,7 @@ class ChordNode{
   
   // Imlements selection and onHover for 3D spheres
   private void render3D(){
-     if( dist(x,y,0,mouseX,mouseY,0) < nodeSize || selected){
+     if( dist(x,y,0,xSelection,ySelection,0) < nodeSize || selected){
         fill(0);
         if(selected){fill(0,255,0);}
         
@@ -125,7 +137,7 @@ class ChordNode{
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
-        if(mousePressed && dist(x,y,z,mouseX,mouseY,0) < nodeSize){
+        if(mousePressed && dist(x,y,z,xSelection,ySelection,0) < nodeSize){
           selected = !selected;
         }
      }
@@ -142,7 +154,7 @@ class ChordNode{
   
   // Implements onHover and Selection for 2D Rectangles
   private void render2DRects(float rectWidth, float rectHeight){
-     if( (mouseX > x && mouseX < (x+rectWidth) && mouseY < y && mouseY > (y-rectHeight)) || selected){ 
+     if( (mouseX > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight)) || selected){ 
         fill(0);
         if(selected){fill(0,255,0);}
         rect(x,y-rectHeight,rectWidth,rectHeight);
@@ -152,7 +164,7 @@ class ChordNode{
         text(metaData.name,x,y-rectHeight);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
-        if(mousePressed &&  (mouseX > x && mouseX < (x+rectWidth) && mouseY < y && mouseY > (y-rectHeight))){
+        if(mousePressed &&  (xSelection > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight))){
           selected = !selected;
         }
      }

@@ -83,17 +83,18 @@ class Histogram extends DataLayer{
   
   // Draw using our rendering modes
   public void draw(int mode){
-       // Draw a background
-      drawBounds(192,192,192);
-      // What is interesting about the drawing, is that it is all happening in the
-      // ChordNode itself. This way we can have any arbritrary shape in ChordNode
-      // drawn and handle all of the selection there. It also would allow us to have
-      // different types of shaped nodes mixed in a visualization much more easily.
-      for(int i =0; i < nodeList.size();i++){
-        ChordNode temp = (ChordNode)nodeList.get(i);
-        temp.render(2);
+    if(showData){
+           // Draw a background
+          drawBounds(192,192,192);
+          // What is interesting about the drawing, is that it is all happening in the
+          // ChordNode itself. This way we can have any arbritrary shape in ChordNode
+          // drawn and handle all of the selection there. It also would allow us to have
+          // different types of shaped nodes mixed in a visualization much more easily.
+          for(int i =0; i < nodeList.size();i++){
+            ChordNode temp = (ChordNode)nodeList.get(i);
+            temp.render(2);
+          }
+    
       }
-
   }
-  
 }
