@@ -156,12 +156,42 @@ public class DataLayer implements VisualizationLayout{
       }
   }
   
+  
+  
+    /*
+      Filter Design pattern
+      
+      1.) Create a new ArrayList<ChordNode>
+      2.) Loop through all nodes that are on the top of the stack
+      3.) If they do not meet the criteria, then do not add them to the list.
+      4.) Push the arrayList we have built on top of the stack
+      5.) Compute summary statistics to give feedback to users
+  */
+  public void filterCallSites(int min, int max){
+      ArrayList<ChordNode> filteredNodes = new ArrayList<ChordNode>();
+      for(int i =0; i < nodeListStack.peek().size();i++){
+        if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
+          filteredNodes.add(nodeListStack.peek().get(i));
+        }
+      }
+      nodeListStack.push(filteredNodes);
+      nodeListStack.computeSummaryStatistics();
+  }
+  
+  /* *******************************
+          Drawing Routines
+     ******************************* */
+  
+  // Draw a rectangle around our visualization
+  // Useful for knowing where we can draw and position our visualization
   public void drawBounds(float r, float g, float b){
     fill(r,g,b);
     stroke(r,g,b);
     rect(xPosition+1,yPosition+1,xBounds,yBounds);
   }
   
+  
+  // Draw our actual visualization
   public void draw(int mode){
     // Do nothing, this method needs to be overridden
     rect(xPosition,yPosition,5,5);

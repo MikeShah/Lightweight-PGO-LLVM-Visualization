@@ -33,7 +33,7 @@ void initGUI(){
                     filtersPanel.addRange("CallSites")
                        // disable broadcasting since setRange and setRangeValues will trigger an event
                        .setBroadcast(false) 
-                       .setPosition(10,100)
+                       .setPosition(10,80)
                        .setSize(80,15)
                        .setHandleSize(10)
                        .setRange(0,255)
@@ -42,6 +42,13 @@ void initGUI(){
                        .setBroadcast(true)
                        .setColorForeground(color(255,40))
                        .setColorBackground(color(255,40))
+                       .setGroup(filterSet1)
+                       ;
+                       
+                    // create a new button for outputting Dot files
+                    filtersPanel.addButton("ApplyOurFilters")
+                       .setPosition(10,100)
+                       .setSize(180,19)
                        .setGroup(filterSet1)
                        ;
      
@@ -72,7 +79,7 @@ void initGUI(){
                    
   Group functionListGroup = filtersPanel.addGroup("Function List")
                 .setPosition(600,100)
-                .setSize(150,200)
+                .setSize(150,240)
                 .setBackgroundColor(color(64,100))
                 ;
                 
@@ -82,6 +89,14 @@ void initGUI(){
                  .setGroup(functionListGroup)
                  .addItems(java.util.Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","L","M","N","O","P","Q","R"))
                  ;
+                 
+                // create a new button for outputting Dot files
+                filtersPanel.addButton("OutputDOT")
+                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
+                   .setPosition(10,200)
+                   .setSize(180,19)
+                   .setGroup(functionListGroup)
+                   ;
 
     // create a new accordion
   // add g1, g2, and g3 to the accordion.
@@ -97,9 +112,10 @@ void initGUI(){
   // Allow us to open multiple levels at a time
   accordion.setCollapseMode(Accordion.MULTI);
 
-  String[] test = new String[h.nodeList.size()];
-  for(int i = 0; i < h.nodeList.size();i++){
-    test[i] = h.nodeList.get(i).metaData.name;
+  // Populate list
+  String[] test = new String[cd.nodeListStack.peek().size()];
+  for(int i = 0; i < cd.nodeListStack.peek().size();i++){
+    test[i] = cd.nodeListStack.peek().get(i).metaData.name;
   }
   
   filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
@@ -109,7 +125,7 @@ void initGUI(){
   Processing program initialization
 */
 void setup(){
-  size(1200 , 900,P3D);
+  size(1600 ,900,P3D);
   //String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
   String filename = "output.dot";
   
@@ -146,6 +162,16 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
+/*
+    When this button is pressed, we output a 
+    .dot file with the functions listed in the microarray
+*/
+public void OutputDOT(int theValue) {
+  println("Outputting Dot file");
+  cd.nodeListStack.outputDot(".//top_of_stack_plus_somet_timestamp");
+}
+
+
 // Histogram
 public void Histogram(int theValue) {
   h.showData = !h.showData;
@@ -154,14 +180,32 @@ public void Histogram(int theValue) {
 // Microarray
 public void Microarray(int theValue) {
   cd.showData = !cd.showData;
-  cd.nodeListStack.filterCallSites(5, 100);
+
 }
 
+
+public void ApplyOurFilters(int theValue){
+  // Apply the relevant filters
+  cd.filterCallSites(5, 100);
+  
+  // Update the functions list with all of the applicable functions
+  String[] test = new String[cd.nodeListStack.peek().size()];
+  for(int i = 0; i < test.length;i++){
+    test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+  }
+  
+  filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
+}
+
+
+/*
+    Main draw function in the visualization.
+*/
 void draw(){
    background(128);
    
    text("FPS :"+frameRate,5,height-10);
-   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
+   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

@@ -76,7 +76,7 @@ class ChordDiagram extends DataLayer{
   private void plotPointsOnGrid(float numberOfPoints){
       
     float padding = 10; // padding on the screen
-    float xSize = (width-padding-200)*3; // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
+    float xSize = (width-padding-200); // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
     float ySize = height-padding;
     
     xBounds = xSize; // Set the bounds

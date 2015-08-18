@@ -26,24 +26,7 @@ public class NodeListStack{
     summaryStatistics = new SummaryStatistics();
   }
   
-  /*
-      Filter Design pattern
-      
-      1.) Create a new ArrayList<ChordNode>
-      2.) Loop through all nodes that are on the top of the stack
-      3.) If they do not meet the criteria, then do not add them to the list.
-      4.) Push the arrayList we have built on top of the stack
-  */
-  public void filterCallSites(int min, int max){
-      ArrayList<ChordNode> filteredNodes = new ArrayList<ChordNode>();
-      for(int i =0; i < stack.peek().size();i++){
-        if(stack.peek().get(i).metaData.callees >= min && stack.peek().get(i).metaData.callees <= max){
-          filteredNodes.add(stack.peek().get(i));
-        }
-      }
-      stack.push(filteredNodes);
-  }
-  
+ 
   
   /*
     Add on a new filter
@@ -78,9 +61,16 @@ public class NodeListStack{
   
   // Update the summary statistics based on the active nodes.
   public void computeSummaryStatistics(){
-   summaryStatistics.callers = 0; // Total number of caller functions
-   summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
-   printStack();
+     summaryStatistics.callers = stack.peek().size(); // Total number of caller functions
+     summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+     
+      for(int i =0; i < stack.peek().size();i++){
+        summaryStatistics.callees += stack.peek().get(i).metaData.callees;
+      }
+        
+     println("Total Callers:"+summaryStatistics.callers);
+     println("Total Callees:"+summaryStatistics.callees);
+     printStack();
   }
   
   /*  Returns how many active nodes there are on the visualization by getting the
@@ -100,6 +90,20 @@ public class NodeListStack{
           counter++;
           iter.next();
       }
+  }
+  
+  // Generates a dot graph from the top of the stack
+  public void outputDot(String filepath){
+    PrintWriter output;
+
+    output = createWriter(filepath);
+    
+    for(int i =0; i < stack.peek().size();i++){
+      output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+    }
+    
+    output.flush();
+    output.close();
   }
   
   
