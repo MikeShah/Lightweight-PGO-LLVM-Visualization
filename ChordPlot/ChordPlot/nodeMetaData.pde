@@ -2,8 +2,9 @@ import java.util.Hashtable;
 import java.util.*;
 
 
-
-
+/*
+    This class is made use of from ChordNode to store metaData.
+*/
 class nodeMetaData implements Comparable<nodeMetaData>{
   
   String name;

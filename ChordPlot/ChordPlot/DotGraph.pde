@@ -6,9 +6,11 @@ import java.util.Hashtable;
 import java.util.*;
 
 
+/*
 
+  This class loads a DOT Graph file and populates a node list
 
-
+*/
 class DotGraph{
   
   // Contains a hashmap that consits of: 

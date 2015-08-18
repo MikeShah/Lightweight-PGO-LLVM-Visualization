@@ -7,12 +7,15 @@ class ChordDiagram extends DataLayer{
   float radius;
      
   public ChordDiagram(float radius, String file,int layout){
+    this.VisualizationName = "Chord Diagram";
     this.radius = radius;
     this.layout = layout;
     // Calls init() which is from the DataLayer class, and basically runs as a constructor
     super.init(file,0,0,layout);
     // Set a layout
     this.setLayout(layout);
+    // Compute initial statistics
+    nodeListStack.computeSummaryStatistics();
   }
   
   /*

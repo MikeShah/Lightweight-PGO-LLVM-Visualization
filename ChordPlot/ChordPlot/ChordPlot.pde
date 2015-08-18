@@ -11,6 +11,10 @@ ButtonBar breadCrumbsBar;
 ChordDiagram cd;
 Histogram h;
 
+/* Global values for our sliders */
+int callSiteMin = 1;
+int callSiteMax = 100;
+int maxNumberOfCallsites = 255;
 
 void initGUI(){
   filtersPanel = new ControlP5(this);
@@ -18,9 +22,10 @@ void initGUI(){
   breadCrumbsBar = filtersPanel.addButtonBar("theBreadCrumbsBar")
      .setPosition(0, height-20)
      .setSize(width, 20)
+     .addItems(split("Start"," "));
      ;
+     
 
-  
   Group filterSet1 = filtersPanel.addGroup("Filters")
                     .setSize(160,120)
                     .setPosition(100,100)
@@ -44,8 +49,8 @@ void initGUI(){
                        .setPosition(10,80)
                        .setSize(80,15)
                        .setHandleSize(10)
-                       .setRange(0,255)
-                       .setRangeValues(50,100)
+                       .setRange(0,maxNumberOfCallsites)
+                       .setRangeValues(callSiteMin,callSiteMax)
                        // after the initialization we turn broadcast back on again
                        .setBroadcast(true)
                        .setColorForeground(color(255,40))
@@ -91,7 +96,7 @@ void initGUI(){
                 .setBackgroundColor(color(64,100))
                 ;
                 
-              filtersPanel.addScrollableList("FunctionScrollableList")
+              filtersPanel.addScrollableList("Function Scrollable List")
                  .setPosition(10,10)
                  .setSize(180,180)
                  .setGroup(functionListGroup)
@@ -126,7 +131,7 @@ void initGUI(){
     test[i] = cd.nodeListStack.peek().get(i).metaData.name;
   }
   
-  filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
+  filtersPanel.get(ScrollableList.class, "Function Scrollable List").setItems(test);
 }
 
 /*
@@ -149,9 +154,9 @@ int drawMode = 0;
 // 
 // an event from slider sliderA will change the value of textfield textA here
 public void sliderA(String item) {
-  filtersPanel.get(ScrollableList.class, "FunctionScrollableList").clear();
+  filtersPanel.get(ScrollableList.class, "Function Scrollable List").clear();
   List<String> test = new ArrayList<String>();
-  filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
+  filtersPanel.get(ScrollableList.class, "Function Scrollable List").setItems(test);
 }
 
 // function controlEvent will be invoked with every value change 
@@ -168,6 +173,16 @@ void controlEvent(ControlEvent theEvent) {
             +theEvent.getController().getName()
             );
   }
+  
+  if(theEvent.isFrom("rangeController")) {
+    // min and max values are stored in an array.
+    // access this array with controller().arrayValue().
+    // min is at index 0, max is at index 1.
+    callSiteMin = int(theEvent.getController().getArrayValue(0));
+    callSiteMax = int(theEvent.getController().getArrayValue(1));
+    println("range update, done.");
+  }
+  
 }
 
 /*
@@ -191,29 +206,47 @@ public void Microarray(int theValue) {
 
 }
 
-
+/*
+  Apply a Filter based on the options we have selected.
+*/
 public void ApplyOurFilters(int theValue){
+  String FilterString = "Callsites "+callSiteMin+"-"+callSiteMax;
   // Apply the relevant filters
-  cd.filterCallSites(0, 1);
-  cd.update();
-  breadCrumbsBar.addItem("A Filter",1);
+  cd.filterCallSites(callSiteMin, callSiteMax);
+  cd.update(); // Make a call to update the visualization
   
+  h.filterCallSites(callSiteMin, callSiteMax);
+  h.update(); // Make a call to update the visualization
+  // Add our item to the list
+  breadCrumbsBar.addItem(FilterString,1);
+}
+
+/*
+  Update our function list
+*/
+public void updateFunctionList(){
   // Update the functions list with all of the applicable functions
   String[] test = new String[cd.nodeListStack.peek().size()];
   for(int i = 0; i < test.length;i++){
     test[i] = cd.nodeListStack.peek().get(i).metaData.name;
   }
   
-  filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
+  // Update the Function List
+  filtersPanel.get(ScrollableList.class, "Function Scrollable List").setItems(test);
 }
 
-public void theBreadCrumbsBar(int theValue){
-  println("bar clicked, item-value:", theValue);
+
+public void theBreadCrumbsBar(int n){
+  if(mouseButton == LEFT){
+    println("Setting Stack to this node", n);
+  }else if(mouseButton == RIGHT){
+    println("Clearing Stack to this node", n);
+  }
 }
 
-/*
-    Main draw function in the visualization.
-*/
+/* =============================================
+     Main draw function in the visualization
+   ============================================= */
 void draw(){
    background(128);
    
@@ -228,7 +261,9 @@ void draw(){
    popMatrix();
 }
 
-
+/* =============================================
+  Camera Controls with Arrowkeys, Ctrl, and Shift
+   ============================================= */
 int keyIndex = 0;
 // Determine how deep in the tree we go.
 void keyPressed() {

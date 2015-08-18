@@ -2,9 +2,12 @@ class Histogram extends DataLayer{
   
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
+    this.VisualizationName = "Histogram";
     super.init(file, xPosition, yPosition,layout);
     // Set a layout
     this.setLayout(layout);
+    // Compute initial statistics
+    nodeListStack.computeSummaryStatistics();
   }
   
 

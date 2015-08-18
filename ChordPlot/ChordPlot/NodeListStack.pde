@@ -15,6 +15,10 @@ public class NodeListStack{
   // Anytime we push or pop, we need to recompute the summary statistics
   public SummaryStatistics summaryStatistics;
   
+   // Store the total elements that are at the first level
+   // This is conveinient so we can see how much data we have filtered out.
+   int bottomOfStackCallers = 0; 
+   int bottomOfStackCallees = 0;
   
   /*
       Default Constructor
@@ -42,7 +46,9 @@ public class NodeListStack{
     Then compute summary statistics
   */
   public void pop(){
-    stack.pop();
+    if(stack.size()>1){
+      stack.pop();
+    }
     computeSummaryStatistics();
   }
   
@@ -58,7 +64,6 @@ public class NodeListStack{
     }
   }
   
-  
   // Update the summary statistics based on the active nodes.
   public void computeSummaryStatistics(){
      summaryStatistics.callers = stack.peek().size(); // Total number of caller functions
@@ -67,9 +72,16 @@ public class NodeListStack{
       for(int i =0; i < stack.peek().size();i++){
         summaryStatistics.callees += stack.peek().get(i).metaData.callees;
       }
-        
-     println("Total Callers:"+summaryStatistics.callers);
-     println("Total Callees:"+summaryStatistics.callees);
+     
+     // Figure out how much of the data we are seeing.
+     // Store our first push onto the stack here
+     if (stack.size()==1){
+       bottomOfStackCallers = summaryStatistics.callers; // Total number of caller functions
+       bottomOfStackCallees = summaryStatistics.callees; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+     }
+             
+     println("Total Callers:"+summaryStatistics.callers + " of "+bottomOfStackCallers);
+     println("Total Callees:"+summaryStatistics.callees + " of "+bottomOfStackCallees);
      printStack();
   }
   

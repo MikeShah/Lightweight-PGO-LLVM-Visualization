@@ -5,7 +5,9 @@
     This class should not be instantiated (It should just be considered abstract with some functionality implemented)
 */
 public class DataLayer implements VisualizationLayout{
-  
+  // The name of the visualization
+  public String VisualizationName = "Data Layer";
+
   // Where to draw the visualization
   public float xPosition;
   public float yPosition;
@@ -25,7 +27,7 @@ public class DataLayer implements VisualizationLayout{
   
   // Toggle for showing the Visualization
   boolean showData = true;
-  
+  // Store our dotGraph
   public DotGraph dotGraph;
   public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
   // Create a stack of the nodes
