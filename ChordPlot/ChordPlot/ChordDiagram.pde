@@ -156,6 +156,15 @@ class ChordDiagram extends DataLayer{
     storeLineDrawings();
   }
 
+
+  // After we filter our data, make an update
+  // so that our visualization is reset based on the
+  // active data.
+  @Override
+  public void update(){
+     this.setLayout(layout);
+  }
+
   
   @Override
   public void setPosition(float x, float y){

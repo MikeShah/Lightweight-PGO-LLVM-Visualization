@@ -4,6 +4,8 @@ import controlP5.*;
 ControlP5 filtersPanel;
 // Collapse into one
 Accordion accordion;
+// Breadcrumbs
+ButtonBar breadCrumbsBar;
 
 /* Create our visualizations */
 ChordDiagram cd;
@@ -12,6 +14,12 @@ Histogram h;
 
 void initGUI(){
   filtersPanel = new ControlP5(this);
+  
+  breadCrumbsBar = filtersPanel.addButtonBar("theBreadCrumbsBar")
+     .setPosition(0, height-20)
+     .setSize(width, 20)
+     ;
+
   
   Group filterSet1 = filtersPanel.addGroup("Filters")
                     .setSize(160,120)
@@ -126,7 +134,7 @@ void initGUI(){
 */
 void setup(){
   size(1600 ,900,P3D);
-  //String filename = "/home/mdshah/Desktop/LLVMSample/dump.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   String filename = "output.dot";
   
   cd = new ChordDiagram(400, filename,1);
@@ -186,7 +194,9 @@ public void Microarray(int theValue) {
 
 public void ApplyOurFilters(int theValue){
   // Apply the relevant filters
-  cd.filterCallSites(5, 100);
+  cd.filterCallSites(0, 1);
+  cd.update();
+  breadCrumbsBar.addItem("A Filter",1);
   
   // Update the functions list with all of the applicable functions
   String[] test = new String[cd.nodeListStack.peek().size()];
@@ -197,6 +207,9 @@ public void ApplyOurFilters(int theValue){
   filtersPanel.get(ScrollableList.class, "FunctionScrollableList").setItems(test);
 }
 
+public void theBreadCrumbsBar(int theValue){
+  println("bar clicked, item-value:", theValue);
+}
 
 /*
     Main draw function in the visualization.

@@ -178,9 +178,18 @@ public class DataLayer implements VisualizationLayout{
       nodeListStack.computeSummaryStatistics();
   }
   
+  
+  
+  // Generally this method should be overridden.
+  // It is called whenver we need to update what data is active
+  // on the visualization. Generally after filtering we would want
+  // to call this.
+  public void update(){
+  }
+  
   /* *******************************
           Drawing Routines
-     ******************************* */
+     ******************************* */  
   
   // Draw a rectangle around our visualization
   // Useful for knowing where we can draw and position our visualization

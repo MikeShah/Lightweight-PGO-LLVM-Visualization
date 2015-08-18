@@ -74,6 +74,14 @@ class Histogram extends DataLayer{
     }
   }
   
+  // After we filter our data, make an update
+  // so that our visualization is reset based on the
+  // active data.
+  @Override
+  public void update(){
+     this.setLayout(layout);
+  }
+  
   @Override
     public void drawBounds(float r, float g, float b){
     fill(r,g,b);
