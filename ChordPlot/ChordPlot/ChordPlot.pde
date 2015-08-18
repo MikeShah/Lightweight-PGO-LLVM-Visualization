@@ -12,7 +12,7 @@ ChordDiagram cd;
 Histogram h;
 
 /* Global values for our sliders */
-int callSiteMin = 1;
+int callSiteMin = 20;
 int callSiteMax = 100;
 int maxNumberOfCallsites = 255;
 
@@ -47,7 +47,7 @@ void initGUI(){
                        // disable broadcasting since setRange and setRangeValues will trigger an event
                        .setBroadcast(false) 
                        .setPosition(10,80)
-                       .setSize(80,15)
+                       .setSize(140,15)
                        .setHandleSize(10)
                        .setRange(0,maxNumberOfCallsites)
                        .setRangeValues(callSiteMin,callSiteMax)
@@ -138,7 +138,7 @@ void initGUI(){
   Processing program initialization
 */
 void setup(){
-  size(1600 ,900,P3D);
+  size(1800 ,1000,P3D);
   //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   String filename = "output.dot";
   
@@ -210,7 +210,7 @@ public void Microarray(int theValue) {
   Apply a Filter based on the options we have selected.
 */
 public void ApplyOurFilters(int theValue){
-  String FilterString = "Callsites "+callSiteMin+"-"+callSiteMax;
+  String FilterString = cd.nodeListStack.peek().name+" Callsites "+callSiteMin+"-"+callSiteMax;
   // Apply the relevant filters
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
@@ -250,7 +250,7 @@ public void theBreadCrumbsBar(int n){
 void draw(){
    background(128);
    
-   text("FPS :"+frameRate,5,height-10);
+   text("FPS :"+frameRate,5,height-40);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
    
    pushMatrix();

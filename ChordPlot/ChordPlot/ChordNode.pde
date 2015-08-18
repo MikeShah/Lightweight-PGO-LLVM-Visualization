@@ -23,8 +23,9 @@ class ChordNode{
   float z;
   public nodeMetaData metaData;
   int nodeSize = 3; // needed if we are rendering 2D circles or spheres
-  float rectWidth = 0; // needed if we are rendering 2D rectangular shapes
-  float rectHeight =0; // needed if we are rendering 2D rectangular shapes
+  
+  float rectWidth = 0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
+  float rectHeight =0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
 
   // Selecting nodes
   boolean selected = false; // By default, we show everything, so we render all nodes
@@ -95,35 +96,32 @@ class ChordNode{
   // renderShape (0) = ellipse
   // renderShape (1) = rect
   private void render2D(int renderShape){
-     if( dist(x,y,xSelection,ySelection) < nodeSize || selected){
-        fill(0);
-        if(selected){fill(0,255,0);}
-        if (renderShape==0){
-          ellipse(x,y,nodeSize*2,nodeSize*2);
-        }else{
-          rect(x,y,nodeSize*2,nodeSize*2);
-        }
-        
-        fill(0,255,0);
-        drawToCallees();
-        fill(0);
-        text(metaData.name,x,y);
-        text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
-        
-        if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize){
-          selected = !selected;
-        }
+    // Simply make a call into render2DRects if we choose to do 2D shapes
+     if(renderShape == 1){
+           render2DRects(rectWidth,rectHeight);
      }
      else{
-        // Color nodes based on callees
-        fill(255-metaData.c);
-        stroke(255-metaData.c);
-        
-        if (renderShape==0){
-          ellipse(x,y,nodeSize*2,nodeSize*2);
-        }else{
-          rect(x,y,nodeSize*2,nodeSize*2);
-        }
+           if( dist(x,y,xSelection,ySelection) < nodeSize || selected){
+              fill(0);
+              if(selected){fill(0,255,0);}
+              ellipse(x,y,nodeSize*2,nodeSize*2);
+              
+              fill(0,255,0);
+              drawToCallees();
+              fill(0);
+              text(metaData.name,x,y);
+              text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
+              
+              if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize){
+                selected = !selected;
+              }
+           }
+           else{
+              // Color nodes based on callees
+              fill(255-metaData.c);
+              stroke(255-metaData.c);
+              ellipse(x,y,nodeSize*2,nodeSize*2);
+           }
      }
   }
   

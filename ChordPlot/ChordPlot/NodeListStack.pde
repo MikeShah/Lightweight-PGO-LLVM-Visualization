@@ -7,7 +7,7 @@
 public class NodeListStack{
   
   // The all important stack
-  Deque<ArrayList<ChordNode>> stack;
+  Deque<ChordNodeList> stack;
   
   // Store statistics about the data 
   // Note that these statistics are always in reference to
@@ -25,7 +25,7 @@ public class NodeListStack{
   */
   public NodeListStack(){
     // Instantiate our stack
-    stack = new ArrayDeque<ArrayList<ChordNode>>();
+    stack = new ArrayDeque<ChordNodeList>();
     // Instantiate summary statistics
     summaryStatistics = new SummaryStatistics();
   }
@@ -36,7 +36,7 @@ public class NodeListStack{
     Add on a new filter
     Then compute summary Statistics
   */
-  public void push(ArrayList<ChordNode> activeNodeList){
+  public void push(ChordNodeList activeNodeList){
     stack.push(activeNodeList);
     computeSummaryStatistics();
   }
@@ -55,9 +55,9 @@ public class NodeListStack{
   /*
     Peek at the top of our stack
   */
-  public ArrayList<ChordNode> peek(){
+  public ChordNodeList peek(){
     if(stack.size() >0){
-      return (ArrayList<ChordNode>)stack.peek();
+      return (ChordNodeList)stack.peek();
     }else
     {
       return null;
@@ -94,11 +94,12 @@ public class NodeListStack{
   
   // Outputs the stack from top to bottom
   public void printStack(){
-      Iterator<ArrayList<ChordNode>> iter = stack.iterator();
+      Iterator<ChordNodeList> iter = stack.iterator();
       
-      int counter = 0;
+      int counter = 0;     
       while (iter.hasNext()){
-          System.out.println(counter+".) nodeList");
+          //ChordNodeList temp = iter;
+          System.out.println(counter+".) ");
           counter++;
           iter.next();
       }

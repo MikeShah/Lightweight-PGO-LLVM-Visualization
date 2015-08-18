@@ -84,13 +84,18 @@ class ChordDiagram extends DataLayer{
     
     xBounds = xSize; // Set the bounds
     
-    float steps = 7; // Based on how many points we have, 
+    float steps = 6; // Based on how many points we have, 
     int counter = 0; // draw a new point at each step
     for(  float yPos = padding; yPos < ySize-padding; yPos+=steps){
       for(float xPos = padding; xPos < xSize-padding; xPos+=steps){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
           nodeListStack.peek().get(counter).y = yPos;
+          // Set the size of our visualization here
+          nodeListStack.peek().get(counter).nodeSize = (int)(steps/2); // Integer division
+          nodeListStack.peek().get(counter).rectWidth = steps;
+          nodeListStack.peek().get(counter).rectHeight = steps;
+          
           yBounds = yPos+padding; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
           counter++;
         }

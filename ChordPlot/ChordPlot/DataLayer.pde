@@ -29,7 +29,7 @@ public class DataLayer implements VisualizationLayout{
   boolean showData = true;
   // Store our dotGraph
   public DotGraph dotGraph;
-  public ArrayList<ChordNode> nodeList;  // All of the nodes, that will be loaded from the dotGraph
+  public ChordNodeList nodeList;  // All of the nodes, that will be loaded from the dotGraph
   // Create a stack of the nodes
   NodeListStack nodeListStack; 
   
@@ -46,7 +46,7 @@ public class DataLayer implements VisualizationLayout{
     dotGraph = new DotGraph(file);
     // Create a list of all of our nodes that will be in the visualization
     // We eventually push a copy of this to the stack
-    nodeList = new ArrayList<ChordNode>();
+    nodeList = new ChordNodeList();
     
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
@@ -58,19 +58,7 @@ public class DataLayer implements VisualizationLayout{
   }
   
   public void sortNodesByCallee(){
-    Collections.sort(nodeListStack.peek(), new Comparator<ChordNode>(){
-      @Override
-      public int compare(ChordNode item1, ChordNode item2){
-          Integer val1 = item1.metaData.callees;
-          Integer val2 = item2.metaData.callees;
-          
-          // Descending order (reverse comare to do ascending order)
-          return val2.compareTo(val1);
-          //return item1.metaData.name.compareTo(item2.metaData.name); // uncomment this to sort based on 'string' value
-      }
-    });
-    
-      
+    this.nodeListStack.peek().sortNodes();
   }
   
   /*
@@ -170,7 +158,7 @@ public class DataLayer implements VisualizationLayout{
       5.) Compute summary statistics to give feedback to users
   */
   public void filterCallSites(int min, int max){
-      ArrayList<ChordNode> filteredNodes = new ArrayList<ChordNode>();
+      ChordNodeList filteredNodes = new ChordNodeList();
       for(int i =0; i < nodeListStack.peek().size();i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
           filteredNodes.add(nodeListStack.peek().get(i));
