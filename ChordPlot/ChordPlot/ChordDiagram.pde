@@ -186,8 +186,8 @@ class ChordDiagram extends DataLayer{
     if(showData){
          // Draw a background
           pushMatrix();
-            translate(0,0,-1);
-            drawBounds(0,64,128);
+            translate(0,0,MySimpleCamera.cameraZ-1);
+            drawBounds(0,64,128, xPosition, yPosition);
           popMatrix();
           
           fill(0);

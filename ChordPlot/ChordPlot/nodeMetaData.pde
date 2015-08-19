@@ -23,6 +23,16 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     this.extra_information = "n/a";
     c = 0;
   }
+  
+  // Prints all of the metaData to a string.
+  public String getAllMetadata(){
+    String result = "";
+    result += "name: "+name + "\n";
+    result += "Callees: "+callees + "\n";
+    result += "info: "+extra_information + "\n";
+    
+    return result;
+  }
  
   // Copies in the metadata from another node into this one.
   // Generally this is used for making new instances (i.e. we need a copy constructor)

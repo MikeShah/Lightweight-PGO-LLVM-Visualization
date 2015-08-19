@@ -34,13 +34,7 @@ class ChordNode{
   // Active nodes are nodes that are considered part of the visualization.
   // They will not be drawn if they are not marked as 'isActive'.
   // This will often be a result of filtering out the nodes.
-  boolean isActive = true;
-  
-  // These three values take into account the mouseX,mouseY positions, and camera orientation
-  float xSelection;
-  float ySelection;
-  float zSelection;
-  
+  boolean isActive = true; 
   
   ArrayList<LocPoint> LocationPoints;
   
@@ -73,22 +67,20 @@ class ChordNode{
     A mode of 2 renders as lines
   */
   public void render(int mode){
-    // Setup the mouse
-    // Translate the mouse coordinates to the pixel-space coordinates appropriately, so if we move the camera we can see everything.
-    xSelection = (mouseX-MySimpleCamera.cameraX);
-    ySelection = (mouseY-MySimpleCamera.cameraY);
-    zSelection = MySimpleCamera.cameraZ;
-  
-    // Determine how to render the nodes
-    if(mode<=0){
-      render2D(1);
-    }else if(mode==1){
-      sphereDetail(6);
-      render3D();
-    }
-    else if(mode==2){
-      render2DRects(rectWidth,rectHeight);
-    }
+    pushMatrix();
+    translate(0,0,MySimpleCamera.cameraZ);
+
+        // Determine how to render the nodes
+        if(mode<=0){
+          render2D(1);
+        }else if(mode==1){
+          sphereDetail(6);
+          render3D();
+        }
+        else if(mode==2){
+          render2DRects(rectWidth,rectHeight);
+        }
+    popMatrix();
   }
   
   // Render 2D Ellipses
@@ -101,7 +93,7 @@ class ChordNode{
            render2DRects(rectWidth,rectHeight);
      }
      else{
-           if( dist(x,y,xSelection,ySelection) < nodeSize || selected){
+           if( dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize || selected){
               fill(0);
               if(selected) { fill(0,255,0); }
               ellipse(x,y,nodeSize*2,nodeSize*2);
@@ -112,7 +104,7 @@ class ChordNode{
               text(metaData.name,x,y);
               text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
               
-              if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize && mouseButton == LEFT){
+              if(mousePressed && dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize && mouseButton == LEFT){
                 selected = !selected;
               }
            }
@@ -127,7 +119,7 @@ class ChordNode{
   
   // Imlements selection and onHover for 3D spheres
   private void render3D(){
-     if( dist(x,y,0,xSelection,ySelection,0) < nodeSize || selected){
+     if( dist(x,y,0,MySimpleCamera.xSelection,MySimpleCamera.ySelection,0) < nodeSize || selected){
         fill(0);
         if(selected){fill(0,255,0);}
         
@@ -142,7 +134,7 @@ class ChordNode{
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
-        if(mousePressed && dist(x,y,z,xSelection,ySelection,0) < nodeSize && mouseButton == LEFT){
+        if(mousePressed && dist(x,y,z,MySimpleCamera.xSelection,MySimpleCamera.ySelection,0) < nodeSize && mouseButton == LEFT){
           selected = !selected;
         }
      }
@@ -161,15 +153,16 @@ class ChordNode{
   */
   public void onRightClick(){
      if(mouseButton == RIGHT){
-       float _w = 100;
-       float _h = 100;
+       float _w = 300;
+       float _h = 200;
+       float padding = 5;
        
        pushMatrix();
-         translate(0,0,20);
+         translate(0,0,MySimpleCamera.cameraZ+20);
          fill(192,255);
          rect(mouseX,mouseY,_w,_h);
          fill(0,255);
-         text("MetaData: "+metaData+" some information THIS IS A REALLY LONG TESTING STRING THAT IS GIVING US MORE INFORMATION ABOUT EACH NODE",mouseX,mouseY,_w,_h);
+         text("MetaData: "+metaData.getAllMetadata()+" \n Lorem ipsum dolor sit amet, phasellus pede tempus magna elit sed integer, aliquam ut mollit turpis, magna at a, non dui",x+padding,y+padding,_w-padding,_h-padding);
        popMatrix();
      }
   }
@@ -177,40 +170,45 @@ class ChordNode{
   
   // Implements onHover and Selection for 2D Rectangles
   private void render2DRects(float rectWidth, float rectHeight){
-     if( (mouseX > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight)) || selected){ 
-        fill(0);
-        if(selected){fill(0,255,0);}
-        rect(x,y-rectHeight,rectWidth,rectHeight);
-        
-        drawToCallees();
-        fill(255);
-        text(metaData.name,x,y-rectHeight);
-        text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
-        onRightClick();
-        
-        if(mousePressed &&  (xSelection > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight)) && mouseButton == LEFT){
-          selected = !selected;
-        }
-     }
-     else{
-        // Color nodes based on callees
-        fill(255-metaData.c);
-        stroke(255-metaData.c);
-        rect(x,y-rectHeight,rectWidth,rectHeight);
-     }
+        if( selected || (mouseX > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight))){ 
+            fill(0);
+            if(selected){fill(0,255,0);}
+            
+            rect(x,y-rectHeight,rectWidth,rectHeight);
+            
+            
+            drawToCallees();
+            fill(255);
+            text(metaData.name,x,y-rectHeight);
+            text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
+            onRightClick();
+            
+            if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
+              selected = !selected;
+            }
+         }
+         else{
+            // Color nodes based on callees
+            fill(255-metaData.c);
+            stroke(255-metaData.c);
+            rect(x,y-rectHeight,rectWidth,rectHeight);
+         }
   }
   
   // Draw to all of the callee locations in 2D
   // Note that we are drawing exclusively to the secondGraphicsLayer here.
   public void drawToCallees(){
     pushMatrix();
-      translate(0,0,1);
+      translate(0,0,MySimpleCamera.cameraZ+1);
       fill(0); stroke(0);
       for(int i =0; i < LocationPoints.size();i++){
         line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
+        noFill();
+        stroke(0);
+        rect(LocationPoints.get(i).x,LocationPoints.get(i).y,rectWidth,rectHeight);
+        
       }
     popMatrix();
-
   }
   
   // Draw to all of the callee locations in 3D

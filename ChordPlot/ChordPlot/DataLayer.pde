@@ -185,7 +185,7 @@ public class DataLayer implements VisualizationLayout{
   
   // Draw a rectangle around our visualization
   // Useful for knowing where we can draw and position our visualization
-  public void drawBounds(float r, float g, float b){
+  public void drawBounds(float r, float g, float b, float xPosition, float yPosition){
     fill(r,g,b);
     stroke(r,g,b);
     rect(xPosition+1,yPosition+1,xBounds,yBounds);

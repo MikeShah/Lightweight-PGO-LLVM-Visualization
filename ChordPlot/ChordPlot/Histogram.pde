@@ -85,18 +85,15 @@ class Histogram extends DataLayer{
      this.setLayout(layout);
   }
   
-  @Override
-    public void drawBounds(float r, float g, float b){
-    fill(r,g,b);
-    stroke(r,g,b);
-    rect(xPosition+1,yPosition-yBounds,xBounds,yBounds);
-  }
+
   
   // Draw using our rendering modes
   public void draw(int mode){
     if(showData){
            // Draw a background
-          drawBounds(192,192,192);
+          pushMatrix();
+            drawBounds(0,64,128, xPosition,yPosition-yBounds);
+          popMatrix();
           // What is interesting about the drawing, is that it is all happening in the
           // ChordNode itself. This way we can have any arbritrary shape in ChordNode
           // drawn and handle all of the selection there. It also would allow us to have

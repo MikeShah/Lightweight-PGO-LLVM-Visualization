@@ -8,7 +8,15 @@ public static class MySimpleCamera{
    public static float cameraY = 0;
    public static float cameraZ = 0 ;
    
+   // Camera speed
    public static float cameraSpeed = 10;
+   
+    // Setup the mouse
+      // These three values take into account the mouseX,mouseY positions, and camera orientation
+    public static float xSelection;
+    public static float ySelection;
+    public static float zSelection;
+
    
    // This constructor is not called
    // unless this class is an inner class I believe.
@@ -46,6 +54,16 @@ public static class MySimpleCamera{
    
    public static void moveRight(){
      cameraX -= cameraSpeed;
+   }
+   
+   /*
+       Pass in mouse x and mouse y
+   */
+   public static void update(float mx, float my){
+      // Translate the mouse coordinates to the pixel-space coordinates appropriately, so if we move the camera we can see everything.
+      xSelection = (mx-cameraX);
+      ySelection = (my-cameraY);
+      zSelection = cameraZ;
    }
    
 }

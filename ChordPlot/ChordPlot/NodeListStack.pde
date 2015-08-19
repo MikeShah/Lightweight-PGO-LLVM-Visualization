@@ -107,13 +107,22 @@ public class NodeListStack{
   }
   
   // Generates a dot graph from the top of the stack
-  public void outputDot(String filepath){
+  // The mode specifies how to output nodes
+  // mode 0 (default) - Output all of the nodes that are visible in our visualization
+  // mode 1           - Output all of the nodes that are selected.
+  public void outputDot(String filepath, int mode){
     PrintWriter output;
 
     output = createWriter(filepath);
     
     for(int i =0; i < stack.peek().size();i++){
-      output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+      if(mode <= 0){
+        output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+      }else if(mode ==1){
+        if(stack.peek().get(i).selected){
+          output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+        }
+      }
     }
     
     output.flush();
