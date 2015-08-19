@@ -103,7 +103,7 @@ class ChordNode{
      else{
            if( dist(x,y,xSelection,ySelection) < nodeSize || selected){
               fill(0);
-              if(selected){fill(0,255,0);}
+              if(selected) { fill(0,255,0); }
               ellipse(x,y,nodeSize*2,nodeSize*2);
               
               fill(0,255,0);

@@ -22,7 +22,6 @@ void initGUI(){
   breadCrumbsBar = filtersPanel.addButtonBar("theBreadCrumbsBar")
      .setPosition(0, height-20)
      .setSize(width, 20)
-     .addItems(split("Start"," "));
      ;
      
 
@@ -138,7 +137,7 @@ void initGUI(){
   Processing program initialization
 */
 void setup(){
-  size(1800 ,1000,P3D);
+  size(1440 ,800,P3D);
   //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   String filename = "output.dot";
   
@@ -173,14 +172,12 @@ void controlEvent(ControlEvent theEvent) {
             +theEvent.getController().getName()
             );
   }
-  
-  if(theEvent.isFrom("rangeController")) {
-    // min and max values are stored in an array.
-    // access this array with controller().arrayValue().
-    // min is at index 0, max is at index 1.
+
+  // Get the values from the CallSites range slider.
+  if(theEvent.isFrom("CallSites")) {
     callSiteMin = int(theEvent.getController().getArrayValue(0));
     callSiteMax = int(theEvent.getController().getArrayValue(1));
-    println("range update, done.");
+    //println("range update, done. ("+callSiteMin+","+callSiteMax+")");
   }
   
 }
@@ -210,15 +207,16 @@ public void Microarray(int theValue) {
   Apply a Filter based on the options we have selected.
 */
 public void ApplyOurFilters(int theValue){
-  String FilterString = cd.nodeListStack.peek().name+" Callsites "+callSiteMin+"-"+callSiteMax;
+  String FilterString = cd.nodeListStack.peek().name;
   // Apply the relevant filters
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
+  cd.setLayout(cd.layout);
+  // Add our item to the list
+  breadCrumbsBar.addItem(FilterString,1);
   
   h.filterCallSites(callSiteMin, callSiteMax);
   h.update(); // Make a call to update the visualization
-  // Add our item to the list
-  breadCrumbsBar.addItem(FilterString,1);
 }
 
 /*
@@ -239,8 +237,12 @@ public void updateFunctionList(){
 public void theBreadCrumbsBar(int n){
   if(mouseButton == LEFT){
     println("Setting Stack to this node", n);
+    ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
+    filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
   }else if(mouseButton == RIGHT){
     println("Clearing Stack to this node", n);
+    ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
+    filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
   }
 }
 

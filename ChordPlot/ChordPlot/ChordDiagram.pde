@@ -101,6 +101,8 @@ class ChordDiagram extends DataLayer{
         }
       }
     }
+    println("xbounds:"+xBounds);
+    println("ybounds:"+yBounds);
   }
   
   /*
@@ -183,7 +185,7 @@ class ChordDiagram extends DataLayer{
   public void draw(int mode){
     if(showData){
          // Draw a background
-          drawBounds(192,192,192);
+          drawBounds(0,64,128);
           
           fill(0);
           

@@ -21,9 +21,9 @@ public class DataLayer implements VisualizationLayout{
   // Bounds
   // Stores how big the visualization is. Useful if we need to select items
   // or draw a background panel
-  float xBounds = 0;
-  float yBounds = 0;
-  float zBounds = 0;
+  public float xBounds = 0;
+  public float yBounds = 0;
+  public float zBounds = 0;
   
   // Toggle for showing the Visualization
   boolean showData = true;
@@ -46,7 +46,7 @@ public class DataLayer implements VisualizationLayout{
     dotGraph = new DotGraph(file);
     // Create a list of all of our nodes that will be in the visualization
     // We eventually push a copy of this to the stack
-    nodeList = new ChordNodeList();
+    nodeList = new ChordNodeList("Initial Data");
     
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
@@ -158,7 +158,9 @@ public class DataLayer implements VisualizationLayout{
       5.) Compute summary statistics to give feedback to users
   */
   public void filterCallSites(int min, int max){
-      ChordNodeList filteredNodes = new ChordNodeList();
+      String name = "Callsites "+callSiteMin+"-"+callSiteMax;
+    
+      ChordNodeList filteredNodes = new ChordNodeList(name);
       for(int i =0; i < nodeListStack.peek().size();i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
           filteredNodes.add(nodeListStack.peek().get(i));

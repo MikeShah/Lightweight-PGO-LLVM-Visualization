@@ -9,11 +9,15 @@ class ChordNodeList{
   ArrayList<ChordNode> chordList;
   
   // The name of the ChordNode List if we want to identify how to work with it.
-  public String name = "Full Data List";
+  public String name = "Dataset";
   
   public ChordNodeList(){
      chordList = new ArrayList<ChordNode>(); 
-     this.name = "Full Data List";
+  }
+  
+  public ChordNodeList(String name){
+     chordList = new ArrayList<ChordNode>(); 
+     this.name = name;    
   }
   
   /*
