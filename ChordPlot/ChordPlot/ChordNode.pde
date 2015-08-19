@@ -112,7 +112,7 @@ class ChordNode{
               text(metaData.name,x,y);
               text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
               
-              if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize){
+              if(mousePressed && dist(x,y,xSelection,ySelection) < nodeSize && mouseButton == LEFT){
                 selected = !selected;
               }
            }
@@ -142,7 +142,7 @@ class ChordNode{
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
         
-        if(mousePressed && dist(x,y,z,xSelection,ySelection,0) < nodeSize){
+        if(mousePressed && dist(x,y,z,xSelection,ySelection,0) < nodeSize && mouseButton == LEFT){
           selected = !selected;
         }
      }
@@ -153,6 +153,24 @@ class ChordNode{
         translate(x,y,z);
           sphere(nodeSize);
         popMatrix();
+     }
+  }
+  
+  /*
+  
+  */
+  public void onRightClick(){
+     if(mouseButton == RIGHT){
+       float _w = 100;
+       float _h = 100;
+       
+       pushMatrix();
+         translate(0,0,20);
+         fill(192,255);
+         rect(mouseX,mouseY,_w,_h);
+         fill(0,255);
+         text("MetaData: "+metaData+" some information THIS IS A REALLY LONG TESTING STRING THAT IS GIVING US MORE INFORMATION ABOUT EACH NODE",mouseX,mouseY,_w,_h);
+       popMatrix();
      }
   }
   
@@ -168,8 +186,9 @@ class ChordNode{
         fill(255);
         text(metaData.name,x,y-rectHeight);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
+        onRightClick();
         
-        if(mousePressed &&  (xSelection > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight))){
+        if(mousePressed &&  (xSelection > x && xSelection < (x+rectWidth) && ySelection < y && ySelection > (y-rectHeight)) && mouseButton == LEFT){
           selected = !selected;
         }
      }
@@ -182,12 +201,16 @@ class ChordNode{
   }
   
   // Draw to all of the callee locations in 2D
+  // Note that we are drawing exclusively to the secondGraphicsLayer here.
   public void drawToCallees(){
-    fill(0,0,0);
-    stroke(0);
-    for(int i =0; i < LocationPoints.size();i++){
-      line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
-    }
+    pushMatrix();
+      translate(0,0,1);
+      fill(0); stroke(0);
+      for(int i =0; i < LocationPoints.size();i++){
+        line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
+      }
+    popMatrix();
+
   }
   
   // Draw to all of the callee locations in 3D

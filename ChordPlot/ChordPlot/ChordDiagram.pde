@@ -185,7 +185,10 @@ class ChordDiagram extends DataLayer{
   public void draw(int mode){
     if(showData){
          // Draw a background
-          drawBounds(0,64,128);
+          pushMatrix();
+            translate(0,0,-1);
+            drawBounds(0,64,128);
+          popMatrix();
           
           fill(0);
           

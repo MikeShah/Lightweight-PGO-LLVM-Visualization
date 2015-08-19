@@ -16,6 +16,13 @@ int callSiteMin = 20;
 int callSiteMax = 100;
 int maxNumberOfCallsites = 255;
 
+
+
+
+/* Figure out attributes for our program */
+String attributes[];
+
+
 void initGUI(){
   filtersPanel = new ControlP5(this);
   
@@ -34,11 +41,7 @@ void initGUI(){
                     filtersPanel.addRadioButton("Attributes")
                        .setPosition(10,10)
                        .setSize(20,9)
-                       .addItem("some attribute",0)
-                       .addItem("inlined",1)
-                       .addItem("another thing",2)
-                       .addItem("readonly",3)
-                       .addItem("writestomemory",4)
+                       .addItem("ba",0)
                        .setGroup(filterSet1)
                        ;
                        
@@ -138,14 +141,24 @@ void initGUI(){
 */
 void setup(){
   size(1440 ,800,P3D);
+  ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
+
   //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   String filename = "output.dot";
   
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-100,0);
   
+  /* Search for attributes that we can filter in our GUI*/
+  attributes = loadStrings("attributes.txt");
+
+  for (int i = 0 ; i < attributes.length; i++) {
+    println("Found Attributes"+attributes[i]);
+  }
+  
   // Initialize our GUI after our data has been loaded
   initGUI();
+   
 }
 
 int drawMode = 0;
@@ -252,13 +265,18 @@ public void theBreadCrumbsBar(int n){
 void draw(){
    background(128);
    
+     if (!mousePressed) {
+    hint(ENABLE_DEPTH_SORT);
+  } else {
+    hint(DISABLE_DEPTH_SORT);
+  }
+   
    text("FPS :"+frameRate,5,height-40);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
      cd.draw(drawMode);
-     
      h.draw(0);
    popMatrix();
 }
