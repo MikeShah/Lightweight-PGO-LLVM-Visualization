@@ -32,7 +32,7 @@ void setup(){
 void draw(){
   // Update the mouse Coordidinates with our camera
   MySimpleCamera.update(mouseX, mouseY);
-  hello();
+  
   // Refresh the screen
   background(128);
    

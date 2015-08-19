@@ -135,7 +135,7 @@ public class DataLayer implements VisualizationLayout{
           for(int j = 0; j < dests.size(); j++){
               for(int k =0; k < nodeListStack.peek().size(); k++){
                 if(dests.get(j).name==nodeListStack.peek().get(k).metaData.name){
-                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y);          // Add to our source node the locations that we can point to
+                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
                   // Store some additional information
                   nodeListStack.peek().get(i).metaData.callees++;
                   break;

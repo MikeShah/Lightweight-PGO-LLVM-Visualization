@@ -1,11 +1,11 @@
- appears 176
-dereferenceable=1 appears 5
-dereferenceable=272 appears 5
-dereferenceable=40 appears 3
-dereferenceable=8 appears 10
-noalias appears 1
-noalias sret appears 2
-nocapture appears 1
-nocapture readonly appears 1
-sret appears 1
-zeroext appears 6
+  (176)
+dereferenceable=1  (5)
+dereferenceable=272  (5)
+dereferenceable=40  (3)
+dereferenceable=8  (10)
+noalias  (1)
+noalias sret  (2)
+nocapture  (1)
+nocapture readonly  (1)
+sret  (1)
+zeroext  (6)

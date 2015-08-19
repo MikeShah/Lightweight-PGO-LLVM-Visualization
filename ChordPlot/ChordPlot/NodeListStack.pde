@@ -114,17 +114,25 @@ public class NodeListStack{
     PrintWriter output;
 
     output = createWriter(filepath);
+    output.println("digraph{");
     
     for(int i =0; i < stack.peek().size();i++){
+      ChordNode currentNode = stack.peek().get(i);
+      
       if(mode <= 0){
-        output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+          output.println(currentNode.metaData.name + " -> " + "some_callee");
       }else if(mode ==1){
-        if(stack.peek().get(i).selected){
-          output.println(stack.peek().get(i).metaData.name + " -> "+"some_callee");
+        // Check if our node is selected first, and then output it. Otherwise we don't care.
+        if(currentNode.selected){
+          // Get all of the callees from our node that has been selected
+          for(int j = 0; j < currentNode.LocationPoints.size(); j++){
+            output.println(currentNode.metaData.name + " -> " + currentNode.LocationPoints.get(j).name);
+          }          
         }
       }
     }
     
+    output.println("}");
     output.flush();
     output.close();
   }

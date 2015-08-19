@@ -27,7 +27,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   // Prints all of the metaData to a string.
   public String getAllMetadata(){
     String result = "";
-    result += "name: "+name + "\n";
+    result += "\nname: "+name + "\n";
     result += "Callees: "+callees + "\n";
     result += "info: "+extra_information + "\n";
     

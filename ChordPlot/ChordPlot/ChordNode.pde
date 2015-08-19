@@ -1,20 +1,3 @@
-// Represents a point in space
-class LocPoint{
- float x;
- float y;
- float z;
- LocPoint(float x, float y){
-   this.x = x;
-   this.y = y;
-   this.z = 0;
- }
- 
-  LocPoint(float x, float y, float z){
-   this.x = x;
-   this.y = y;
-   this.z = z;
- }
-}
 
 // Node class consits of a source
 class ChordNode{
@@ -52,13 +35,13 @@ class ChordNode{
   }
   
   // for 2D
-  void addPoint(float x, float y){
-    LocationPoints.add(new LocPoint(x,y,0));
+  void addPoint(float x, float y, String name){
+    LocationPoints.add(new LocPoint(x,y,0, name));
   }
   
   // For 3D
-  void addPoint(float x, float y, float z){
-    LocationPoints.add(new LocPoint(x,y,z));
+  void addPoint(float x, float y, float z, String name){
+    LocationPoints.add(new LocPoint(x,y,z, name));
   }
   
   /*
@@ -159,7 +142,7 @@ class ChordNode{
        
        pushMatrix();
          translate(0,0,MySimpleCamera.cameraZ+20);
-         fill(192,255);
+         fill(192,192);
          rect(mouseX,mouseY,_w,_h);
          fill(0,255);
          text("MetaData: "+metaData.getAllMetadata()+" \n Lorem ipsum dolor sit amet, phasellus pede tempus magna elit sed integer, aliquam ut mollit turpis, magna at a, non dui",x+padding,y+padding,_w-padding,_h-padding);

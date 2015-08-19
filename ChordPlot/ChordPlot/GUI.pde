@@ -196,7 +196,7 @@ void controlEvent(ControlEvent theEvent) {
 */
 public void OutputDOT(int theValue) {
   println("Outputting Dot file");
-  cd.nodeListStack.outputDot(".//top_of_stack_plus_somet_timestamp",0);
+  cd.nodeListStack.outputDot(".//top_of_stack_plus_somet_timestamp.dot",0);
 }
 
 /*
@@ -205,7 +205,7 @@ public void OutputDOT(int theValue) {
 */
 public void OutputSelectedDOT(int theValue){
   println("Outputting Dot file of selected nodes");
-  cd.nodeListStack.outputDot(".//selected_nodes_plus_somet_timestamp",1);
+  cd.nodeListStack.outputDot(".//selected_nodes_plus_somet_timestamp.dot",1);
 }
 
 
