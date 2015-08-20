@@ -77,7 +77,7 @@ class ChordDiagram extends DataLayer{
       Plot points in the microarary
   */
   private void plotPointsOnGrid(float numberOfPoints){
-      
+    println("Calling plotPointsOnGrid");  
     float padding = 10; // padding on the screen
     float xSize = (width-padding-200); // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
     float ySize = height-padding;
@@ -172,10 +172,9 @@ class ChordDiagram extends DataLayer{
   // active data.
   @Override
   public void update(){
-     this.setLayout(layout);
+     this.setLayout(this.layout);
   }
 
-  
   @Override
   public void setPosition(float x, float y){
     centerx = x;

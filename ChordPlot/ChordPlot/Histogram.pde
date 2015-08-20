@@ -24,6 +24,9 @@ class Histogram extends DataLayer{
   }
   
   
+  /*
+      Currently there is only one layout supported.
+  */
   public void setLayout(int layout){
     this.layout = layout;
         
@@ -41,6 +44,7 @@ class Histogram extends DataLayer{
     if(layout<=0){
       plotPoints2D();
     }else{
+      plotPoints2D();
     }
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller

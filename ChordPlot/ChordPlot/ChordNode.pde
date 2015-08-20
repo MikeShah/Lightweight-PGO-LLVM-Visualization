@@ -188,7 +188,7 @@ class ChordNode{
         line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
         noFill();
         stroke(0);
-        rect(LocationPoints.get(i).x,LocationPoints.get(i).y,rectWidth,rectHeight);
+        rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
         
       }
     popMatrix();

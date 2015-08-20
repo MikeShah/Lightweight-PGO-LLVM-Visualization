@@ -46,10 +46,12 @@ public class NodeListStack{
     Then compute summary statistics
   */
   public ChordNodeList pop(){
+    
     if(stack.size()>1){
+      computeSummaryStatistics();
       return stack.pop();
     }
-    computeSummaryStatistics();
+    
     return null;
   }
   
