@@ -4,10 +4,6 @@ import controlP5.*;
 ChordDiagram cd;
 Histogram h;
 
-
-
-
-
 /*
   Processing program initialization
 */
@@ -25,7 +21,6 @@ void setup(){
   initGUI();   
 }
 
-
 /* =============================================
      Main draw function in the visualization
    ============================================= */
@@ -35,12 +30,6 @@ void draw(){
   
   // Refresh the screen
   background(128);
-   
-  if (!mousePressed) {
-    hint(ENABLE_DEPTH_SORT);
-  } else {
-    hint(DISABLE_DEPTH_SORT);
-  }
    
    text("FPS :"+frameRate,5,height-40);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
