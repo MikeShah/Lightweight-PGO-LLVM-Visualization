@@ -224,7 +224,7 @@ public void ApplyOurFilters(int theValue){
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
   // Add our item to the list
-  breadCrumbsBar.addItem(FilterString,0);
+  breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
   
   h.filterCallSites(callSiteMin, callSiteMax);
   h.update(); // Make a call to update the visualization
@@ -253,7 +253,7 @@ public void updateFunctionList(){
 */
 public void theBreadCrumbsBar(int n){
   if(mouseButton == LEFT){
-    println("Setting Stack to this node", n);
+    println("-------------------------------------------Setting Stack to this node", n);
     ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
     ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items

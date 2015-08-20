@@ -1,19 +1,38 @@
 import controlP5.*;
+import javax.swing.*; 
+
+/*
+  Create a second window
+*/
+DetailsPane dp;
+
 
 /* Create our visualizations */
 ChordDiagram cd;
 Histogram h;
 
+
+void settings(){
+  size(1440 ,800,P3D);
+}
+
 /*
   Processing program initialization
 */
 void setup(){
-  size(1440 ,800,P3D);
+  frame.setTitle("Microarray Visualization");
+  frame.setLocation(0, 0);
+  
+  
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
 
   //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   String filename = "output.dot";
   
+  // Create the second window with the details pane
+  dp = new DetailsPane();
+  
+  // Our base visualizations
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-100,0);
   

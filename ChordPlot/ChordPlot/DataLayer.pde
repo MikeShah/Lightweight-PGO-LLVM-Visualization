@@ -83,6 +83,9 @@ public class DataLayer implements VisualizationLayout{
     }
   }
   
+  /*
+      Sets the position of our visualization
+  */
   public void setPosition(float x, float y){
      this.xPosition = x;
      this.yPosition = y;
@@ -170,6 +173,12 @@ public class DataLayer implements VisualizationLayout{
       nodeListStack.computeSummaryStatistics();
   }
   
+  /*
+      GUI Controls for this component to filter.
+  */
+  public void GUIControls(){
+    
+  }
   
   
   // Generally this method should be overridden.
