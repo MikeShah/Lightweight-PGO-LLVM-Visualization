@@ -18,7 +18,7 @@ class Histogram extends DataLayer{
     for(int i =0; i < nodeListStack.peek().size();i++){
       nodeListStack.peek().get(i).x = xPos;
       nodeListStack.peek().get(i).y = yPosition;
-      xPos += defaultWidth;
+      xPos += defaultWidth+1;
       xBounds = xPos;
     }
   }

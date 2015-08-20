@@ -30,6 +30,9 @@ public class NodeListStack{
     summaryStatistics = new SummaryStatistics();
   }
   
+  public int size(){
+    return stack.size();
+  }
  
   
   /*
@@ -44,6 +47,9 @@ public class NodeListStack{
   /*
     Remove our last filter
     Then compute summary statistics
+    
+    // Notice that this does not work like a traditional stack
+    // We never want our stack to be empty.
   */
   public ChordNodeList pop(){
     

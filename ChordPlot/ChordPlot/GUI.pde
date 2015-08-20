@@ -224,7 +224,7 @@ public void ApplyOurFilters(int theValue){
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
   // Add our item to the list
-  breadCrumbsBar.addItem(FilterString,1);
+  breadCrumbsBar.addItem(FilterString,0);
   
   h.filterCallSites(callSiteMin, callSiteMax);
   h.update(); // Make a call to update the visualization
@@ -260,6 +260,9 @@ public void theBreadCrumbsBar(int n){
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
       cd.update(); // Make a call to update the visualization
       h.update();
+    }
+    if(cd.nodeListStack.size()==1){
+      filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();
     }
 
   }else if(mouseButton == RIGHT){

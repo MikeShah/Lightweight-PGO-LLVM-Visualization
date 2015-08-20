@@ -76,8 +76,14 @@ class ChordNode{
            render2DRects(rectWidth,rectHeight);
      }
      else{
+          // Display information if we hover over our node
+          if(dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize){
+            onRightClick();
+          }
+        
            if( dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize || selected){
               fill(0);
+              stroke(255);
               if(selected) { fill(0,255,0); }
               ellipse(x,y,nodeSize*2,nodeSize*2);
               
@@ -143,7 +149,7 @@ class ChordNode{
        pushMatrix();
          translate(0,0,MySimpleCamera.cameraZ+20);
          fill(192,192);
-         rect(mouseX,mouseY,_w,_h);
+         rect(x,y,_w,_h);
          fill(0,255);
          text("MetaData: "+metaData.getAllMetadata()+" \n Lorem ipsum dolor sit amet, phasellus pede tempus magna elit sed integer, aliquam ut mollit turpis, magna at a, non dui",x+padding,y+padding,_w-padding,_h-padding);
        popMatrix();
@@ -153,18 +159,34 @@ class ChordNode{
   
   // Implements onHover and Selection for 2D Rectangles
   private void render2DRects(float rectWidth, float rectHeight){
+        // Display information if we hover over our node
+        if((mouseX > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight))){
+            // Display more information
+            onRightClick();
+            // Popup some useful text if we have not yet right-clicked  
+            if(mousePressed==false){
+               pushMatrix();
+                 translate(0,0,MySimpleCamera.cameraZ+20);
+                 fill(192,192);
+                 if (selected) {fill(0,255,0);}  // Provide feedback if we're hovering over a selected node.
+                 rect(x,y,metaData.name.length()*8,20);
+                 fill(0,255);
+                 text(metaData.name,x,y+10);
+               popMatrix();
+            }
+        }
+    
+    
         if( selected || (mouseX > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight))){ 
             fill(0);
-            if(selected){fill(0,255,0);}
+            stroke(255);
+            if(selected){ stroke(255,0,0); fill(0,255,0); }
             
             rect(x,y-rectHeight,rectWidth,rectHeight);
             
-            
             drawToCallees();
-            fill(255);
-            text(metaData.name,x,y-rectHeight);
-            text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
-            onRightClick();
+            
+          
             
             if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
               selected = !selected;
