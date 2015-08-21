@@ -11,6 +11,7 @@ DetailsPane dp;
 ChordDiagram cd;
 Histogram h;
 
+int programStart = 0;
 
 void settings(){
   size(1440 ,800,P3D);
@@ -20,6 +21,7 @@ void settings(){
   Processing program initialization
 */
 void setup(){
+  programStart = millis();
   frame.setTitle("Microarray Visualization");
   frame.setLocation(0, 0);
   
@@ -38,6 +40,8 @@ void setup(){
   
   // Initialize our GUI after our data has been loaded
   initGUI();   
+  
+  println("setup time: " + (millis()-programStart));
 }
 
 /* =============================================

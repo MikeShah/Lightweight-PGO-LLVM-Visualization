@@ -34,7 +34,7 @@ class ChordDiagram extends DataLayer{
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
     for(int i =0; i < nodeListStack.peek().size();i++){
-                                   // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
+      // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
       nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, 255);
     }
     
@@ -140,10 +140,14 @@ class ChordDiagram extends DataLayer{
   public void setLayout(int layout){
     // Set our layout
     this.layout = layout;
-    
+
+    synchronized(this){
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
+    
+    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // This is called after we have positioned all of our nodes in the visualization
     // Draw the mapping of the visualization (Different layouts may need different 
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
@@ -164,6 +168,7 @@ class ChordDiagram extends DataLayer{
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
+    }
   }
 
   /*

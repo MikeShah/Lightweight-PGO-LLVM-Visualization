@@ -222,13 +222,12 @@ public void ApplyOurFilters(int theValue){
   String FilterString = cd.nodeListStack.peek().name;
   // Apply the relevant filters
   cd.filterCallSites(callSiteMin, callSiteMax);
-  cd.fastUpdate(); // Make a call to update the visualization
+  cd.update(); // Make a call to update the visualization
   // Add our item to the list
   breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
   
   h.filterCallSites(callSiteMin, callSiteMax);
-  h.fastUpdate(); // Make a call to update the visualization
-  h.setLayout(h.layout);
+  h.update(); // Make a call to update the visualization
   
   updateFunctionList();
 }

@@ -16,20 +16,36 @@
 
 */
 public void readFile(String filename){
-  // Load data into a byte array.
-  byte b[] = loadBytes(filename);
-  for(int i =0; i < b.length; i++){
-    println(b[i]);
+  
+  
+  
+  List<String> strings = new ArrayList<String>();
+  try{
+      // Attempt to read file fast
+      BufferedReader br = new BufferedReader(new FileReader(filename));
+      String line = null;
+      while( (line = br.readLine()) != null ){
+        strings.add(line);
+      }
+      br.close();
+  }
+  catch(IOException e){
+    
+  }
+  
+  // Start processing the file
+  String[] lineArray = strings.toArray(new String[strings.size()]);
+  // Spawn some threads
+  int numberOfThreads = 10;
+  int workOfThreads = lineArray.length/numberOfThreads; // Note that the last thread will read any leftover.
+  
+  for(int i =0; i < numberOfThreads; ++i){
+    
   }
 
 }
 
 
-public void spawnFileReadingThread(){
-  
-}
-
-
-public void multiThreadedFileRead(int offset,int start, int stop){
+public void multiThreadedFileRead(){
     
 }

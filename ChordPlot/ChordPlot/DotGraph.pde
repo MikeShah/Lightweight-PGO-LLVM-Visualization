@@ -24,21 +24,7 @@ class DotGraph{
   int totalSources = 0;
   
   public DotGraph(String file){
-    String[] lines = loadStrings(file);
-    
-    try{
-      BufferedReader bis = new BufferedReader(new FileReader(file));
-      String line;
-    
-      while ((line = bis.readLine()) != null) {
-          processLine(line); //process current line
-      }
-      bis.close();
-    }
-    catch(Exception e){
-      println("Caught Exception: "+e);
-    }
-    
+    String[] lines = loadStrings(file);   
     
     for(int i =0; i < lines.length; i++){
       if (lines[i].contains("->")){
