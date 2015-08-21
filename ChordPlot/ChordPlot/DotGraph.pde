@@ -4,6 +4,7 @@
 */
 import java.util.Hashtable;
 import java.util.*;
+import java.io.*;
 
 
 /*
@@ -24,6 +25,20 @@ class DotGraph{
   
   public DotGraph(String file){
     String[] lines = loadStrings(file);
+    
+    try{
+      BufferedReader bis = new BufferedReader(new FileReader(file));
+      String line;
+    
+      while ((line = bis.readLine()) != null) {
+          processLine(line); //process current line
+      }
+      bis.close();
+    }
+    catch(Exception e){
+      println("Caught Exception: "+e);
+    }
+    
     
     for(int i =0; i < lines.length; i++){
       if (lines[i].contains("->")){
@@ -55,6 +70,14 @@ class DotGraph{
       }
     }
   }
+  
+  /*
+      Process a single line of data when we read it in.
+  */
+  public void processLine(String line){
+      println("");
+  }
+  
   
   public void printGraph(){
     

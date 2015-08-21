@@ -81,6 +81,19 @@ class Histogram extends DataLayer{
     }
   }
   
+    /*
+      Useful for being used in update where we don't need to do anything else with the data.
+  */
+  public void fastUpdate(){
+    int layout = this.layout;
+    // Modify all of the positions in our nodeList
+    if(layout<=0){
+      plotPoints2D();
+    }else{
+      plotPoints2D();
+    }
+  }
+  
   // After we filter our data, make an update
   // so that our visualization is reset based on the
   // active data.

@@ -166,6 +166,20 @@ class ChordDiagram extends DataLayer{
     storeLineDrawings();
   }
 
+  /*
+      Useful for being used in update where we don't need to do anything else with the data.
+  */
+  public void fastUpdate(){
+    int layout = this.layout;
+    // Modify all of the positions in our nodeList
+    if(layout<=0){
+      plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
+    }else if(layout==1){
+      plotPointsOnGrid(nodeListStack.peek().size());
+    }else if(layout>=2){
+      plotPointsOnSphere(nodeListStack.peek().size());
+    }
+  }
 
   // After we filter our data, make an update
   // so that our visualization is reset based on the
