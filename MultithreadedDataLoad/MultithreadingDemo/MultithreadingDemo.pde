@@ -1,7 +1,3 @@
-// This is a random file for testing ideas
-// Consider this a sandbox.
-// Totally not necessary to keep this file in the project.
-
 /*
       Algorithm
       
@@ -15,21 +11,25 @@
 
 
 */
-public void readFile(String filename){
-  // Load data into a byte array.
-  byte b[] = loadBytes(filename);
-  for(int i =0; i < b.length; i++){
-    println(b[i]);
-  }
+import java.util.*;
 
-}
+int[] bigArray;
 
 
-public void spawnFileReadingThread(){
+void setup()
+{
   
+  bigArray = new int[1000000];
+ /*
+  Runnable task = () -> {
+      String threadName = Thread.currentThread().getName();
+  };
+  */
 }
 
+void draw(){
 
-public void multiThreadedFileRead(int offset,int start, int stop){
-    
+  background(0);
+  rect(0,0,20,20);
+
 }
