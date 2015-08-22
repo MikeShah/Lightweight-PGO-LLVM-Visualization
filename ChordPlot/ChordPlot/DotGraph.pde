@@ -17,7 +17,7 @@ class DotGraph{
   // Contains a hashmap that consits of: 
   // key -- The source node, which is a String
   // value -- The Destination nodes this source points to, which is an arraylist.
-  public Map<nodeMetaData,ArrayList> graph = new Hashtable<nodeMetaData,ArrayList>();
+  public Map<nodeMetaData,LinkedHashSet<nodeMetaData>> graph = new Hashtable<nodeMetaData,LinkedHashSet<nodeMetaData>>();
   // Contains a list of all of the nodes (sources and destinations)
   // Can be useful if we need to populate all nodes in a visualization
   public SortedSet<nodeMetaData> fullNodeList = new TreeSet<nodeMetaData>();
@@ -42,12 +42,12 @@ class DotGraph{
         
         // If the function exists, then add a new destination
         if(graph.containsKey(src)){
-          ArrayList temp = (ArrayList)(graph.get(src));
+          LinkedHashSet<nodeMetaData> temp = (LinkedHashSet<nodeMetaData>)(graph.get(src));
           temp.add(dst);
           graph.put(src,temp);
         }else{
           // Create a new node
-          ArrayList incidentEdges = new ArrayList();
+          LinkedHashSet<nodeMetaData> incidentEdges = new LinkedHashSet<nodeMetaData>();
           incidentEdges.add(dst);
           graph.put(src,incidentEdges);
           totalSources++;
