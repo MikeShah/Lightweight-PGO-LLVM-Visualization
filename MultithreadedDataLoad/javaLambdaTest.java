@@ -1,7 +1,8 @@
 public class{
 
 	public static void main(String[] args){
-	
+
+		
 		Runnable task = () -> {
       			String threadName = Thread.currentThread().getName();
   			System.out.println("Test thread: "+threadName);

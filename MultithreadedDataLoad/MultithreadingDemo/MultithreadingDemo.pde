@@ -20,11 +20,11 @@ void setup()
 {
   
   bigArray = new int[1000000];
- /*
-  Runnable task = () -> {
+ 
+  Runnable task = () => {
       String threadName = Thread.currentThread().getName();
   };
-  */
+  
 }
 
 void draw(){

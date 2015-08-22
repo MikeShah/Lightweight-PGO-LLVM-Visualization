@@ -178,11 +178,11 @@ public class DataLayer implements VisualizationLayout{
   public void storeLineDrawings(){
       println("Start of store: " + (millis()-programStart));
       
-      /*
+/*     //Original 
       for(int i =0; i < nodeListStack.peek().size(); i++){
         // Search to see if our node has outcoming edges
         nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-        nodeListStack.peek().get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
+        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
         if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
@@ -199,7 +199,35 @@ public class DataLayer implements VisualizationLayout{
           }
         }
       }
-    */
+*/     
+      // For all of our nodes
+      for(int i =0; i < nodeListStack.peek().size(); i++){
+          // Search through all of the callees
+          // Set that nodes
+      }
+
+      // Faster hacked version
+      for(int i =0; i < nodeListStack.peek().size(); i++){
+        // Search to see if our node has outcoming edges
+        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
+        if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+          // If we do find that our node is a source(with targets)
+          // then search to get all of the destination names and their positions
+          ArrayList<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+          for(int j = 0; j < dests.size(); j++){
+              for(int k =0; k < nodeListStack.peek().size(); k++){                  // This loop can likely go
+                if(dests.get(j).name==nodeListStack.peek().get(k).metaData.name){
+                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
+                  // Store some additional information
+                  nodeListStack.peek().get(i).metaData.callees++;
+                  break;
+                }
+              }
+          }
+        }
+      }
+      
       println("end of store: " + (millis()-programStart));
   }
   
