@@ -25,31 +25,29 @@ public class fastData implements Runnable{
       
     public void run(){
             for(int i = start; i < stop; i++){
-                  // Search to see if our node has outcoming edges
-                  nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                  nodeListStack.peek().get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
-                  if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-                    // If we do find that our node is a source(with targets)
-                    // then search to get all of the destination names and their positions
-                    LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-                    Iterator<LinkedHashSet<nodeMetaData>> it;
-                    int j = 0;
-                    while(it.hasNext()){
-                      for(int k =0; k < nodeListStack.peek().size(); k++){
-                          if(it.name==nodeListStack.peek().get(k).metaData.name){
-                              nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
-                              // Store some additional information
-                              nodeListStack.peek().get(i).metaData.callees++;
-                              break;
-                          }
-                      }
-                      it.next();
-                      j++;
+                      // Search to see if our node has outcoming edges
+                      nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+                      nodeListStack.peek().get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
+                      if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+                              // If we do find that our node is a source(with targets)
+                              // then search to get all of the destination names and their positions
+                              LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+                              //Iterator<LinkedHashSet<nodeMetaData>> it;
+                              Iterator it = dests.iterator();
+                              while(it.hasNext()){
+                                      for(int k =0; k < nodeListStack.peek().size(); k++){
+                                              if(it == (nodeListStack.peek().get(k).metaData)){
+                                                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
+                                                  // Store some additional information
+                                                  nodeListStack.peek().get(i).metaData.callees++;
+                                                  break;
+                                              }
+                                      }
+                                      it.next();
+                              }
                     }
-  
-                }
-                }
               }
+      }
     
 }
 
@@ -205,11 +203,6 @@ public class DataLayer implements VisualizationLayout{
         }
       }
 */     
-      // For all of our nodes
-      for(int i =0; i < nodeListStack.peek().size(); i++){
-          // Search through all of the callees
-          // Set that nodes
-      }
 
       // Faster hacked version
       for(int i =0; i < nodeListStack.peek().size(); i++){
@@ -219,19 +212,32 @@ public class DataLayer implements VisualizationLayout{
         if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
-          ArrayList<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          for(int j = 0; j < dests.size(); j++){
+          LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+          int stop = dests.size(); // if we add all of our destinations, then stop iterating.
+          Iterator<nodeMetaData> it = dests.iterator();
+          
+          while(it.hasNext()){
+              nodeMetaData temp = it.next();
               for(int k =0; k < nodeListStack.peek().size(); k++){                  // This loop can likely go
-                if(dests.get(j).name==nodeListStack.peek().get(k).metaData.name){
-                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
-                  // Store some additional information
-                  nodeListStack.peek().get(i).metaData.callees++;
-                  break;
-                }
+                  if(temp.name == nodeListStack.peek().get(k).metaData.name){
+                    nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
+                    // Store some additional information
+                    nodeListStack.peek().get(i).metaData.callees++;
+                    stop--;
+                    //break;
+                  }
+                  // break out of the while loop if we've added all of our destinations.
+                  if(stop<=0){
+                    break;
+                  }
               }
+              // Increment our iterator
+              
           }
         }
       }
+      
+      
       
       println("end of store: " + (millis()-programStart));
   }

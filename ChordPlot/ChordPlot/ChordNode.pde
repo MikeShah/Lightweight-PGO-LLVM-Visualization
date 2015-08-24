@@ -6,9 +6,11 @@ class ChordNode{
   float z;
   public nodeMetaData metaData;
   int nodeSize = 3; // needed if we are rendering 2D circles or spheres
-  
-  float rectWidth = 0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
-  float rectHeight =0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
+    
+  float rectWidth  = 0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
+  float rectHeight = 0; // needed if we are rendering 2D rectangular shapes (Such as when we render histogram)
+
+  int bucket = 0;      // If we are clustering the nodes together, figure out which bucket they should be put in.
 
   // Selecting nodes
   boolean selected = false; // By default, we show everything, so we render all nodes

@@ -93,6 +93,13 @@ void initGUI(){
                      .addItem("ChordDiagram3D",2)
                      .setGroup(layoutPanel)
                      ;
+
+                 filtersPanel.addRadioButton("Buckets")
+                     .setPosition(10,60)
+                     .setSize(20,9)
+                     .addItem("Buckets2D",0)
+                     .setGroup(layoutPanel)
+                     ;
                    
                  filtersPanel.addRadioButton("Histogram")
                      .setPosition(10,80)
@@ -100,6 +107,8 @@ void initGUI(){
                      .addItem("Histogram2D",0)
                      .setGroup(layoutPanel)
                      ;
+                     
+
                    
   Group functionListGroup = filtersPanel.addGroup("Function List")
                     .setPosition(600,100)
@@ -213,6 +222,11 @@ public void Histogram(int theValue) {
 // Microarray
 public void Microarray(int theValue) {
   cd.showData = !cd.showData;
+}
+
+// Buckets
+public void Buckets(int theValue) {
+  b.showData = !b.showData;
 }
 
 /*

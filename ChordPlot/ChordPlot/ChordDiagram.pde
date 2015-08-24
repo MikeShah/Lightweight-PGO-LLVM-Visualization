@@ -141,7 +141,7 @@ class ChordDiagram extends DataLayer{
     // Set our layout
     this.layout = layout;
 
-    synchronized(this){
+
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
@@ -168,11 +168,12 @@ class ChordDiagram extends DataLayer{
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
-    }
+    
   }
 
   /*
       Useful for being used in update where we don't need to do anything else with the data.
+      This means setLayout should only be called once initially.
   */
   public void fastUpdate(){
     int layout = this.layout;

@@ -10,6 +10,7 @@ DetailsPane dp;
 /* Create our visualizations */
 ChordDiagram cd;
 Histogram h;
+Buckets b;
 
 int programStart = 0;
 
@@ -37,6 +38,7 @@ void setup(){
   // Our base visualizations
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-100,0);
+  b = new Buckets(filename,20,height-100,0);
   
   // Initialize our GUI after our data has been loaded
   initGUI();   
@@ -61,5 +63,6 @@ void draw(){
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
      cd.draw(drawMode);
      h.draw(0);
+     b.draw(0);
    popMatrix();
 }
