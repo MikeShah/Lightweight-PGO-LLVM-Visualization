@@ -12,7 +12,7 @@
 class Buckets extends DataLayer{
   
   // Store all of the nodes in each respective bucket
-  ArrayList<ArrayList<ChordNode>> bucketLists;
+  ArrayList<ChordNodeList> bucketLists;
   // The default number of Buckets
   int numberOfBuckets = 0;
   
@@ -21,9 +21,9 @@ class Buckets extends DataLayer{
   
   // For now there is an assumption that these
   // are all positive values
-  float maxValue = 0;
-  float minValue = 0;
-  float stepValue = 10;
+  float maxValue  = 0;
+  float minValue  = 0;
+  float stepValue = 5;
   
   // Default Constructor for the Buckets
   public Buckets(String file, float xPosition, float yPosition, int layout){
@@ -31,7 +31,7 @@ class Buckets extends DataLayer{
     // Call init which seets up the DataLayer.
     super.init(file, xPosition, yPosition,layout);
 
-    bucketLists = new ArrayList<ArrayList<ChordNode>>();
+    bucketLists = new ArrayList<ChordNodeList>();
     
     // Set a layout
     this.setLayout(layout);
@@ -44,14 +44,15 @@ class Buckets extends DataLayer{
   //
   // start is the maximum value where we want to show items
   // step - How big each bucket is
-  private void plotPoints2D(float stepSize){
+  private void plotPoints2D(){
     bucketLists.clear();
     
     // How many buckets do we allocate in our arrayList
-    numberOfBuckets = (int) ((maxValue - minValue)/stepSize);
+    numberOfBuckets = (int) ((maxValue - minValue)/stepValue);
     
+    // Allocate memory for all of the buckets we will need.
     for(int i = 0; i < numberOfBuckets; ++i){
-      bucketLists.add(new ArrayList<ChordNode>());
+      bucketLists.add(new ChordNodeList());
     }
     
     println("numberOfBuckets: "+numberOfBuckets);
@@ -62,9 +63,20 @@ class Buckets extends DataLayer{
     
     // Figure out which bucket to set the ChordNode to.
     for(int i =0; i < nodeListStack.peek().size();i++){
-      int assignBucket = (int) (nodeListStack.peek().get(i).metaData.callees / stepSize);
-      // clamp ou values within a certain range
-      if(assignBucket < 0)               {  assignBucket = 0;  }
+      int assignBucket = 0;
+      // Increment which bucket we need to put our node in based on the step value.
+      // If the attribute we're analyzing is less then the bucket size, then we know we have finished.
+      for(int j = 0; j < bucketLists.size(); j++){
+        if (nodeListStack.peek().get(i).metaData.callees > j*stepValue){
+          assignBucket++;
+        }else
+        {
+          break;
+        }
+      }
+      
+      // clamp our values within a certain range
+      if(assignBucket < 0)                 {  assignBucket = 0;  }
       if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }
       // All of the nodes that are within the right bucket get assigned to their proper bucket.
       nodeListStack.peek().get(i).bucket = assignBucket;
@@ -72,7 +84,8 @@ class Buckets extends DataLayer{
       // This will allos us to quickly highlight over a bucket, and select the nodes that fall in that subset.
       bucketLists.get(assignBucket).add(nodeListStack.peek().get(i));
       
-      println("callees:"+nodeListStack.peek().get(i).metaData.callees + " bucket:" + nodeListStack.peek().get(i).bucket);
+      if(nodeListStack.peek().get(i).metaData.callees>2)
+        println("callees:"+nodeListStack.peek().get(i).metaData.callees + " bucket:" + nodeListStack.peek().get(i).bucket);
     }
   }
   
@@ -95,9 +108,9 @@ class Buckets extends DataLayer{
     sortNodesByCallee();
     
     if(layout<=0){
-      plotPoints2D(stepValue);
+      plotPoints2D();
     }else{
-      plotPoints2D(stepValue);
+      plotPoints2D();
     }
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
@@ -136,9 +149,9 @@ class Buckets extends DataLayer{
     int layout = this.layout;
     // Modify all of the positions in our nodeList
     if(layout<=0){
-      plotPoints2D(stepValue);
+      plotPoints2D();
     }else{
-      plotPoints2D(stepValue);
+      plotPoints2D();
     }
   }
   
@@ -151,6 +164,16 @@ class Buckets extends DataLayer{
   }
   
   
+  // Output all of the buckets and their respective sizes
+  public void debug(){
+        // Render the rectangles
+        for(int i =0; i < bucketLists.size(); ++i){
+          fill(192); stroke(255);
+          float bucketHeight = bucketLists.get(i).size();
+          println("Bucket: "+i+" has: "+bucketHeight);
+        }
+  }
+  
   
   // Draw using our rendering modes
   //
@@ -162,16 +185,46 @@ class Buckets extends DataLayer{
     if(showData){
           // Draw a background
           pushMatrix();
+            translate(0,0,MySimpleCamera.cameraZ);
             drawBounds(0,64,128, xPosition,yPosition-yBounds);
-          
+            
+            // Normalize the largest buckets
+            // The purpose is so we can use this information to scale the bucket
+            // heights and fit the visualization within the screen.
+            float largestBucket = 0;
+            float smallestBucket = 0;
+            for(int i = 0; i < bucketLists.size(); ++i){
+                smallestBucket = min(smallestBucket,bucketLists.get(i).size());
+                largestBucket = max(largestBucket,bucketLists.get(i).size());
+            }
+            
             // Render the rectangles
             for(int i =0; i < bucketLists.size(); ++i){
-              fill(192);
-              stroke(255);
+              fill(192,255); stroke(255);
               float bucketHeight = bucketLists.get(i).size();
-              map(bucketHeight, minValue, maxValue, 0, 350);
+              float xBucketPosition = xPosition+(i*((int)bucketWidth));
+              bucketHeight = map(bucketHeight, smallestBucket, largestBucket, 0, 350);
               
-              rect(xPosition+(i*((int)bucketWidth)),yPosition-bucketHeight,bucketWidth,bucketHeight);
+              // A bit hacky, but check to see if the mouse is over the region and then highlight the active nodes.
+              if(MySimpleCamera.xSelection >  xBucketPosition && MySimpleCamera.xSelection < xBucketPosition+bucketWidth){
+                // Just check if we are within our visualization. The reason is because we want to be able to select 
+                // even very small buckets by just sliding over them.
+                if(MySimpleCamera.ySelection > yPosition-yBounds){
+                  fill(0,255,0,255); stroke(255);
+                  // Give some text to tell us which bucket we are in
+                  text("Bucket# "+i,xBucketPosition,yPosition+10);
+                  // If the mouse is pressed
+                  if(mousePressed==true){
+                    // TODO: Do not make me a hard link
+                    println("Here we go");
+                    cd.setActiveNodes(bucketLists.get(i));
+                  }
+                }
+              }
+              
+              // Draw our rectangle
+              rect(xBucketPosition,yPosition-bucketHeight,bucketWidth,bucketHeight);
+             
             }
           
           popMatrix();

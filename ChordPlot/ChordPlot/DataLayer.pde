@@ -274,6 +274,40 @@ public class DataLayer implements VisualizationLayout{
   }
   
   
+  /* *******************************
+          Data Link Routines
+     ******************************* */  
+/*  The purpose of these commands are to share data between visualizations.
+    Early on I decided that I wanted each visualization to be able to be explored
+    independently of the others, and leave the microarray as the key diagram.
+    
+    However, it has become useful to use visualizations such as 'Buckets' to
+    quickly filter the microarray for particular criteria.
+*/
+
+  // This command takes in a ChordNodeList from one visualization
+  // and then sets the other visualizations nodes active on the top of its stack.
+  //
+  // 
+  public void setActiveNodes(ChordNodeList cnl){
+      println("cnl.size():"+cnl.size());
+      // It's possible that cnl or the top of the nodeListStack has been filtered
+      // so we need to make sure we check every node against each other.
+      // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
+      // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+      for(int i =0; i < cnl.size(); ++i){
+          for(int j = 0; j < nodeListStack.peek().size(); ++j){
+            
+            if(cnl.get(i).metaData == nodeListStack.peek().get(j).metaData){
+              println(cnl.get(i).metaData.name + "==" + nodeListStack.peek().get(j).metaData.name);
+              nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+              break;
+            }
+          }
+      }
+  }
+  
+  
   // Generally this method should be overridden.
   // It is called whenver we need to update what data is active
   // on the visualization. Generally after filtering we would want

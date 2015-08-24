@@ -44,6 +44,7 @@ void setup(){
   initGUI();   
   
   println("setup time: " + (millis()-programStart));
+  b.debug();
 }
 
 /* =============================================
