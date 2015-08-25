@@ -1,57 +1,4 @@
 /*
-  
-*/
-public class fastData implements Runnable{
-    
-    public DotGraph dotGraph;
-    public ChordNodeList nodeList;  // All of the nodes, that will be loaded from the dotGraph
-    // Create a stack of the nodes
-    public NodeListStack nodeListStack; 
-    
-    int start,stop;
-   
-    // Inefficient way to do this
-    // TODO: FIXME and make me fast
-    
-    public void passData(int start, int stop, DotGraph dotGraph,ChordNodeList nodeList,NodeListStack nodeListStack)
-    {
-        this.dotGraph = dotGraph;
-        this.nodeList = nodeList;
-        this.nodeListStack = nodeListStack;
-        
-        this.start = start;
-        this.stop = stop;
-    }
-      
-    public void run(){
-            for(int i = start; i < stop; i++){
-                      // Search to see if our node has outcoming edges
-                      nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                      nodeListStack.peek().get(i).LocationPoints.clear();                       // Clear our old Locations because we'll be setting up new ones
-                      if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-                              // If we do find that our node is a source(with targets)
-                              // then search to get all of the destination names and their positions
-                              LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-                              //Iterator<LinkedHashSet<nodeMetaData>> it;
-                              Iterator it = dests.iterator();
-                              while(it.hasNext()){
-                                      for(int k =0; k < nodeListStack.peek().size(); k++){
-                                              if(it == (nodeListStack.peek().get(k).metaData)){
-                                                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
-                                                  // Store some additional information
-                                                  nodeListStack.peek().get(i).metaData.callees++;
-                                                  break;
-                                              }
-                                      }
-                                      it.next();
-                              }
-                    }
-              }
-      }
-    
-}
-
-/*
     This is a class that other classes can extend from to get data from
     The goal of this class is to store all common information from a visualization.
     
@@ -203,21 +150,37 @@ public class DataLayer implements VisualizationLayout{
         }
       }
 */     
-
+      
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      
       // Faster hacked version
       for(int i =0; i < nodeListStack.peek().size(); i++){
         // Search to see if our node has outcoming edges
         nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
         nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
-        if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+        if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
           LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
           int stop = dests.size(); // if we add all of our destinations, then stop iterating.
           Iterator<nodeMetaData> it = dests.iterator();
           
+          // Iterate through all of the callees in our current node
+          // We already know what they are, but now we need to map
+          // WHERE they are in the visualization screen space.
           while(it.hasNext()){
               nodeMetaData temp = it.next();
+              
+              // When we find the key, add the values points
+              if(topOfStackMap.containsKey(temp.name)){
+                  ChordNode value = topOfStackMap.get(temp.name);
+                  nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name);          // Add to our source node the locations that we can point to
+                  // Store some additional information (i.e. update our callees count.
+                  // TODO: This number is only of the visible callees, perhaps we want a maximum value?
+                  nodeListStack.peek().get(i).metaData.callees++;
+              }
+              
+              /*
               for(int k =0; k < nodeListStack.peek().size(); k++){                  // This loop can likely go
                   if(temp.name == nodeListStack.peek().get(k).metaData.name){
                     nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
@@ -232,7 +195,7 @@ public class DataLayer implements VisualizationLayout{
                   }
               }
               // Increment our iterator
-              
+              */
           }
         }
       }

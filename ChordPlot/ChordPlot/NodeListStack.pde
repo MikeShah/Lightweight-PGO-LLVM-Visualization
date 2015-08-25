@@ -145,5 +145,26 @@ public class NodeListStack{
     output.close();
   }
   
+  // Return map
+  // This is useful, if we want to search very quickly
+  // over our collection of nodes, then we can learn the list
+  // very quickly (O(1)) instead of O(n).
+  //
+  // Note that the key is a node's name, as often we want to search by the nodes name
+  //
+  public Map<String,ChordNode> getTopStackMap(){
+    // Create a temporary map
+    Map<String,ChordNode> tempMap = new HashMap<String,ChordNode>();  
+    // Iterate through all of the items on the top of our stack
+    for(int i =0; i < stack.peek().size();++i){
+        ChordNode temp = stack.peek().get(i);
+        tempMap.put(temp.metaData.name,temp);
+    }
+  
+    return tempMap;
+  }
+
+  
+  
   
 }

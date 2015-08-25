@@ -9,17 +9,34 @@ class DetailsPane extends PApplet {
   // Our control panel
   ControlP5 detailsPanel;
   
+  // re-route output from text to this details pane.
+  Textarea myConsoleTextarea;
+  Println console;
+  
   /*
       Build the GUI for the Details Pane
   */
   void initGUI(){
       detailsPanel = new ControlP5(this);
-                    // create a new button for outputting Dot files
+              // create a new button for something
               detailsPanel.addButton("More")
                    //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
                    .setPosition(width-180,0)
                    .setSize(180,19)
                    ;
+                   
+              // Capture Console output here.
+              myConsoleTextarea = detailsPanel.addTextarea("txt")
+                  .setPosition(400, 0)
+                  .setSize(300, height)
+                  .setFont(createFont("", 10))
+                  .setLineHeight(14)
+                  .setColor(color(200))
+                  .setColorBackground(color(0, 100))
+                  .setColorForeground(color(255, 100));
+              ;
+
+              console = detailsPanel.addConsole(myConsoleTextarea);//
   }
   
   
