@@ -34,6 +34,7 @@ void setup(){
   
   // Create the second window with the details pane
   dp = new DetailsPane();
+  dp.setDataString("File Loaded: "+filename);
   
   // Our base visualizations
   cd = new ChordDiagram(400, filename,1);
