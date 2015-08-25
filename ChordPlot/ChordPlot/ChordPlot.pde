@@ -12,6 +12,11 @@ ChordDiagram cd;
 Histogram h;
 Buckets b;
 
+/*
+
+*/
+commonWidget w;
+
 int programStart = 0;
 
 void settings(){
@@ -21,10 +26,10 @@ void settings(){
 /*
   Processing program initialization
 */
-void setup(){
+void setup(){  
   programStart = millis();
-  frame.setTitle("Microarray Visualization");
-  frame.setLocation(0, 0);
+  surface.setTitle("Microarray Visualization");
+  surface.setLocation(0, 0);
   
   
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
@@ -46,6 +51,8 @@ void setup(){
   
   println("setup time: " + (millis()-programStart));
   b.debug();
+  
+  w = new commonWidget("test");
 }
 
 /* =============================================

@@ -2,50 +2,60 @@
 // Consider this a sandbox.
 // Totally not necessary to keep this file in the project.
 
-/*
-      Algorithm
-      
-      1.) Open a Random Access File
-      2.) (multithreaded) Split file into n distinct sections
-          a.) Distinct sections need to explicitly start at the start of a line
-          b.) Distinct sections ened to explicitly end at the end of the line ('\n') found
-      3.) (single threaded bottleneck) Add entries from file into a data structure
-      4.) (single threaded bottleneck) Sort the data structure
-      5.) 
+/* 
 
+  Common Widget sandbox
+
+  The purpose of this class is to split up the visualization into multiple windows, that all have
+  similar filters, and ways of digging through information.
 
 */
-public void readFile(String filename){
-  
-  
-  
-  List<String> strings = new ArrayList<String>();
-  try{
-      // Attempt to read file fast
-      BufferedReader br = new BufferedReader(new FileReader(filename));
-      String line = null;
-      while( (line = br.readLine()) != null ){
-        strings.add(line);
-      }
-      br.close();
-  }
-  catch(IOException e){
-    
-  }
-  
-  // Start processing the file
-  String[] lineArray = strings.toArray(new String[strings.size()]);
-  // Spawn some threads
-  int numberOfThreads = 10;
-  int workOfThreads = lineArray.length/numberOfThreads; // Note that the last thread will read any leftover.
-  
-  for(int i =0; i < numberOfThreads; ++i){
-    
-  }
 
-}
-
-
-public void multiThreadedFileRead(){
-    
+public class commonWidget extends PApplet{
+  // The main GUI component
+  ControlP5 cp5;
+  // Window title
+  String windowTitle;
+  
+  /*
+      Initialize all of the GUI components.
+      Ideally this connects to the dataLayer.
+  */
+  private void  initGUI(){
+      cp5.addSlider( "value-")
+           .setRange( 0, 255 )
+           .plugTo( this, "setValue" )
+           .setValue( 127 )
+           .setLabel("value")
+           ;
+  }
+  
+  /*
+      Constructor for a common Widget
+  */
+  public commonWidget(String windowTitle){
+      // Call the constructor for the PApplet
+      super();
+      PApplet.runSketch(new String[]{this.getClass().getName()}, this);
+      // Setup our GUI
+      cp5 = new ControlP5( this );
+      this.initGUI();
+      // Set the window title
+      this.windowTitle = windowTitle;
+  }
+  
+    public void settings() {
+      size(200, 200, P3D);
+      smooth();
+    }
+    public void setup() { 
+      surface.setTitle(windowTitle);
+      surface.setLocation(0, 800);
+    }
+  
+    public void draw() {
+      background(0);
+      
+      rect(5,5,5,5);
+    }
 }

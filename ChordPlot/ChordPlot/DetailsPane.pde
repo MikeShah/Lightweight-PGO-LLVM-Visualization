@@ -59,7 +59,7 @@ class DetailsPane extends PApplet {
   }
   public void setup() { 
     surface.setTitle("Details View");
-    frame.setLocation(0, 800);
+    surface.setLocation(0, 800);
   }
 
   public void draw() {
