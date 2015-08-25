@@ -15,6 +15,9 @@ class ChordNode{
   // Selecting nodes
   boolean selected = false; // By default, we show everything, so we render all nodes
   
+  // Highlighted
+  boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
+  
   // Active node
   // Active nodes are nodes that are considered part of the visualization.
   // They will not be drawn if they are not marked as 'isActive'.
@@ -190,9 +193,7 @@ class ChordNode{
             rect(x,y-rectHeight,rectWidth,rectHeight);
             
             drawToCallees();
-            
-          
-            
+                        
             if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
               selected = !selected;
             }

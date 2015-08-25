@@ -1,5 +1,7 @@
 class Histogram extends DataLayer{
   
+  int scaledHeight = 250; // Normalize visualization height and values to this
+  
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
     this.VisualizationName = "Histogram";
@@ -37,7 +39,7 @@ class Histogram extends DataLayer{
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    this.generateHeatForCalleeAttribute(350);
+    this.generateHeatForCalleeAttribute(scaledHeight);
     
     sortNodesByCallee();
     

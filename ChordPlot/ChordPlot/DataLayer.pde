@@ -77,7 +77,7 @@ public class DataLayer implements VisualizationLayout{
   public float xBounds = 0;
   public float yBounds = 0;
   public float zBounds = 0;
-  
+    
   // Toggle for showing the Visualization
   boolean showData = true;
   // Store our dotGraph
@@ -286,21 +286,43 @@ public class DataLayer implements VisualizationLayout{
 */
 
   // This command takes in a ChordNodeList from one visualization
-  // and then sets the other visualizations nodes active on the top of its stack.
-  //
-  // 
-  public void setActiveNodes(ChordNodeList cnl){
-      println("cnl.size():"+cnl.size());
+  // and then highlights the other visualizations nodes on the top of its stack.
+  public void highlightNodes(ChordNodeList cnl){
       // It's possible that cnl or the top of the nodeListStack has been filtered
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
       for(int i =0; i < cnl.size(); ++i){
+        
           for(int j = 0; j < nodeListStack.peek().size(); ++j){
-            
-            if(cnl.get(i).metaData == nodeListStack.peek().get(j).metaData){
-              println(cnl.get(i).metaData.name + "==" + nodeListStack.peek().get(j).metaData.name);
-              nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+            if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+              //nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+              float xx = nodeListStack.peek().get(j).x;
+              float ww = nodeListStack.peek().get(j).rectWidth;
+              float yy = nodeListStack.peek().get(j).y-ww;
+              float hh = nodeListStack.peek().get(j).rectHeight;
+              // draw a rectangle over our visualization.
+              fill(255,255,0);
+              rect(xx,yy,ww,hh);
+              
+              break;
+            }
+          }
+      }
+  }
+  
+    // This command takes in a ChordNodeList from one visualization
+    // and then toggles the other visualizations nodes being active.
+    public void toggleActiveNodes(ChordNodeList cnl){
+      // It's possible that cnl or the top of the nodeListStack has been filtered
+      // so we need to make sure we check every node against each other.
+      // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
+      // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+      for(int i =0; i < cnl.size(); ++i){
+        
+          for(int j = 0; j < nodeListStack.peek().size(); ++j){
+            if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+              nodeListStack.peek().get(j).selected = !nodeListStack.peek().get(j).selected; // Modify the node we have found. 
               break;
             }
           }

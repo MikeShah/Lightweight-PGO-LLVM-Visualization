@@ -25,6 +25,8 @@ class Buckets extends DataLayer{
   float minValue  = 0;
   float stepValue = 5;
   
+  int scaledHeight = 250; // Normalize visualization height and values to this
+  
   // Default Constructor for the Buckets
   public Buckets(String file, float xPosition, float yPosition, int layout){
     this.VisualizationName = "Buckets";
@@ -103,7 +105,7 @@ class Buckets extends DataLayer{
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    this.generateHeatForCalleeAttribute(350);
+    this.generateHeatForCalleeAttribute(scaledHeight);
     
     sortNodesByCallee();
     
@@ -203,7 +205,7 @@ class Buckets extends DataLayer{
               fill(192,255); stroke(255);
               float bucketHeight = bucketLists.get(i).size();
               float xBucketPosition = xPosition+(i*((int)bucketWidth));
-              bucketHeight = map(bucketHeight, smallestBucket, largestBucket, 0, 350);
+              bucketHeight = map(bucketHeight, smallestBucket, largestBucket, 0, scaledHeight);
               
               // A bit hacky, but check to see if the mouse is over the region and then highlight the active nodes.
               if(MySimpleCamera.xSelection >  xBucketPosition && MySimpleCamera.xSelection < xBucketPosition+bucketWidth){
@@ -214,10 +216,13 @@ class Buckets extends DataLayer{
                   // Give some text to tell us which bucket we are in
                   text("Bucket# "+i,xBucketPosition,yPosition+10);
                   // If the mouse is pressed
-                  if(mousePressed==true){
+                  if(mousePressed==true ){
                     // TODO: Do not make me a hard link
-                    println("Here we go");
-                    cd.setActiveNodes(bucketLists.get(i));
+                    if(mouseButton==LEFT){
+                      cd.highlightNodes(bucketLists.get(i));
+                    }else if(mouseButton==RIGHT){
+                      cd.toggleActiveNodes(bucketLists.get(i));
+                    }
                   }
                 }
               }

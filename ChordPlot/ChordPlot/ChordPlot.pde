@@ -37,8 +37,8 @@ void setup(){
   
   // Our base visualizations
   cd = new ChordDiagram(400, filename,1);
-  h = new Histogram(filename,20,height-100,0);
-  b = new Buckets(filename,20,height-100,0);
+  h = new Histogram(filename,20,height-30,0);
+  b = new Buckets(filename,20,height-290,0);
   
   // Initialize our GUI after our data has been loaded
   initGUI();   
