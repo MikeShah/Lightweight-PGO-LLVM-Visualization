@@ -45,12 +45,12 @@ public class commonWidget extends PApplet{
   }
   
     public void settings() {
-      size(200, 200, P3D);
+      size(300, 600, P3D);
       smooth();
     }
     public void setup() { 
       surface.setTitle(windowTitle);
-      surface.setLocation(0, 800);
+      surface.setLocation(1440, 400);
     }
   
     public void draw() {
