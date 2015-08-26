@@ -801,7 +801,7 @@ public:
                 std::string occurrences = std::to_string(cs_pair.second);
                 // Build a meta-data string that has some information
                 std::string edgeLabel = "[ label=\"" + occurrences + "\"];";
-                ss << "\"" << callerFunction->getName() << "\"" << " -> " << "\"" << cs_pair.first << "\"" << edgeLabel << "\n";
+                ss << "\"" << callerFunction->getName() << "\"" << " -> " << "\"" << cs_pair.first << "\" " << edgeLabel << "\n"; // Note that it is important to have a space after cs_pair.first because it makes the stuff easier to parse.
             }
         }
         ss << "}";
