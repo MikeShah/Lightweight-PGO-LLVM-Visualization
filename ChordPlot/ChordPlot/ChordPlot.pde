@@ -35,7 +35,8 @@ void setup(){
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
 
   //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
-  String filename = "output.dot";
+  //String filename = "output.dot"; // legacy version of dot file loader
+  String filename = "horde3d.dot";
   
   // Create the second window with the details pane
   dp = new DetailsPane();

@@ -74,12 +74,26 @@ public class DataLayer implements VisualizationLayout{
     
     // Populate the node list
     // Get access to all of our nodes
-    Iterator<nodeMetaData> nodeListIter = dotGraph.fullNodeList.iterator();
+    Iterator nodeListIter = dotGraph.fullNodeList.entrySet().iterator();
     while(nodeListIter.hasNext()){
-      nodeMetaData m = nodeListIter.next();
+      Map.Entry pair = (Map.Entry)nodeListIter.next();
+      nodeMetaData m = (nodeMetaData)pair.getValue(); 
       ChordNode temp = new ChordNode(m.name,xPosition,yPosition,0);
+      // Do a deep copy
+      // This is annoying, but will work for now
       temp.metaData.callees = m.callees;
+      temp.metaData.attributes = m.attributes;
+      temp.metaData.metaData = m.metaData;
+      temp.metaData.OpCodes = m.OpCodes;
+      temp.metaData.PGOData = m.PGOData;
+      temp.metaData.PerfData = m.PerfData;
+      temp.metaData.ControlFlowData = m.ControlFlowData;
+      temp.metaData.extra_information = m.extra_information;
+      
+      
+      println("??? "+temp.metaData.attributes);
       nodeList.add(temp);
+      //nodeListIter.remove(); // Avoid ConcurrentModficiationException
     }
   }
   
@@ -152,13 +166,15 @@ public class DataLayer implements VisualizationLayout{
 */     
       
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
-      
+
       // Faster hacked version
       for(int i =0; i < nodeListStack.peek().size(); i++){
+        
         // Search to see if our node has outcoming edges
         nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
         nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
         if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+        
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
           LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
@@ -168,9 +184,9 @@ public class DataLayer implements VisualizationLayout{
           // Iterate through all of the callees in our current node
           // We already know what they are, but now we need to map
           // WHERE they are in the visualization screen space.
+          
           while(it.hasNext()){
               nodeMetaData temp = it.next();
-              
               // When we find the key, add the values points
               if(topOfStackMap.containsKey(temp.name)){
                   ChordNode value = topOfStackMap.get(temp.name);
@@ -196,6 +212,7 @@ public class DataLayer implements VisualizationLayout{
               }
               // Increment our iterator
               */
+              
           }
         }
       }

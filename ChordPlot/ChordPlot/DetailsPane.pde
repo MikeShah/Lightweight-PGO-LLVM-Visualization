@@ -24,7 +24,7 @@ class DetailsPane extends PApplet {
                    .setPosition(width-180,0)
                    .setSize(180,19)
                    ;
-                   
+/*                   
               // Capture Console output here.
               myConsoleTextarea = detailsPanel.addTextarea("txt")
                   .setPosition(400, 0)
@@ -37,6 +37,7 @@ class DetailsPane extends PApplet {
               ;
 
               console = detailsPanel.addConsole(myConsoleTextarea);//
+*/              
   }
   
   

@@ -86,8 +86,6 @@ class Buckets extends DataLayer{
       // This will allos us to quickly highlight over a bucket, and select the nodes that fall in that subset.
       bucketLists.get(assignBucket).add(nodeListStack.peek().get(i));
       
-      if(nodeListStack.peek().get(i).metaData.callees>2)
-        println("callees:"+nodeListStack.peek().get(i).metaData.callees + " bucket:" + nodeListStack.peek().get(i).bucket);
     }
   }
   

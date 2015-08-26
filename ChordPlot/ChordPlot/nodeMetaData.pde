@@ -13,20 +13,29 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   float c;  // the color of the node
   
   String attributes;
+  String annotations;
   String metaData;
   String OpCodes;
   String PGOData;
   String PerfData;
+  String ControlFlowData;
     
-  public nodeMetaData(String name, String extra_information){
+  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData){
     this.name = name;
     this.extra_information = extra_information;
+    this.attributes=attributes;
+    this.annotations=annotations;
+    this.metaData=metaData;
+    this.OpCodes=OpCodes;
+    this.PGOData=PGOData;
+    this.PerfData=PerfData;
+    this.ControlFlowData=ControlFlowData;
+    
     c = 0;
   }
   
   public nodeMetaData(String name){
     this.name = name;
-    this.extra_information = "n/a";
     c = 0;
   }
   
@@ -35,7 +44,13 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     String result = "";
     result += "\nname: "+name + "\n";
     result += "Callees: "+callees + "\n";
-    result += "info: "+extra_information + "\n";
+    result += "attributes: "+attributes + "\n";
+    result += "metaData: "+metaData + "\n";
+    result += "OpCodes: "+OpCodes + "\n";
+    result += "PGOData: "+PGOData + "\n";
+    result += "PerfData: "+PerfData + "\n";
+    result += "ControlFlowData: "+ControlFlowData + "\n";
+    result += "extra_information: "+extra_information + "\n";
     
     return result;
   }
