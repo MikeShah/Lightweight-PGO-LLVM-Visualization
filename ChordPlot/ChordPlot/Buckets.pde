@@ -211,16 +211,16 @@ class Buckets extends DataLayer{
               if(MySimpleCamera.xSelection >  xBucketPosition && MySimpleCamera.xSelection < xBucketPosition+bucketWidth){
                 // Just check if we are within our visualization. The reason is because we want to be able to select 
                 // even very small buckets by just sliding over them.
-                if(MySimpleCamera.ySelection > yPosition-yBounds){
+                if(MySimpleCamera.ySelection > yPosition-yBounds && MySimpleCamera.ySelection < yPosition){
                   fill(0,255,0,255); stroke(255);
                   // Give some text to tell us which bucket we are in
                   text("Bucket# "+i,xBucketPosition,yPosition+10);
+                  
+                  cd.highlightNodes(bucketLists.get(i));
                   // If the mouse is pressed
                   if(mousePressed==true ){
                     // TODO: Do not make me a hard link
                     if(mouseButton==LEFT){
-                      cd.highlightNodes(bucketLists.get(i));
-                    }else if(mouseButton==RIGHT){
                       cd.toggleActiveNodes(bucketLists.get(i));
                     }
                   }

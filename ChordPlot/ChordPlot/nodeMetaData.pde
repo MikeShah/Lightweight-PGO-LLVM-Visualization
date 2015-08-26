@@ -11,6 +11,12 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String extra_information;
   int callees = 0;
   float c;  // the color of the node
+  
+  String attributes;
+  String metaData;
+  String OpCodes;
+  String PGOData;
+  String PerfData;
     
   public nodeMetaData(String name, String extra_information){
     this.name = name;

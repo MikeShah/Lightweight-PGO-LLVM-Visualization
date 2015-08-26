@@ -106,11 +106,6 @@ private:
                 }
                 ss << "\n";
 
-                // Iterate through each instruction in our basic block
-                /*for(BasicBlock::iterator it = bb->begin(), ie = bb->end(); it!=ie; ++it){
-                    mi.
-                }
-                */
             //}
         } // if(m_function->hasMetadata()){
         else{
@@ -219,30 +214,11 @@ private:
             s.clear();
             ss.flush();
         }
-        /*
-        for (Function::const_iterator FI = I->begin(), FE = I->end(); FI != FE; ++FI){
-            ss << "\tblock name? " << FI->getName() << "\n";
-        }
-        */
     }
 
     // This function stores the opCodeCalls for each function
     void storeOpCodes(){
         // Get the function name
-/*
-        Vals.insert(&*I);
-        if(!I->isDeclaration()) {
-          for (Function::arg_iterator AI = I->arg_begin(), AE = I->arg_end(); AI != AE; ++AI)
-            Vals.insert(&*AI);
-          for (Function::const_iterator FI = I->begin(), FE = I->end(); FI != FE; ++FI)
-            for (BasicBlock::const_iterator BI = FI->begin(), BE = FI->end(); BI != BE; ++BI) {
-              Vals.insert(&*BI);
-              for (User::const_op_iterator OI = BI->op_begin(), OE = BI->op_end(); OI != OE; ++OI)
-                Vals.insert(*OI);
-            }
-        }
-*/
-
         for(Function::iterator bb = m_function->begin(), e = m_function->end(); bb != e; ++bb){
             // Grab all of the basic blocks, and then iterate through their opcodes
             for(BasicBlock::iterator i = bb->begin(), e=bb->end(); i!= e; ++i){
@@ -277,33 +253,6 @@ private:
                     //MDNode* md = it->getMetadata("noalias"); // Example: of getting a specific type of metadata
                     // Store all of the metadata from an instruction here
                 }
- /*             // Get the Metadata declare in the llvm intrinsic function
-                if(CallInst* CI = dyn_cast<CallInst>(it)){
-                    // ^ Above we checked if a call instruction is made, and now we create a function F for it
-                    if(Function *F = CI->getCalledFunction()){
-                        if(F->getName().startswith("llvm.")){
-                            // Figure out how much metadata our instruction has
-                            unsigned operandCount = it->getNumOperands();
-                            // Finally search through all of the operands and if it non-null
-                            // then create a meta-data node for it
-                            // Push all of the operands that are MDNodes into meta data slots
-                            for(unsigned int i =0, e = operandCount; i != e; ++i){
-
-                                if(MDNode* N = dyn_cast_or_null<MDNode>(it->getOperand(i))){
-                                    createMetadataSlot(N);
-                                }
-                            }
-                        }
-                    }
-                }
-*/
-// ! Need to figure out exactly how this is working
-                // Get all of the meta data nodes attached to each instruction
-//                it->getAllMetadata(MDForInstr);
-//                for(unsigned i = 0, e = MDForInstr.size(); i!=e; ++i){
-//                    createMetadataSlot(MDForInstr[i].second);
-//                }
-//               MDForInstr.clear();
 
             }   // for(BasicBlock::iterator it = bb->begin(), ie = bb->end(); it!=ie; ++it){
         }       // for(Function::iterator bb = F.begin(), E = F.end(); bb != E; ++bb){
@@ -323,33 +272,6 @@ private:
     void storeFunctionControlFlowGraph(){
 
     }
-
-/*
-    // Map for MDNodes
-    DenseMap<MDNode*,unsigned> _metadataMap;
-
-    //
-    void createMetadataSlot(MDNode *N){
-            if(!N->isFunctionLocal()){
-                mdn_iterator I = _metadataMap.find(N);
-                if(I!=_mdnMap.end()){
-                    return;
-                }
-                //the map also stores the number of each metadata node. It is the same order as in the dumped bc file.
-                unsigned DestSlot = _mdnNext++;
-                _metadataMap[N] = DestSlot;
-            }
-
-            for (unsigned i = 0, e = N->getNumOperands(); i!=e; ++i){
-                if(MDNode *Op = dyn_cast_or_null<MDNode>(N->getOperand(i))){
-                    createMetadataSlot(Op);
-                }
-            }
-
-    }
-
-*/
-
 
     // Takes an instruction and returns all attributes
     // TODO: Implement this on an instruction or basic block(bb) level.
@@ -470,9 +392,8 @@ public:
         llvm::raw_string_ostream ss(s);
 
         for(std::map<std::string,unsigned>::iterator it = opcodeCounter.begin(), ie = opcodeCounter.end(); it != ie; ++it){
-            ss << it->first << " : " << it->second << "\n";
+            ss << it->first << " " << it->second << "\n";
         }
-
 
         return ss.str();
     }
@@ -492,16 +413,73 @@ public:
         llvm::raw_string_ostream ss(s);
 
         // Start with the attributes
-        if(m_attributes.size()>0){
+        if(m_attributes.size() > 0 ){
             ss << "{";
             ss << "Attributes";
             for(unsigned i =0; i < m_attributes.size(); i++){
                 ss << "|" << m_attributes[i];
             }
-            ss << "}";
+            ss << "}|";
         }
-        // Then print out meta-data
+        // Output Function Metadata
+        //if(.size() > 0){
+            ss << "{";
+            ss << "Metadata";
+         //   for(){
+         //       ss << ;
+         //   }
+            ss << "}|";
+        //}
 
+        // Output Annotations
+        //if(.size() > 0){
+            ss << "{";
+            ss << "Annotations";
+         //   for(){
+         //       ss << ;
+         //   }
+            ss << "}|";
+        //}
+
+        // PGO Data
+        //if(.size() > 0){
+            ss << "{";
+            ss << "PGO Data";
+         //   for(){
+         //       ss << ;
+         //   }
+            ss << "}|";
+        //}
+
+        // Perf Data
+        //if(.size() > 0){
+            ss << "{";
+            ss << "Perf Data";
+         //   for(){
+         //       ss << ;
+         //   }
+            ss << "}|";
+        //}
+
+        // Control Flow Graph
+        //if(.size() > 0){
+            ss << "{";
+            ss << "Control Flow Data";
+         //   for(){
+         //       ss << ;
+         //   }
+            ss << "}|";
+        //}
+
+        // Output Opcodes
+        if(opcodeCounter.size() > 0){
+            ss << "{";
+            ss << "Opcodes";
+            for(std::map<std::string,unsigned>::iterator it = opcodeCounter.begin(), ie = opcodeCounter.end(); it != ie; ++it){
+                ss << "|" << it->first << " " << it->second;
+            }
+            ss << "}|";
+        }
 
         return ss.str();
     }
@@ -907,19 +885,11 @@ namespace {
               myfile.open (".//attributes.txt", std::fstream::out);
               myfile << qcg.genUniqueAttributes();
               myfile.close();
-
+            // FIXME: Change this to raw_ostream
               myfile.open(".//metadata.txt",std::fstream::out);
               myfile << qcg.tryToPrintModuleMetaData();
               myfile.close();
 
-              // Output all of the kinds of metadata found
-              SmallVector<StringRef, 8> Names;
-              M.getMDKindNames(Names);
-
-/*              for(SmallVector<std::pair<unsigned, MDNode*>, 4>::iterator II = MDForInst.begin(), EE = MDForInst.end(); II != EE; ++II) {
-                outs() << "name: " << Names[II->first] << "\n";
-              }
-*/
 
         // Just perform one write
         errs() << ss.str();
