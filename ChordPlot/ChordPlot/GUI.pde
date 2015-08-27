@@ -237,11 +237,15 @@ public void ApplyOurFilters(int theValue){
   // Apply the relevant filters
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
-  // Add our item to the list
-  breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
   
   h.filterCallSites(callSiteMin, callSiteMax);
   h.update(); // Make a call to update the visualization
+  
+  b.filterCallSites(callSiteMin, callSiteMax);
+  b.update();
+  
+  // Add our item to the list
+  breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
   
   updateFunctionList();
 }
@@ -283,15 +287,20 @@ public void theBreadCrumbsBar(int n){
 
   }else if(mouseButton == RIGHT){
     println("Clearing Stack to this node", n);
-    ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-    ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
-    ChordNodeList temp3 = (ChordNodeList)b.nodeListStack.pop();
-    
-    if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
-      filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
-      cd.fastUpdate(); // Make a call to update the visualization
-      h.fastUpdate();
-      b.fastUpdate();
+    while(cd.nodeListStack.size()>n+1){
+      ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
+      ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
+      ChordNodeList temp3 = (ChordNodeList)b.nodeListStack.pop();
+      
+      if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
+        filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
+        cd.fastUpdate(); // Make a call to update the visualization
+        h.fastUpdate();
+        b.fastUpdate();
+      }
+      if(cd.nodeListStack.size()==1){
+        filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();
+      }
     }
   }
 }

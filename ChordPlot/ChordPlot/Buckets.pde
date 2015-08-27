@@ -107,11 +107,8 @@ class Buckets extends DataLayer{
     
     sortNodesByCallee();
     
-    if(layout<=0){
-      plotPoints2D();
-    }else{
-      plotPoints2D();
-    }
+    // Modify all of the physical locations in our nodeList
+    fastUpdate();
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
@@ -142,13 +139,17 @@ class Buckets extends DataLayer{
     }
   }
   
-    /*
+  /*
       Useful for being used in update where we don't need to do anything else with the data.
+      This means setLayout should only be called once initially.
+      
+      Fast layout will layout the nodes. It is nice to have this abstracted away
+      into its own function so we can quickly re-plot the nodes without doing additional
+      computations.
   */
   public void fastUpdate(){
-    int layout = this.layout;
     // Modify all of the positions in our nodeList
-    if(layout<=0){
+    if(this.layout <= 0){
       plotPoints2D();
     }else{
       plotPoints2D();

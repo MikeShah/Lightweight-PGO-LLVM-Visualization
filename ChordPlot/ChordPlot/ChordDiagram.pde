@@ -80,7 +80,7 @@ class ChordDiagram extends DataLayer{
     println("Calling plotPointsOnGrid");  
     float padding = 10; // padding on the screen
     // Compute the proper aspect ratio so that the visualization is more square.
-    float steps = 4; // Based on how many points we have, 
+    float steps = 6; // Based on how many points we have, 
     
     // Adjust the aspect ratio
     int pixelsNeeded = (int)(sqrt( steps * nodeListStack.peek().size()));
@@ -93,15 +93,18 @@ class ChordDiagram extends DataLayer{
     
     float ySize = height-padding;
     
-    xBounds = xSize; // Set the bounds
+    xBounds = xSize+padding; // Set the bounds
     
-    
+    println("======About to replot=========");
     int counter = 0; // draw a new point at each step
-    for(  float yPos = padding; yPos < ySize-padding; yPos+=steps){
-      for(float xPos = padding; xPos < xSize-padding; xPos+=steps){
+    for(  float yPos = padding; yPos < ySize; yPos+=steps){
+      for(float xPos = padding; xPos < xSize; xPos+=steps){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
           nodeListStack.peek().get(counter).y = yPos;
+          if(nodeListStack.peek().size()<5){
+              println("(x,y)=> ("+xPos+","+yPos+")");
+          }
           // Set the size of our visualization here
           nodeListStack.peek().get(counter).nodeSize = (int)(steps/2); // Integer division
           nodeListStack.peek().get(counter).rectWidth = steps;
@@ -152,7 +155,7 @@ class ChordDiagram extends DataLayer{
     // Set our layout
     this.layout = layout;
 
-
+    println("Setting a new layout");
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
@@ -167,14 +170,8 @@ class ChordDiagram extends DataLayer{
     
     sortNodesByCallee();
     
-    // Modify all of the positions in our nodeList
-    if(layout<=0){
-      plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
-    }else if(layout==1){
-      plotPointsOnGrid(nodeListStack.peek().size());
-    }else if(layout>=2){
-      plotPointsOnSphere(nodeListStack.peek().size());
-    }
+    // Modify all of the physical locations in our nodeList
+    fastUpdate();
        
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
@@ -185,15 +182,19 @@ class ChordDiagram extends DataLayer{
   /*
       Useful for being used in update where we don't need to do anything else with the data.
       This means setLayout should only be called once initially.
+      
+      Fast layout will layout the nodes. It is nice to have this abstracted away
+      into its own function so we can quickly re-plot the nodes without doing additional
+      computations.
   */
   public void fastUpdate(){
-    int layout = this.layout;
+    println("Calling fastUpdate");
     // Modify all of the positions in our nodeList
-    if(layout<=0){
+    if(this.layout <=0 ){
       plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
-    }else if(layout==1){
+    }else if(this.layout == 1){
       plotPointsOnGrid(nodeListStack.peek().size());
-    }else if(layout>=2){
+    }else if(this.layout >= 2){
       plotPointsOnSphere(nodeListStack.peek().size());
     }
   }

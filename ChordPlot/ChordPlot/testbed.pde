@@ -30,6 +30,17 @@ public class commonWidget extends PApplet{
            ;
   }
   
+  public commonWidget(){
+      // Call the constructor for the PApplet
+      super();
+      PApplet.runSketch(new String[]{this.getClass().getName()}, this);
+      // Setup our GUI
+      cp5 = new ControlP5( this );
+      this.initGUI();
+      // Set the window title
+      this.windowTitle = "No set windowTitle";
+  }
+  
   /*
       Constructor for a common Widget
   */
@@ -44,6 +55,7 @@ public class commonWidget extends PApplet{
       this.windowTitle = windowTitle;
   }
   
+  /*
     public void settings() {
       size(300, 600, P3D);
       smooth();
@@ -58,4 +70,5 @@ public class commonWidget extends PApplet{
       
       rect(5,5,5,5);
     }
+    */
 }

@@ -55,4 +55,36 @@ void keyPressed() {
     MySimpleCamera.moveDown();
   }
   
+  // Need to check for Enter and Return so application is cross
+  // platform: https://processing.org/reference/keyCode.html
+  if(keyCode == ENTER || keyCode == RETURN){
+      
+      String FilterString = cd.nodeListStack.peek().name;
+      
+      // Apply the relevant filters
+      cd.pushSelectedNodes();
+      cd.update(); // Make a call to update the visualization
+      
+      h.pushSelectedNodes();
+      h.update(); // Make a call to update the visualization
+      
+      b.pushSelectedNodes();
+      b.update();
+      
+      // Add our item to the list
+      breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
+      
+      updateFunctionList();
+  }
+  
+  // De-select nodes if space is pressed.
+  if(key== ' '){
+      // Apply the relevant filters
+      cd.deselectAllNodes();
+      
+      h.deselectAllNodes();
+      
+      b.deselectAllNodes();
+  }
+  
 }

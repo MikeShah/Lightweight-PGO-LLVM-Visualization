@@ -6,11 +6,12 @@ import javax.swing.*;
 */
 DetailsPane dp;
 
-
 /* Create our visualizations */
 ChordDiagram cd;
 Histogram h;
 Buckets b;
+
+HistogramWindow hw;
 
 /*
 
@@ -34,9 +35,9 @@ void setup(){
   
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
 
-  String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   //String filename = "output.dot"; // legacy version of dot file loader
-  //String filename = "horde3d.dot";
+  String filename = "horde3d.dot";
   
   // Create the second window with the details pane
   dp = new DetailsPane();
@@ -46,6 +47,8 @@ void setup(){
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-30,0);
   b = new Buckets(filename,20,height-290,0);
+  
+  hw = new HistogramWindow(filename);
   
   // Initialize our GUI after our data has been loaded
   initGUI();   
@@ -66,8 +69,8 @@ void draw(){
   // Refresh the screen
   background(128);
    
-   text("FPS :"+frameRate,width-100,height-25);
-   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
+   text("FPS :"+frameRate,width-100,height-20);
+   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

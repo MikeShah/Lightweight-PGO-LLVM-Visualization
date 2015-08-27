@@ -17,7 +17,6 @@ public static class MySimpleCamera{
     public static float ySelection;
     public static float zSelection;
 
-   
    // This constructor is not called
    // unless this class is an inner class I believe.
    public MySimpleCamera(){

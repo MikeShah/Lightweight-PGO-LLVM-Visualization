@@ -1,3 +1,72 @@
+/*
+    This class serves as the details window to display other information.
+*/
+class HistogramWindow extends commonWidget {
+  
+  // a self-contained 
+  Histogram m_histogram;
+  String filename;
+  
+  PGraphics pg;
+  
+  public HistogramWindow(String filename){
+    this.filename = filename;
+    println("a");
+    m_histogram = new Histogram(filename,0,height-30,0);
+  }
+  
+  public void settings() {
+    size(600, 200, P3D);
+    smooth();
+  }
+    
+  public void setup() { 
+      surface.setTitle(windowTitle);
+      surface.setLocation(1440, 200);
+      pg = createGraphics(width,height);
+  }
+  
+  public void draw() {
+    println("d");
+    // Refresh the screen    
+    pg.beginDraw();
+      pg.background(128);
+        pg.fill(0,255,0);
+        pg.rect(0,0,50,50); 
+        pg.fill(255,0,0);
+        pg.rect(0,50,50,50);
+        pg.text("FPS :"+frameRate,width-100,height-20);
+        pg.text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
+    pushMatrix();
+       translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
+       if(m_histogram != null){
+         //m_histogram.draw(0);
+         //m_histogram.drawBounds(0,64,128, m_histogram.xPosition,m_histogram.yPosition-m_histogram.yBounds);
+         // What is interesting about the drawing, is that it is all happening in the
+          // ChordNode itself. This way we can have any arbritrary shape in ChordNode
+          // drawn and handle all of the selection there. It also would allow us to have
+          // different types of shaped nodes mixed in a visualization much more easily.
+          for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
+            ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
+            temp.render(2);
+          }
+       }
+    popMatrix();
+    
+    pg.endDraw();
+    
+    image(pg,0,0);
+    
+    
+
+    
+
+    
+  }
+  
+  
+}
+
 class Histogram extends DataLayer{
   
   int scaledHeight = 250; // Normalize visualization height and values to this
@@ -43,11 +112,8 @@ class Histogram extends DataLayer{
     
     sortNodesByCallee();
     
-    if(layout<=0){
-      plotPoints2D();
-    }else{
-      plotPoints2D();
-    }
+    // Modify all of the physical locations in our nodeList
+    fastUpdate();
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
@@ -83,13 +149,17 @@ class Histogram extends DataLayer{
     }
   }
   
-    /*
+  /*
       Useful for being used in update where we don't need to do anything else with the data.
+      This means setLayout should only be called once initially.
+      
+      Fast layout will layout the nodes. It is nice to have this abstracted away
+      into its own function so we can quickly re-plot the nodes without doing additional
+      computations.
   */
   public void fastUpdate(){
-    int layout = this.layout;
     // Modify all of the positions in our nodeList
-    if(layout<=0){
+    if(this.layout <= 0){
       plotPoints2D();
     }else{
       plotPoints2D();

@@ -18,12 +18,7 @@ class ChordNode{
   // Highlighted
   boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
   
-  // Active node
-  // Active nodes are nodes that are considered part of the visualization.
-  // They will not be drawn if they are not marked as 'isActive'.
-  // This will often be a result of filtering out the nodes.
-  boolean isActive = true; 
-  
+  // This arrayList holds all of the locations that the node points to(all of its callees).
   ArrayList<LocPoint> LocationPoints;
   
   public ChordNode(String name, float x, float y, float z){

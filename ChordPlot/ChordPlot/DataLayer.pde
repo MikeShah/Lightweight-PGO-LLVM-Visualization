@@ -218,6 +218,37 @@ public class DataLayer implements VisualizationLayout{
   }
   
   
+  /*
+      Pushes all of the selected nodes onto a stack
+      This is the most generic way to push nodes onto a stack.
+  
+      Ideally this is tied to some keypress(Enter key)
+  */
+  public void pushSelectedNodes(){
+      String name = "Selected Nodes";
+    
+      ChordNodeList selectedNodes = new ChordNodeList(name);
+      for(int i =0; i < nodeListStack.peek().size();i++){
+        if(nodeListStack.peek().get(i).selected){
+          selectedNodes.add(nodeListStack.peek().get(i));
+        }
+      }
+      nodeListStack.push(selectedNodes);
+  }
+  
+  /*
+      Unselects all nodes.
+      
+      This is a convenience function
+  
+      Ideally this is tied to some keypress(Space key)
+  */
+  public void deselectAllNodes(){
+      for(int i =0; i < nodeListStack.peek().size();i++){
+        nodeListStack.peek().get(i).selected = false;
+      }
+  }
+    
   
     /*
       Filter Design pattern
@@ -226,7 +257,6 @@ public class DataLayer implements VisualizationLayout{
       2.) Loop through all nodes that are on the top of the stack
       3.) If they do not meet the criteria, then do not add them to the list.
       4.) Push the arrayList we have built on top of the stack
-      5.) Compute summary statistics to give feedback to users
   */
   public void filterCallSites(int min, int max){
       String name = "Callsites "+callSiteMin+"-"+callSiteMax;
@@ -238,7 +268,6 @@ public class DataLayer implements VisualizationLayout{
         }
       }
       nodeListStack.push(filteredNodes);
-      nodeListStack.computeSummaryStatistics();
   }
   
   /*
