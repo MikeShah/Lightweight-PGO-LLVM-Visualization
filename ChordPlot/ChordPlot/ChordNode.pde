@@ -147,7 +147,7 @@ class ChordNode{
   */
   public void onRightClick(){
      if(mouseButton == RIGHT){
-       float _w = 300;
+       float _w = 500;
        float _h = 200;
        float padding = 5;
        
@@ -159,9 +159,10 @@ class ChordNode{
          text("MetaData: "+metaData.getAllMetadata()+" \n Lorem ipsum dolor sit amet, phasellus pede tempus magna elit sed integer, aliquam ut mollit turpis, magna at a, non dui",x+padding,y+padding,_w-padding,_h-padding);
        popMatrix();
        
-        // Pass a data string to our child applet and store it here.
-        dp.setDataString("Data:"+metaData.getAllMetadata());
      }
+     
+     // Pass a data string to our child applet and store it here.
+      dp.setDataString("Data:"+metaData.getAllMetadata());
   }
   
   

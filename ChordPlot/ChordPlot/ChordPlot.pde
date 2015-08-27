@@ -34,9 +34,9 @@ void setup(){
   
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
 
-  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   //String filename = "output.dot"; // legacy version of dot file loader
-  String filename = "horde3d.dot";
+  //String filename = "horde3d.dot";
   
   // Create the second window with the details pane
   dp = new DetailsPane();
@@ -66,7 +66,7 @@ void draw(){
   // Refresh the screen
   background(128);
    
-   text("FPS :"+frameRate,5,height-40);
+   text("FPS :"+frameRate,width-100,height-25);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-25);
    
    pushMatrix();

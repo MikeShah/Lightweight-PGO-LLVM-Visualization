@@ -81,17 +81,16 @@ public class DataLayer implements VisualizationLayout{
       ChordNode temp = new ChordNode(m.name,xPosition,yPosition,0);
       // Do a deep copy
       // This is annoying, but will work for now
-      temp.metaData.callees = m.callees;
-      temp.metaData.attributes = m.attributes;
-      temp.metaData.metaData = m.metaData;
-      temp.metaData.OpCodes = m.OpCodes;
-      temp.metaData.PGOData = m.PGOData;
-      temp.metaData.PerfData = m.PerfData;
-      temp.metaData.ControlFlowData = m.ControlFlowData;
+      temp.metaData.callees           = m.callees;
+      temp.metaData.attributes        = m.attributes;
+      temp.metaData.annotations       = m.annotations;
+      temp.metaData.metaData          = m.metaData;
+      temp.metaData.OpCodes           = m.OpCodes;
+      temp.metaData.PGOData           = m.PGOData;
+      temp.metaData.PerfData          = m.PerfData;
+      temp.metaData.ControlFlowData   = m.ControlFlowData;
       temp.metaData.extra_information = m.extra_information;
-      
-      
-      println("??? "+temp.metaData.attributes);
+    
       nodeList.add(temp);
       //nodeListIter.remove(); // Avoid ConcurrentModficiationException
     }
@@ -140,7 +139,6 @@ public class DataLayer implements VisualizationLayout{
   // so that when we render we can do it quickly.
   //
   public void storeLineDrawings(){
-      println("Start of store: " + (millis()-programStart));
       
 /*     //Original 
       for(int i =0; i < nodeListStack.peek().size(); i++){
@@ -217,9 +215,6 @@ public class DataLayer implements VisualizationLayout{
         }
       }
       
-      
-      
-      println("end of store: " + (millis()-programStart));
   }
   
   

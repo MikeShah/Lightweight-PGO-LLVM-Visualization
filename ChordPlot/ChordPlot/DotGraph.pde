@@ -171,15 +171,7 @@ class DotGraph{
           ControlFlowData += tokens[i];
         }
     }
-    
-    println(attributes);
-    println(annotations);
-    println(metaData);
-    println(OpCodes);
-    println(PGOData);
-    println(PerfData);
-    println(ControlFlowData);
-    
+        
     nodeMetaData src = new nodeMetaData(functionName,restOfLine, attributes,annotations,metaData,OpCodes,PGOData,PerfData,ControlFlowData);
     
     return src;

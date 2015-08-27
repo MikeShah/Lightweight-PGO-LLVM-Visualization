@@ -75,11 +75,18 @@ public class NodeListStack{
   
   // Update the summary statistics based on the active nodes.
   public void computeSummaryStatistics(){
-     summaryStatistics.callers = stack.peek().size(); // Total number of caller functions
+    
+    
+     summaryStatistics.callers = 0; // Total number of caller functions
      summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
      
       for(int i =0; i < stack.peek().size();i++){
         summaryStatistics.callees += stack.peek().get(i).metaData.callees;
+        
+        // A caller is defined as a function that calls at least one other callee.
+        if(stack.peek().get(i).metaData.callees > 0){
+           summaryStatistics.callers++; // Total number of caller functions
+        }
       }
      
      // Figure out how much of the data we are seeing.

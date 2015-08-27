@@ -79,12 +79,23 @@ class ChordDiagram extends DataLayer{
   private void plotPointsOnGrid(float numberOfPoints){
     println("Calling plotPointsOnGrid");  
     float padding = 10; // padding on the screen
-    float xSize = (width-padding-200); // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
+    // Compute the proper aspect ratio so that the visualization is more square.
+    float steps = 4; // Based on how many points we have, 
+    
+    // Adjust the aspect ratio
+    int pixelsNeeded = (int)(sqrt( steps * nodeListStack.peek().size()));
+    
+    float xSize = pixelsNeeded * steps; //(width-padding-200); // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
+    // If our aspect ratio gets messed up, set it to the maximum
+    if(xSize > width-padding-200){
+      xSize = width-padding-200;
+    }
+    
     float ySize = height-padding;
     
     xBounds = xSize; // Set the bounds
     
-    float steps = 6; // Based on how many points we have, 
+    
     int counter = 0; // draw a new point at each step
     for(  float yPos = padding; yPos < ySize-padding; yPos+=steps){
       for(float xPos = padding; xPos < xSize-padding; xPos+=steps){

@@ -24,6 +24,12 @@ class DetailsPane extends PApplet {
                    .setPosition(width-180,0)
                    .setSize(180,19)
                    ;
+              // create a new button for something
+              detailsPanel.addButton("Highlight Similiar Nodes (todo)")
+                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
+                   .setPosition(width-180,20)
+                   .setSize(180,19)
+                   ;
 /*                   
               // Capture Console output here.
               myConsoleTextarea = detailsPanel.addTextarea("txt")
