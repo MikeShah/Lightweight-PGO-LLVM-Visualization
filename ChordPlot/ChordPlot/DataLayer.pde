@@ -300,21 +300,9 @@ public class DataLayer implements VisualizationLayout{
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
-
       for(int i =0; i < cnl.size(); ++i){
-        
           for(int j = 0; j < nodeListStack.peek().size(); ++j){
             if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
-              //nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
-              /*
-              float xx = nodeListStack.peek().get(j).x;
-              float ww = nodeListStack.peek().get(j).rectWidth;
-              float yy = nodeListStack.peek().get(j).y-ww;
-              float hh = nodeListStack.peek().get(j).rectHeight;
-              // draw a rectangle over our visualization.
-              fill(255,255,0);
-              rect(xx,yy,ww,hh);
-              */
               nodeListStack.peek().get(j).highlighted = value;
               break;
             }

@@ -20,8 +20,12 @@ class BucketsWindow extends commonWidget {
     
   public void setup() { 
       surface.setTitle(windowTitle);
-      surface.setLocation(800, 0);
+      surface.setLocation(1440, 0);
   }
+  
+  
+  // HACK to unlight the nodes after every N ticks.
+  int unhighlight = 0;
   
   public void draw() {
     
@@ -80,8 +84,16 @@ class BucketsWindow extends commonWidget {
                           }
                           else{
                              // If we are not hovering over our nodes, unhighlight them.
-                             cd.highlightNodes(m_buckets.bucketLists.get(i),false);
+                             // FIXME: This is a hack
+                             //        Need to properly figure out where to un-highlight nodes.
+                            unhighlight++;
+                            if(unhighlight>5){
+                                cd.highlightNodes(m_buckets.bucketLists.get(i),false);
+                                unhighlight = 0;
+                            }
                           }
+                          
+
 
                           
                           // Draw our rectangle for each of the buckets
