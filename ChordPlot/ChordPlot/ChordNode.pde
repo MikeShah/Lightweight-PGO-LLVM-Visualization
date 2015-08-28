@@ -180,7 +180,7 @@ class ChordNode{
             }
         }
     
-    
+        // If our node is selected, then highlight it a new color
         if( selected || (mouseX > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight))){ 
             fill(0);
             stroke(255);
@@ -194,12 +194,19 @@ class ChordNode{
               selected = !selected;
             }
          }
+         else if(highlighted){
+           if(highlighted) { fill(255,255,0); }  
+           rect(x,y-rectHeight,rectWidth,rectHeight);
+         }
          else{
-            // Color nodes based on callees
+            // If we aren't selected or highlighted then
+            // Default to coloing nodes based on color in the metaData
             fill(255-metaData.c);
             stroke(255-metaData.c);
             rect(x,y-rectHeight,rectWidth,rectHeight);
          }
+         
+
   }
   
   // Draw to all of the callee locations in 2D

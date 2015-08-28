@@ -92,7 +92,7 @@ public class DataLayer implements VisualizationLayout{
       temp.metaData.extra_information = m.extra_information;
     
       nodeList.add(temp);
-      //nodeListIter.remove(); // Avoid ConcurrentModficiationException
+      nodeListIter.remove(); // Avoid ConcurrentModficiationException
     }
   }
   
@@ -246,6 +246,7 @@ public class DataLayer implements VisualizationLayout{
   public void deselectAllNodes(){
       for(int i =0; i < nodeListStack.peek().size();i++){
         nodeListStack.peek().get(i).selected = false;
+        nodeListStack.peek().get(i).highlighted = false;
       }
   }
     
@@ -291,16 +292,21 @@ public class DataLayer implements VisualizationLayout{
 
   // This command takes in a ChordNodeList from one visualization
   // and then highlights the other visualizations nodes on the top of its stack.
-  public void highlightNodes(ChordNodeList cnl){
+  //
+  // We can also unhighlight nodes by passing in a value of 'false'
+  //
+  public void highlightNodes(ChordNodeList cnl, boolean value){
       // It's possible that cnl or the top of the nodeListStack has been filtered
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+
       for(int i =0; i < cnl.size(); ++i){
         
           for(int j = 0; j < nodeListStack.peek().size(); ++j){
             if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
               //nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+              /*
               float xx = nodeListStack.peek().get(j).x;
               float ww = nodeListStack.peek().get(j).rectWidth;
               float yy = nodeListStack.peek().get(j).y-ww;
@@ -308,12 +314,42 @@ public class DataLayer implements VisualizationLayout{
               // draw a rectangle over our visualization.
               fill(255,255,0);
               rect(xx,yy,ww,hh);
-              
+              */
+              nodeListStack.peek().get(j).highlighted = value;
               break;
             }
           }
       }
   }
+  
+  
+  /*
+    public void highlightNodes(ChordNodeList cnl, boolean value){
+      // It's possible that cnl or the top of the nodeListStack has been filtered
+      // so we need to make sure we check every node against each other.
+      // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
+      // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+
+      // Put everything into a hashmap from the cnl list (items we're trying to highlight,
+      // and then modify the nodes in another loop
+      HashMap<String, ChordNode> quickConvert = new HashMap<String, ChordNode>();
+      for(int i =0; i < nodeListStack.peek().size(); ++i){
+        quickConvert.put(nodeListStack.peek().get(i).metaData.name,nodeListStack.peek().get(i));
+      }
+      
+      
+      for(int i = 0; i < cnl.size(); ++i){
+        quickConvert.get(cnl.get(i).metaData.name).selected = value;
+        
+        if((nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).highlighted = value;
+          break;
+        }
+      }
+
+  }
+  
+  */
   
     // This command takes in a ChordNodeList from one visualization
     // and then toggles the other visualizations nodes being active.

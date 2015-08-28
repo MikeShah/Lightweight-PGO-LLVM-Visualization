@@ -16,52 +16,43 @@ class HistogramWindow extends commonWidget {
   }
   
   public void settings() {
-    size(600, 200, P3D);
+    size(1440, 350, P3D);
     smooth();
   }
     
   public void setup() { 
       surface.setTitle(windowTitle);
-      surface.setLocation(1440, 200);
+      surface.setLocation(1440, 350);
       pg = createGraphics(width,height);
   }
   
   public void draw() {
-    println("d");
+    
     // Refresh the screen    
-    pg.beginDraw();
+    pg.beginDraw();  
       pg.background(128);
-        pg.fill(0,255,0);
-        pg.rect(0,0,50,50); 
-        pg.fill(255,0,0);
-        pg.rect(0,50,50,50);
         pg.text("FPS :"+frameRate,width-100,height-20);
         pg.text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
-    pushMatrix();
-       translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
-       if(m_histogram != null){
-         //m_histogram.draw(0);
-         //m_histogram.drawBounds(0,64,128, m_histogram.xPosition,m_histogram.yPosition-m_histogram.yBounds);
-         // What is interesting about the drawing, is that it is all happening in the
-          // ChordNode itself. This way we can have any arbritrary shape in ChordNode
-          // drawn and handle all of the selection there. It also would allow us to have
-          // different types of shaped nodes mixed in a visualization much more easily.
-          for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
-            ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
-            temp.render(2);
-          }
-       }
-    popMatrix();
     
-    pg.endDraw();
-    
-    image(pg,0,0);
-    
-    
-
-    
-
-    
+        pg.pushMatrix();
+           pg.translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
+           if(m_histogram != null){
+             //m_histogram.draw(0); // TODO: FIXME: This is a bug, for some reason I "Cannot run the OpenGL renderer outside the main thread, change your code so the drawing calls are all inside the main thread"
+             //m_histogram.drawBounds(0,64,128, m_histogram.xPosition,m_histogram.yPosition-m_histogram.yBounds);
+             // What is interesting about the drawing, is that it is all happening in the
+              // ChordNode itself. This way we can have any arbritrary shape in ChordNode
+              // drawn and handle all of the selection there. It also would allow us to have
+              // different types of shaped nodes mixed in a visualization much more easily.
+              for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
+                ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
+                pg.fill(temp.metaData.c);
+                pg.rect(temp.x,temp.y - temp.rectHeight,temp.rectWidth,temp.rectHeight);
+              }
+           }
+        pg.popMatrix();
+     pg.endDraw();
+     
+     image(pg,0,0);
   }
   
   
@@ -173,10 +164,10 @@ class Histogram extends DataLayer{
   public void update(){
      this.setLayout(layout);
   }
-  
-
-  
-  // Draw using our rendering modes
+    
+  /*
+      Draw using our rendering modes
+  */
   public void draw(int mode){
     if(showData){
            // Draw a background
@@ -187,11 +178,13 @@ class Histogram extends DataLayer{
           // ChordNode itself. This way we can have any arbritrary shape in ChordNode
           // drawn and handle all of the selection there. It also would allow us to have
           // different types of shaped nodes mixed in a visualization much more easily.
-          for(int i =0; i < nodeListStack.peek().size();i++){
+          for(int i = 0; i < nodeListStack.peek().size(); ++i){
             ChordNode temp = (ChordNode)nodeListStack.peek().get(i);
             temp.render(2);
           }
     
       }
   }
+  
+  
 }

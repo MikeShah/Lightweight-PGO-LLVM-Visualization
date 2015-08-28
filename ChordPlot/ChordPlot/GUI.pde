@@ -226,7 +226,7 @@ public void Microarray(int theValue) {
 
 // Buckets
 public void Buckets(int theValue) {
-  b.showData = !b.showData;
+  bw.m_buckets.showData = !bw.m_buckets.showData;
 }
 
 /*
@@ -241,8 +241,8 @@ public void ApplyOurFilters(int theValue){
   h.filterCallSites(callSiteMin, callSiteMax);
   h.update(); // Make a call to update the visualization
   
-  b.filterCallSites(callSiteMin, callSiteMax);
-  b.update();
+  bw.m_buckets.filterCallSites(callSiteMin, callSiteMax);
+  bw.m_buckets.update();
   
   // Add our item to the list
   breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
@@ -273,13 +273,13 @@ public void theBreadCrumbsBar(int n){
     println("-------------------------------------------Setting Stack to this node", n);
     ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
     ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
-    ChordNodeList temp3 = (ChordNodeList)b.nodeListStack.pop();
+    ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
       cd.fastUpdate(); // Make a call to update the visualization
       h.fastUpdate();
-      b.fastUpdate();
+      bw.m_buckets.fastUpdate();
     }
     if(cd.nodeListStack.size()==1){
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();
@@ -290,13 +290,13 @@ public void theBreadCrumbsBar(int n){
     while(cd.nodeListStack.size()>n+1){
       ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
       ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
-      ChordNodeList temp3 = (ChordNodeList)b.nodeListStack.pop();
+      ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
         cd.fastUpdate(); // Make a call to update the visualization
         h.fastUpdate();
-        b.fastUpdate();
+        bw.m_buckets.fastUpdate();
       }
       if(cd.nodeListStack.size()==1){
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();

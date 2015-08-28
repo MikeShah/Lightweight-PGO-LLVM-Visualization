@@ -9,9 +9,9 @@ DetailsPane dp;
 /* Create our visualizations */
 ChordDiagram cd;
 Histogram h;
-Buckets b;
 
-HistogramWindow hw;
+//HistogramWindow hw;
+BucketsWindow bw;
 
 /*
 
@@ -21,7 +21,7 @@ commonWidget w;
 int programStart = 0;
 
 void settings(){
-  size(1440 ,800,P3D);
+  size(1440 ,800, P3D);
 }
 
 /*
@@ -46,15 +46,14 @@ void setup(){
   // Our base visualizations
   cd = new ChordDiagram(400, filename,1);
   h = new Histogram(filename,20,height-30,0);
-  b = new Buckets(filename,20,height-290,0);
   
-  hw = new HistogramWindow(filename);
-  
+//  hw = new HistogramWindow(filename);
+  bw = new BucketsWindow(filename);
   // Initialize our GUI after our data has been loaded
   initGUI();   
   
   println("setup time: " + (millis()-programStart));
-  b.debug();
+  bw.m_buckets.debug();
   
   w = new commonWidget("test");
 }
@@ -76,6 +75,5 @@ void draw(){
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
      cd.draw(drawMode);
      h.draw(0);
-     b.draw(0);
    popMatrix();
 }

@@ -28,6 +28,14 @@ public class commonWidget extends PApplet{
            .setValue( 127 )
            .setLabel("value")
            ;
+           
+      cp5.addSlider( "heheh test-")
+           .setRange( 0, 255 )
+           .setPosition( 100, 0)
+           .plugTo( this, "setValue" )
+           .setValue( 127 )
+           .setLabel("value")
+           ;
   }
   
   public commonWidget(){

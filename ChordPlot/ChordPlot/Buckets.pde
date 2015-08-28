@@ -1,4 +1,106 @@
 /*
+    This class serves as the details window to display other information.
+*/
+class BucketsWindow extends commonWidget {
+  
+  // a self-contained 
+  Buckets m_buckets;
+  String filename;
+
+  public BucketsWindow(String filename){
+    this.filename = filename;
+    println("a");
+    m_buckets = new Buckets(filename,0,height-30,0);
+  }
+  
+  public void settings() {
+    size(600, 450, P3D);
+    smooth();
+  }
+    
+  public void setup() { 
+      surface.setTitle(windowTitle);
+      surface.setLocation(800, 0);
+  }
+  
+  public void draw() {
+    
+    float m_x = mouseX;
+    float m_y = mouseY;
+    
+    
+    
+    if(m_buckets!=null){
+                     if(m_buckets.showData){
+                      background(0,64,164); fill(0); stroke(0); text(frameRate,20,height-20);
+                      //pushMatrix();
+                        //translate(0,0,MySimpleCamera.cameraZ);
+                        // Draw some bounds
+                        fill(0,64,128);
+                        rect(m_buckets.xPosition+1,m_buckets.yPosition-m_buckets.yBounds-1,m_buckets.xBounds,m_buckets.yBounds);
+                        
+                        // Normalize the largest buckets
+                        // The purpose is so we can use this information to scale the bucket
+                        // heights and fit the visualization within the screen.
+                        float largestBucket = 0;
+                        float smallestBucket = 0;
+                        for(int i = 0; i < m_buckets.bucketLists.size(); ++i){
+                            smallestBucket = min(smallestBucket,m_buckets.bucketLists.get(i).size());
+                            largestBucket = max(largestBucket,m_buckets.bucketLists.get(i).size());
+                        }
+                        
+                        
+                        
+                        
+                        // Render the rectangles
+                        for(int i =0; i < m_buckets.bucketLists.size(); ++i){
+                          fill(192,255); stroke(255);
+                          float bucketHeight = m_buckets.bucketLists.get(i).size();
+                          float xBucketPosition = m_buckets.xPosition+(i*((int)m_buckets.bucketWidth));
+                          bucketHeight = map(bucketHeight, smallestBucket, largestBucket, 0, m_buckets.scaledHeight);
+
+                          // A bit hacky, but check to see if the mouse is over the region and then highlight the active nodes.
+                          if(m_x >  xBucketPosition && m_x < xBucketPosition+m_buckets.bucketWidth){
+                              // Just check if we are within our visualization. The reason is because we want to be able to select 
+                              // even very small buckets by just sliding over them.
+                              if(m_y < m_buckets.yPosition && m_y > m_buckets.yPosition-m_buckets.yBounds){
+                                  text("selected",200,200);
+                                  fill(0,255,0,255); stroke(255);
+                                  // Give some text to tell us which bucket we are in
+                                  text("Bucket# "+i,xBucketPosition,m_buckets.yPosition+10);
+                                  cd.highlightNodes(m_buckets.bucketLists.get(i),true);
+                                  // If the mouse is pressed
+                                  if(mousePressed==true ){
+                                      // TODO: Do not make me a hard link
+                                      if(mouseButton==LEFT){
+                                        cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                      }
+                                  }
+                              }
+                          }
+                          else{
+                             // If we are not hovering over our nodes, unhighlight them.
+                             cd.highlightNodes(m_buckets.bucketLists.get(i),false);
+                          }
+
+                          
+                          // Draw our rectangle for each of the buckets
+                          rect(xBucketPosition,m_buckets.yPosition-bucketHeight,m_buckets.bucketWidth,bucketHeight);
+                        }
+                      
+                      //popMatrix();
+                
+                  } 
+    }
+
+     
+  }
+  
+  
+}
+
+
+/*
   This visualization takes a bunch of values,
   and generates buckets of an appropriate size.
   
@@ -186,7 +288,7 @@ class Buckets extends DataLayer{
     if(showData){
           // Draw a background
           pushMatrix();
-            translate(0,0,MySimpleCamera.cameraZ);
+            //translate(0,0,MySimpleCamera.cameraZ);
             drawBounds(0,64,128, xPosition,yPosition-yBounds);
             
             // Normalize the largest buckets
@@ -215,7 +317,7 @@ class Buckets extends DataLayer{
                   // Give some text to tell us which bucket we are in
                   text("Bucket# "+i,xBucketPosition,yPosition+10);
                   
-                  cd.highlightNodes(bucketLists.get(i));
+                  cd.highlightNodes(bucketLists.get(i),true);
                   // If the mouse is pressed
                   if(mousePressed==true ){
                     // TODO: Do not make me a hard link

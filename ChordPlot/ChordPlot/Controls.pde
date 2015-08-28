@@ -68,8 +68,8 @@ void keyPressed() {
       h.pushSelectedNodes();
       h.update(); // Make a call to update the visualization
       
-      b.pushSelectedNodes();
-      b.update();
+      bw.m_buckets.pushSelectedNodes();
+      bw.m_buckets.update();
       
       // Add our item to the list
       breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
@@ -84,7 +84,7 @@ void keyPressed() {
       
       h.deselectAllNodes();
       
-      b.deselectAllNodes();
+      bw.m_buckets.deselectAllNodes();
   }
   
 }
