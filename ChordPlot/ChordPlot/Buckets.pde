@@ -24,15 +24,11 @@ class BucketsWindow extends commonWidget {
   }
   
   
-  // HACK to unlight the nodes after every N ticks.
-  int unhighlight = 0;
   
   public void draw() {
     
     float m_x = mouseX;
-    float m_y = mouseY;
-    
-    
+    float m_y = mouseY;   
     
     if(m_buckets!=null){
                      if(m_buckets.showData){
@@ -83,14 +79,8 @@ class BucketsWindow extends commonWidget {
                               }
                           }
                           else{
-                             // If we are not hovering over our nodes, unhighlight them.
-                             // FIXME: This is a hack
-                             //        Need to properly figure out where to un-highlight nodes.
-                            unhighlight++;
-                            if(unhighlight>5){
+                                // FIXME: Make me faster
                                 cd.highlightNodes(m_buckets.bucketLists.get(i),false);
-                                unhighlight = 0;
-                            }
                           }
                           
 
