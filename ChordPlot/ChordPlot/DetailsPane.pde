@@ -19,7 +19,7 @@ class DetailsPane extends PApplet {
   void initGUI(){
       detailsPanel = new ControlP5(this);
               // create a new button for something
-              detailsPanel.addButton("More")
+              detailsPanel.addButton("More (todo)")
                    //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
                    .setPosition(width-180,0)
                    .setSize(180,19)
@@ -28,6 +28,20 @@ class DetailsPane extends PApplet {
               detailsPanel.addButton("Highlight Similiar Nodes (todo)")
                    //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
                    .setPosition(width-180,20)
+                   .setSize(180,19)
+                   ;
+                   
+              // create a new button for outputting Dot files
+              detailsPanel.addButton("OutputDOT")
+                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
+                   .setPosition(width-180,40)
+                   .setSize(180,19)
+                   ;
+                   
+              // create a new button for outputting Dot files
+              detailsPanel.addButton("OutputSelectedDOT")
+                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
+                   .setPosition(width-180,60)
                    .setSize(180,19)
                    ;
 /*                   
@@ -88,10 +102,22 @@ class DetailsPane extends PApplet {
   }
   
   
+  /*
+       When this button is pressed, we output a 
+      .dot file with the functions listed in the microarray
+  */
+  public void OutputDOT(int theValue) {
+    println("Outputting Dot file");
+    cd.nodeListStack.outputDot(".//top_of_stack_plus_some_timestamp.dot",0);
+  }
   
-  
-  
-  
-  
-  
+  /*
+      Output all of the selected nodes to
+      a dot file
+  */
+  public void OutputSelectedDOT(int theValue){
+    println("Outputting Dot file of selected nodes");
+    cd.nodeListStack.outputDot(".//selected_nodes_plus_some_timestamp.dot",1);
+  }
+    
 }

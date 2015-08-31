@@ -116,21 +116,7 @@ void initGUI(){
                    .addItems(java.util.Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","L","M","N","O","P","Q","R"))
                    ;
                  
-              // create a new button for outputting Dot files
-              filtersPanel.addButton("OutputDOT")
-                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
-                   .setPosition(10,200)
-                   .setSize(180,19)
-                   .setGroup(functionListGroup)
-                   ;
-                   
-              // create a new button for outputting Dot files
-              filtersPanel.addButton("OutputSelectedDOT")
-                   //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
-                   .setPosition(10,220)
-                   .setSize(180,19)
-                   .setGroup(functionListGroup)
-                   ;
+
 
   // Populate list
   String[] test = new String[cd.nodeListStack.peek().size()];
@@ -188,28 +174,10 @@ void controlEvent(ControlEvent theEvent) {
   
 }
 
-/*
-     When this button is pressed, we output a 
-    .dot file with the functions listed in the microarray
-*/
-public void OutputDOT(int theValue) {
-  println("Outputting Dot file");
-  cd.nodeListStack.outputDot(".//top_of_stack_plus_some_timestamp.dot",0);
-}
-
-/*
-    Output all of the selected nodes to
-    a dot file
-*/
-public void OutputSelectedDOT(int theValue){
-  println("Outputting Dot file of selected nodes");
-  cd.nodeListStack.outputDot(".//selected_nodes_plus_some_timestamp.dot",1);
-}
-
 
 // Histogram
 public void Histogram(int theValue) {
-  h.showData = !h.showData;
+  hw.m_histogram.showData = !hw.m_histogram.showData;
 }
 
 // Microarray
@@ -226,8 +194,8 @@ public void ApplyOurFilters(int theValue){
   cd.filterCallSites(callSiteMin, callSiteMax);
   cd.update(); // Make a call to update the visualization
   
-  h.filterCallSites(callSiteMin, callSiteMax);
-  h.update(); // Make a call to update the visualization
+  hw.m_histogram.filterCallSites(callSiteMin, callSiteMax);
+  hw.m_histogram.update(); // Make a call to update the visualization
   
   bw.m_buckets.filterCallSites(callSiteMin, callSiteMax);
   bw.m_buckets.update();
@@ -260,13 +228,13 @@ public void theBreadCrumbsBar(int n){
   if(mouseButton == LEFT){
     println("-------------------------------------------Setting Stack to this node", n);
     ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-    ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
+    ChordNodeList temp2 = (ChordNodeList)hw.m_histogram.nodeListStack.pop();
     ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
       cd.fastUpdate(); // Make a call to update the visualization
-      h.fastUpdate();
+      hw.m_histogram.fastUpdate();
       bw.m_buckets.fastUpdate();
     }
     if(cd.nodeListStack.size()==1){
@@ -277,13 +245,13 @@ public void theBreadCrumbsBar(int n){
     println("Clearing Stack to this node", n);
     while(cd.nodeListStack.size()>n+1){
       ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-      ChordNodeList temp2 = (ChordNodeList)h.nodeListStack.pop();
+      ChordNodeList temp2 = (ChordNodeList)hw.m_histogram.nodeListStack.pop();
       ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
         cd.fastUpdate(); // Make a call to update the visualization
-        h.fastUpdate();
+        hw.m_histogram.fastUpdate();
         bw.m_buckets.fastUpdate();
       }
       if(cd.nodeListStack.size()==1){

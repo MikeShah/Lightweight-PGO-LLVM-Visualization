@@ -65,8 +65,8 @@ void keyPressed() {
       cd.pushSelectedNodes();
       cd.update(); // Make a call to update the visualization
       
-      h.pushSelectedNodes();
-      h.update(); // Make a call to update the visualization
+      hw.m_histogram.pushSelectedNodes();
+      hw.m_histogram.update(); // Make a call to update the visualization
       
       bw.m_buckets.pushSelectedNodes();
       bw.m_buckets.update();
@@ -82,7 +82,7 @@ void keyPressed() {
       // Apply the relevant filters
       cd.deselectAllNodes();
       
-      h.deselectAllNodes();
+      hw.m_histogram.deselectAllNodes();
       
       bw.m_buckets.deselectAllNodes();
   }

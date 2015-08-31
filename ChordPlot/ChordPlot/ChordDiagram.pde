@@ -5,6 +5,7 @@
 class ChordDiagram extends DataLayer{
   
   float radius;
+  float nodeSteps = 6;
      
   public ChordDiagram(float radius, String file,int layout){
     this.VisualizationName = "Chord Diagram";
@@ -76,11 +77,10 @@ class ChordDiagram extends DataLayer{
   /*
       Plot points in the microarary
   */
-  private void plotPointsOnGrid(float numberOfPoints){
+  private void plotPointsOnGrid(float numberOfPoints, float steps){
     println("Calling plotPointsOnGrid");  
     float padding = 10; // padding on the screen
     // Compute the proper aspect ratio so that the visualization is more square.
-    float steps = 6; // Based on how many points we have, 
     
     // Adjust the aspect ratio
     int pixelsNeeded = (int)(sqrt( steps * nodeListStack.peek().size()));
@@ -193,7 +193,7 @@ class ChordDiagram extends DataLayer{
     if(this.layout <=0 ){
       plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
     }else if(this.layout == 1){
-      plotPointsOnGrid(nodeListStack.peek().size());
+      plotPointsOnGrid(nodeListStack.peek().size(),nodeSteps);
     }else if(this.layout >= 2){
       plotPointsOnSphere(nodeListStack.peek().size());
     }

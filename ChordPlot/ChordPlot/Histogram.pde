@@ -6,12 +6,10 @@ class HistogramWindow extends commonWidget {
   // a self-contained 
   Histogram m_histogram;
   String filename;
-  
-  PGraphics pg;
-  
+
   public HistogramWindow(String filename){
     this.filename = filename;
-    println("a");
+    println("a from Histogram");
     m_histogram = new Histogram(filename,0,height-30,0);
   }
   
@@ -23,38 +21,78 @@ class HistogramWindow extends commonWidget {
   public void setup() { 
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 350);
-      pg = createGraphics(width,height);
   }
+  
+  int p_node_old = -1;
+  int p_node = -1;
+  Set<Integer> selectedNodes = new HashSet<Integer>();
   
   public void draw() {
+    float m_x = mouseX;
+    float m_y = mouseY;   
     
+    if(m_histogram != null){
     // Refresh the screen    
-    pg.beginDraw();  
-      pg.background(128);
-        pg.text("FPS :"+frameRate,width-100,height-20);
-        pg.text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
-    
-        pg.pushMatrix();
-           pg.translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
-           if(m_histogram != null){
-             //m_histogram.draw(0); // TODO: FIXME: This is a bug, for some reason I "Cannot run the OpenGL renderer outside the main thread, change your code so the drawing calls are all inside the main thread"
-             //m_histogram.drawBounds(0,64,128, m_histogram.xPosition,m_histogram.yPosition-m_histogram.yBounds);
-             // What is interesting about the drawing, is that it is all happening in the
-              // ChordNode itself. This way we can have any arbritrary shape in ChordNode
-              // drawn and handle all of the selection there. It also would allow us to have
-              // different types of shaped nodes mixed in a visualization much more easily.
-              for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
-                ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
-                pg.fill(temp.metaData.c);
-                pg.rect(temp.x,temp.y - temp.rectHeight,temp.rectWidth,temp.rectHeight);
+      background(0,64,128);
+        text("FPS :"+frameRate,width-100,height-20);
+        text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
+        text("(x,y) => ("+m_x+","+m_y+")",width-200,height-20);
+           
+           //m_histogram.draw(0); // TODO: FIXME: This is a bug, for some reason I "Cannot run the OpenGL renderer outside the main thread, change your code so the drawing calls are all inside the main thread"
+           //m_histogram.drawBounds(0,64,128, m_histogram.xPosition,m_histogram.yPosition-m_histogram.yBounds);
+           // What is interesting about the drawing, is that it is all happening in the
+          // ChordNode itself. This way we can have any arbritrary shape in ChordNode
+          // drawn and handle all of the selection there. It also would allow us to have
+          // different types of shaped nodes mixed in a visualization much more easily.
+          for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
+            ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
+                       
+            fill(temp.metaData.c); stroke(255);
+            
+            // Highlight nodes we are over
+            if(m_x > temp.x && m_x < temp.x+temp.rectWidth){
+              fill(192);
+              text("selected: "+i+" prev: "+p_node+" prev2: "+p_node_old,200,150);
+              // Highlight nodes we are hovering over
+              fill(255,255,0,255); stroke(255);
+              
+              // Unhighlight all of the previous buckets that were highlighted.
+              if(p_node != i){
+                p_node_old = p_node;
+                p_node = i;
+                cd.highlightNode(temp,true);
+                // Store the list of nodes we had previously highlighted
+                // This allows us to quickly unhighlight them.
+                if(p_node_old > -1){
+                    ChordNode old = (ChordNode)m_histogram.nodeListStack.peek().get(p_node_old);
+                    cd.highlightNode(old,false);
+                }
               }
-           }
-        pg.popMatrix();
-     pg.endDraw();
-     
-     image(pg,0,0);
+              
+                // If the mouse is pressed
+                if(mousePressed==true){
+                   if(mouseButton==LEFT){
+                     if(selectedNodes.contains(i)){
+                       cd.toggleActiveNode(temp);
+                       selectedNodes.remove(i);
+                     }else{
+                       cd.toggleActiveNode(temp);
+                       selectedNodes.add(i);
+                     }
+                   }
+                }
+            }
+            
+            // If our node has been selected, then highlight it green
+            if(selectedNodes.contains(i)){
+              fill(0,255,0,255); stroke(255);
+            }
+            
+            // Draw rectangel for each of the buckets.
+            rect(temp.x,temp.y - temp.rectHeight,temp.rectWidth,temp.rectHeight);
+          }
+     }   
   }
-  
   
 }
 

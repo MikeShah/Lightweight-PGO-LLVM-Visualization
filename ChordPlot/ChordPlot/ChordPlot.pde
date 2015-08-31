@@ -8,15 +8,11 @@ DetailsPane dp;
 
 /* Create our visualizations */
 ChordDiagram cd;
-Histogram h;
+//Histogram h;
 
-//HistogramWindow hw;
+HistogramWindow hw;
 BucketsWindow bw;
 
-/*
-
-*/
-commonWidget w;
 
 int programStart = 0;
 
@@ -35,27 +31,29 @@ void setup(){
   
   ortho(-width/2, width/2, -height/2, height/2); // same as ortho()
 
-  String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   //String filename = "output.dot"; // legacy version of dot file loader
-  //String filename = "horde3d.dot";
+  String filename = "horde3d.dot";
+
+  // Our base visualizations
+  // It is best practice to intialize this first since we reference 'cd' across
+  // the entire codebase.
+  cd = new ChordDiagram(400, filename,1);
+  //h = new Histogram(filename,20,height-30,0);
   
   // Create the second window with the details pane
   dp = new DetailsPane();
   dp.setDataString("File Loaded: "+filename);
   
-  // Our base visualizations
-  cd = new ChordDiagram(400, filename,1);
-  h = new Histogram(filename,20,height-30,0);
+
   
-//  hw = new HistogramWindow(filename);
+  hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
   // Initialize our GUI after our data has been loaded
   initGUI();   
   
   println("setup time: " + (millis()-programStart));
   bw.m_buckets.debug();
-  
-  w = new commonWidget("test");
 }
 
 /* =============================================
@@ -74,6 +72,6 @@ void draw(){
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
      cd.draw(drawMode);
-     h.draw(0);
+     //h.draw(0);
    popMatrix();
 }

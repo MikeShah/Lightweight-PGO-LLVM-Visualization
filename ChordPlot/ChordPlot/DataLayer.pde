@@ -300,16 +300,36 @@ public class DataLayer implements VisualizationLayout{
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+      // WORKAROUND: Once we find the index of the first item, since they are sorted,
+      // we should be able to just linearly scan from that starting point instead of always
+      // starting from the beginning. Note this could lead to a bug if the nodes are unsorted
+      // or in some random order.
+      int firstIndex = 0;
       for(int i =0; i < cnl.size(); ++i){
-          for(int j = 0; j < nodeListStack.peek().size(); ++j){
+          for(int j = firstIndex; j < nodeListStack.peek().size(); ++j){
             if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
               nodeListStack.peek().get(j).highlighted = value;
+              firstIndex = j;
               break;
             }
           }
       }
   }
   
+  /* 
+      Highlight exactly one node
+      
+      This function is useful if you're working on a very fine grained
+      level, such as a long bargraph with many functions.
+  */
+  public void highlightNode(ChordNode cn, boolean value){
+    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).highlighted = value; // Modify the node we have found. 
+          break;
+        }
+      }
+  }
   
   /*
     public void highlightNodes(ChordNodeList cnl, boolean value){
@@ -354,6 +374,22 @@ public class DataLayer implements VisualizationLayout{
               break;
             }
           }
+      }
+  }
+  
+  
+  /* 
+      Select exactly one node
+
+      This function is useful if you're working on a very fine grained
+      level, such as a long bargraph with many functions.
+  */
+  public void toggleActiveNode(ChordNode cn){
+    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).selected = !nodeListStack.peek().get(j).selected; // Modify the node we have found. 
+          break;
+        }
       }
   }
   

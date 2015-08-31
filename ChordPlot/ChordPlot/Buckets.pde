@@ -23,7 +23,10 @@ class BucketsWindow extends commonWidget {
       surface.setLocation(1440, 0);
   }
   
-  
+  int p_buckets_old = -1;
+  int p_buckets = -1;
+  Set<Integer> selectedBuckets = new HashSet<Integer>();
+
   
   public void draw() {
     
@@ -32,7 +35,7 @@ class BucketsWindow extends commonWidget {
     
     if(m_buckets!=null){
                      if(m_buckets.showData){
-                      background(0,64,164); fill(0); stroke(0); text(frameRate,20,height-20);
+                      background(0,64,164); fill(0); stroke(0); text("FPS: "+frameRate,20,height-20);
                       //pushMatrix();
                         //translate(0,0,MySimpleCamera.cameraZ);
                         // Draw some bounds
@@ -49,9 +52,7 @@ class BucketsWindow extends commonWidget {
                             largestBucket = max(largestBucket,m_buckets.bucketLists.get(i).size());
                         }
                         
-                        
-                        
-                        
+                                                
                         // Render the rectangles
                         for(int i =0; i < m_buckets.bucketLists.size(); ++i){
                           fill(192,255); stroke(255);
@@ -64,27 +65,47 @@ class BucketsWindow extends commonWidget {
                               // Just check if we are within our visualization. The reason is because we want to be able to select 
                               // even very small buckets by just sliding over them.
                               if(m_y < m_buckets.yPosition && m_y > m_buckets.yPosition-m_buckets.yBounds){
-                                  text("selected",200,200);
-                                  fill(0,255,0,255); stroke(255);
+                                 
+                                  text("selected: "+i+" prev: "+p_buckets+" prev2: "+p_buckets_old,200,200);
+                                  fill(255,255,0,255); stroke(255);
                                   // Give some text to tell us which bucket we are in
                                   text("Bucket# "+i,xBucketPosition,m_buckets.yPosition+10);
-                                  cd.highlightNodes(m_buckets.bucketLists.get(i),true);
+                                  // Unhighlight all of the previous buckets that were highlighted.
+                                  if(p_buckets != i){
+                                    p_buckets_old = p_buckets;
+                                    p_buckets = i;
+                                    cd.highlightNodes(m_buckets.bucketLists.get(i),true);
+                                    // Store the list of buckets we had previously highlighted
+                                    // This allows us to quickly unhighlight them.
+                                    
+                                    if(p_buckets_old>-1){
+                                        cd.highlightNodes(m_buckets.bucketLists.get(p_buckets_old),false);
+                                    }
+                                  }
+                                  
                                   // If the mouse is pressed
                                   if(mousePressed==true ){
                                       // TODO: Do not make me a hard link
                                       if(mouseButton==LEFT){
-                                        cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                        if(selectedBuckets.contains(i)){
+                                          cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                          selectedBuckets.remove(i);
+                                        }
+                                        else{
+                                          // Highlight the buckets we are over if we have not done so
+                                          cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                          selectedBuckets.add(i);
+                                        }
                                       }
                                   }
                               }
                           }
-                          else{
-                                // FIXME: Make me faster
-                                cd.highlightNodes(m_buckets.bucketLists.get(i),false);
-                          }
                           
-
-
+                          // If we have selected our bucket, then highlight it green.
+                          if(selectedBuckets.contains(i)){
+                            // Fill our rectangle if it is the selected one.
+                            fill(0,255,0,255); stroke(255);
+                          }
                           
                           // Draw our rectangle for each of the buckets
                           rect(xBucketPosition,m_buckets.yPosition-bucketHeight,m_buckets.bucketWidth,bucketHeight);
@@ -95,9 +116,7 @@ class BucketsWindow extends commonWidget {
                   } 
     }
 
-     
-  }
-  
+  }  
   
 }
 

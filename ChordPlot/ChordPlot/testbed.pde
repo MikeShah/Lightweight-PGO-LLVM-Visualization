@@ -28,14 +28,46 @@ public class commonWidget extends PApplet{
            .setValue( 127 )
            .setLabel("value")
            ;
-           
-      cp5.addSlider( "heheh test-")
-           .setRange( 0, 255 )
-           .setPosition( 100, 0)
-           .plugTo( this, "setValue" )
-           .setValue( 127 )
-           .setLabel("value")
+                      
+      ButtonBar b = cp5.addButtonBar("filterSelector")
+           .setPosition(0, 0)
+           .setSize(width, 20)
+           .addItems(split("Metadata Attributes PGO Perf Graph Other"," "))
            ;
+  }
+  
+  /*
+      For the visualization, select the appropriate window
+      to bring up, and restructure the Buckets window
+  */
+  void filterSelector(int n) {
+    println("filterSelector clicked, item-value:", n);
+    
+    // Metadata
+    if(n==0){
+      println("clicked Metadata");
+    }
+    // Attributes
+    else if(n==1){
+      println("clicked Attributes");
+    }
+    // PGO 
+    else if(n==2){
+      println("clicked PGO");
+    }
+    // Perf 
+    else if(n==3){
+      println("clicked Perf");
+    }
+    // Graph
+    else if(n==4){
+      println("clicked Graph");
+    }
+    // Other
+    else if(n==5){
+      println("clicked Other");
+    }
+    
   }
   
   public commonWidget(){
