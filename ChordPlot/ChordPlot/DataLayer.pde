@@ -113,7 +113,7 @@ public class DataLayer implements VisualizationLayout{
     // Find the max and min from the ChordNode metadata
     float themin = 0;
     float themax = 0;
-    for(int i =0; i < nodeListStack.peek().size();i++){
+    for(int i = 0; i < nodeListStack.peek().size();i++){
       themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
       themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
     }
@@ -121,7 +121,7 @@ public class DataLayer implements VisualizationLayout{
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
-    for(int i =0; i < nodeListStack.peek().size();i++){
+    for(int i = 0; i < nodeListStack.peek().size();i++){
       // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
       nodeListStack.peek().get(i).metaData.callees = (int)map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, maxHeight);
       
@@ -130,6 +130,52 @@ public class DataLayer implements VisualizationLayout{
       nodeListStack.peek().get(i).rectHeight = nodeListStack.peek().get(i).metaData.callees;
     }
   }
+  
+  
+  /*
+    Compute how many callees each function has.
+    
+    We can then use this information to generate attributes for the functions
+  */
+  public void ComputeeCallees(){
+      
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+
+      // Faster hacked version
+      for(int i =0; i < nodeListStack.peek().size(); i++){
+        
+        // Search to see if our node has outcoming edges
+        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
+        if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+        
+          // If we do find that our node is a source(with targets)
+          // then search to get all of the destination names and their positions
+          LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+          int stop = dests.size(); // if we add all of our destinations, then stop iterating.
+          Iterator<nodeMetaData> it = dests.iterator();
+          
+          // Iterate through all of the callees in our current node
+          // We already know what they are, but now we need to map
+          // WHERE they are in the visualization screen space.
+          
+          while(it.hasNext()){
+              nodeMetaData temp = it.next();
+              // When we find the key, add the values points
+              if(topOfStackMap.containsKey(temp.name)){
+                  ChordNode value = topOfStackMap.get(temp.name);
+                  // Store some additional information (i.e. update our callees count.
+                  // TODO: This number is only of the visible callees, perhaps we want a maximum value?
+                  nodeListStack.peek().get(i).metaData.callees++;
+              }
+          }
+        }
+      }
+                    
+  }
+  
+  
+  
   
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
@@ -191,7 +237,7 @@ public class DataLayer implements VisualizationLayout{
                   nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name);          // Add to our source node the locations that we can point to
                   // Store some additional information (i.e. update our callees count.
                   // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                  nodeListStack.peek().get(i).metaData.callees++;
+                  //nodeListStack.peek().get(i).metaData.callees++;
               }
               
               /*
@@ -266,6 +312,28 @@ public class DataLayer implements VisualizationLayout{
       for(int i =0; i < nodeListStack.peek().size();i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
           filteredNodes.add(nodeListStack.peek().get(i));
+        }
+      }
+      nodeListStack.push(filteredNodes);
+  }
+  
+  /*
+      Functions that match the starting characters
+  */
+  
+    public void functionStartsWith(String text){
+      String name = "Starts With: "+text;
+      // The name we give to our list, so we can pop it off the stack by name if we need to.
+      ChordNodeList filteredNodes = new ChordNodeList(name);
+      
+      for(int i =0; i < nodeListStack.peek().size();i++){
+        // Small hack we have to do for now, because all of our functions are
+        // surrounded by quotes to work properly in the .dot format (because if we use
+        // periods in the .dot format for function names, things break, thus we surround them
+        // in quotes). Thus, the hack is we append a double quote to all searches.
+        if(nodeListStack.peek().get(i).metaData.name.startsWith("\""+text)){
+          filteredNodes.add(nodeListStack.peek().get(i));
+          println("adding: "+nodeListStack.peek().get(i).metaData.name);
         }
       }
       nodeListStack.push(filteredNodes);

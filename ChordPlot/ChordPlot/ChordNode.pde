@@ -18,8 +18,11 @@ class ChordNode{
   // Highlighted
   boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
   
+  // DEPRECATED
   // This arrayList holds all of the locations that the node points to(all of its callees).
+  // This is a lightweight
   ArrayList<LocPoint> LocationPoints;
+  //ChordNodeList LocationPoints;
   
   public ChordNode(String name, float x, float y, float z){
     this.metaData = new nodeMetaData(name);

@@ -95,6 +95,9 @@ class ChordDiagram extends DataLayer{
     
     xBounds = xSize+padding; // Set the bounds
     
+    // We can set a default steps(that is passed in the parameter)
+    // But we can re-adjust it to fit the xBo
+    
     println("======About to replot=========");
     int counter = 0; // draw a new point at each step
     for(  float yPos = padding; yPos < ySize; yPos+=steps){
@@ -156,9 +159,8 @@ class ChordDiagram extends DataLayer{
     this.layout = layout;
 
     println("Setting a new layout");
-    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
-    // This is called after we have positioned all of our nodes in the visualization
-    storeLineDrawings();
+    // Calculates the number of callees from the caller
+    ComputeeCallees();
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization

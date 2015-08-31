@@ -44,6 +44,21 @@ class DetailsPane extends PApplet {
                    .setPosition(width-180,60)
                    .setSize(180,19)
                    ;
+
+              detailsPanel.addTextfield("StartsWith")
+                 .setPosition(width-180,80)
+                 .setSize(180,19)
+                 .setFocus(true)
+                 .setColor(color(255,0,0))
+                 ;  
+                 
+                 detailsPanel.addBang("FindFunction")
+                 .setPosition(width-180,100)
+                 .setSize(180,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;    
+  
+                  
 /*                   
               // Capture Console output here.
               myConsoleTextarea = detailsPanel.addTextarea("txt")
@@ -84,15 +99,13 @@ class DetailsPane extends PApplet {
   }
 
   public void draw() {
-    background(0);
+    background(145,160,176);
     
-    int xSize = width;
+    int xSize = width-180;
     int ySize = height;
     
-    stroke(192,255);
-    fill(0,255);
-    rect(0,0,xSize,ySize);
-    fill(255,0,0,255);
+    fill(0); stroke(0,255);
+
     text(dataString.getString(), 0,0, xSize, ySize);
   }
   
@@ -118,6 +131,32 @@ class DetailsPane extends PApplet {
   public void OutputSelectedDOT(int theValue){
     println("Outputting Dot file of selected nodes");
     cd.nodeListStack.outputDot(".//selected_nodes_plus_some_timestamp.dot",1);
+  }
+  
+  /*
+      Search for functions that match the string
+  */
+ 
+  public void FindFunction() {
+    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
+    if(theText.length() > 0){
+      
+        String FilterString = cd.nodeListStack.peek().name;
+        // Apply the relevant filters
+        cd.functionStartsWith(theText);
+        cd.update(); // Make a call to update the visualization
+        
+        hw.m_histogram.functionStartsWith(theText);
+        hw.m_histogram.update(); // Make a call to update the visualization
+        
+        bw.m_buckets.functionStartsWith(theText);
+        bw.m_buckets.update();
+        
+        // Add our item to the list
+        breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
+        // Update the functions list with anything we have found.
+        updateFunctionList();
+    }
   }
     
 }

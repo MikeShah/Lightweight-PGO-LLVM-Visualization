@@ -39,8 +39,10 @@ void setup(){
   // It is best practice to intialize this first since we reference 'cd' across
   // the entire codebase.
   cd = new ChordDiagram(400, filename,1);
+  
   //h = new Histogram(filename,20,height-30,0);
   
+
   // Create the second window with the details pane
   dp = new DetailsPane();
   dp.setDataString("File Loaded: "+filename);
@@ -54,6 +56,7 @@ void setup(){
   
   println("setup time: " + (millis()-programStart));
   bw.m_buckets.debug();
+  
 }
 
 /* =============================================
