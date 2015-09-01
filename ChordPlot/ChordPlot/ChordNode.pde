@@ -18,19 +18,37 @@ class ChordNode{
   // Highlighted
   boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
   
-  // DEPRECATED
+
   // This arrayList holds all of the locations that the node points to(all of its callees).
-  // This is a lightweight
-  ArrayList<LocPoint> LocationPoints;
-  //ChordNodeList LocationPoints;
+  ChordNodeList LocationPoints;
   
+  /*
+      The most default constructor that will be used
+  */
   public ChordNode(String name, float x, float y, float z){
     this.metaData = new nodeMetaData(name);
     this.x = x;
     this.y = y;
     this.z = z;
     
-    LocationPoints = new ArrayList<LocPoint>();
+    LocationPoints = new ChordNodeList();
+  }
+  
+  /*
+      Another constructor with more fields if we need them pre-populated.
+  */
+  public ChordNode(String name, float x, float y, float z, nodeMetaData nmd, ChordNodeList cnl){
+    this.metaData = new nodeMetaData(name);
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    
+    this.metaData = nmd;
+    if(cnl==null){
+      LocationPoints = new ChordNodeList();
+    }else{
+      this.LocationPoints = cnl;
+    }
   }
   
   void getMetaData(nodeMetaData n){
@@ -39,12 +57,17 @@ class ChordNode{
   
   // for 2D
   void addPoint(float x, float y, String name){
-    LocationPoints.add(new LocPoint(x,y,0, name));
+    LocationPoints.add(new ChordNode(name,x,y,0));
+  }
+  
+    // for 2D
+  void addPoint(float x, float y, String name, nodeMetaData nmd, ChordNodeList cnl){
+    LocationPoints.add(new ChordNode(name,x,y,0, nmd, cnl));
   }
   
   // For 3D
   void addPoint(float x, float y, float z, String name){
-    LocationPoints.add(new LocPoint(x,y,z, name));
+    LocationPoints.add(new ChordNode(name,x,y,z));
   }
   
   /*
@@ -84,14 +107,18 @@ class ChordNode{
             onRightClick();
           }
         
-           if( dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize || selected){
+        
+          if( dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize || selected){
               fill(0);
               stroke(255);
               if(selected) { fill(0,255,0); }
               ellipse(x,y,nodeSize*2,nodeSize*2);
               
               fill(0,255,0);
-              drawToCallees();
+              pushMatrix();
+                translate(0,0,MySimpleCamera.cameraZ+1);  // Translate forward
+                drawToCallees(CalleeDepth);
+              popMatrix();
               fill(0);
               text(metaData.name,x,y);
               text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
@@ -99,13 +126,13 @@ class ChordNode{
               if(mousePressed && dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize && mouseButton == LEFT){
                 selected = !selected;
               }
-           }
-           else{
+          }
+          else{
               // Color nodes based on callees
               fill(255-metaData.c);
               stroke(255-metaData.c);
               ellipse(x,y,nodeSize*2,nodeSize*2);
-           }
+          }
      }
   }
   
@@ -121,7 +148,8 @@ class ChordNode{
         popMatrix();
         
         fill(0,255,0);
-        drawTo3DCallees();
+        
+        drawTo3DCallees(CalleeDepth);
         fill(0);
         text(metaData.name,x,y);
         text("Here's the meta-data for "+metaData.name+": "+metaData.extra_information,0,height-20);
@@ -190,8 +218,10 @@ class ChordNode{
             if(selected){ stroke(255,0,0); fill(0,255,0); }
             
             rect(x,y-rectHeight,rectWidth,rectHeight);
-            
-            drawToCallees();
+            pushMatrix();
+              translate(0,0,MySimpleCamera.cameraZ+1);  // Translate forward
+              drawToCallees(CalleeDepth);
+            popMatrix();
                         
             if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
               selected = !selected;
@@ -214,26 +244,34 @@ class ChordNode{
   
   // Draw to all of the callee locations in 2D
   // Note that we are drawing exclusively to the secondGraphicsLayer here.
-  public void drawToCallees(){
-    pushMatrix();
-      translate(0,0,MySimpleCamera.cameraZ+1);
+  // The depth is how many levels in the tree to draw to callees (essentially do a BFS).
+  public void drawToCallees(int depth){
+
       fill(0); stroke(0);
       for(int i =0; i < LocationPoints.size();i++){
         line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
-        noFill();
-        stroke(0);
+        noFill(); stroke(0);
         rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-        
+        ChordNode blah = LocationPoints.get(i);
+        if(depth>0){
+          blah.drawToCallees(depth-1);     
+        }
       }
-    popMatrix();
   }
   
   // Draw to all of the callee locations in 3D
-  public void drawTo3DCallees(){
+  public void drawTo3DCallees(int depth){
     fill(255,0,0);
     for(int i =0; i < LocationPoints.size();i++){
       line(x,y,z,LocationPoints.get(i).x,LocationPoints.get(i).y,LocationPoints.get(i).z);
     }
+  }
+  
+  /*
+      Return information about a ChordNode
+  */
+  public String debug(){
+    return "(x,y,z)=> (" + x + "," + y + "," + z + ")" + " name; "+metaData.name + "callees: "+metaData.callees;
   }
   
     

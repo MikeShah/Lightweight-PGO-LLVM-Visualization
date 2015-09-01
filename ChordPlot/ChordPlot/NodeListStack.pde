@@ -141,7 +141,7 @@ public class NodeListStack{
         if(currentNode.selected){
           // Get all of the callees from our node that has been selected
           for(int j = 0; j < currentNode.LocationPoints.size(); j++){
-            output.println(currentNode.metaData.name + " -> " + currentNode.LocationPoints.get(j).name);
+            output.println(currentNode.metaData.name + " -> " + currentNode.LocationPoints.get(j).metaData.name);
           }          
         }
       }

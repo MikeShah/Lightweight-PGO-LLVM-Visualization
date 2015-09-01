@@ -23,6 +23,8 @@ String attributes[];
 // This controls the dynamic size of our attributes
 int heightOfGUIElements = 10;
 
+// How far many levels to draw to callees when we highlight over nodes.
+int CalleeDepth = 15;
 
 void initGUI(){
   filtersPanel = new ControlP5(this);
@@ -76,33 +78,7 @@ void initGUI(){
                        .setGroup(attributeFiltersSet)
                        ;
      
-  Group layoutPanel = filtersPanel.addGroup("Layouts")
-                      .setPosition(280,100)
-                      .setWidth(220)
-                      .activateEvent(true)
-                      .setBackgroundColor(color(64,80))
-                      .setBackgroundHeight(100)
-                      .setLabel("Visualization Layouts")
-                      ;
-  
-                filtersPanel.addRadioButton("Microarray")
-                     .setPosition(10,10)
-                     .setSize(20,9)
-                     .addItem("ChordDiagram2D",0)
-                     .addItem("Microarray2D",1)
-                     .addItem("ChordDiagram3D",2)
-                     .setGroup(layoutPanel)
-                     ;
-                   
-                 filtersPanel.addRadioButton("Histogram")
-                     .setPosition(10,80)
-                     .setSize(20,9)
-                     .addItem("Histogram2D",0)
-                     .setGroup(layoutPanel)
-                     ;
-                     
-
-                   
+                        
   Group functionListGroup = filtersPanel.addGroup("Function List")
                     .setPosition(600,100)
                     .setSize(150,240)
@@ -135,7 +111,6 @@ void initGUI(){
                  .setPosition(width-200,0)
                  .setWidth(200)
                  .addItem(attributeFiltersSet)
-                 .addItem(layoutPanel)
                  .addItem(functionListGroup)
                  ;
                  

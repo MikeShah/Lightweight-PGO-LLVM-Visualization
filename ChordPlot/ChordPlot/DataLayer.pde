@@ -132,51 +132,6 @@ public class DataLayer implements VisualizationLayout{
   }
   
   
-  /*
-    Compute how many callees each function has.
-    
-    We can then use this information to generate attributes for the functions
-  */
-  public void ComputeeCallees(){
-      
-      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
-
-      // Faster hacked version
-      for(int i =0; i < nodeListStack.peek().size(); i++){
-        
-        // Search to see if our node has outcoming edges
-        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
-        if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-        
-          // If we do find that our node is a source(with targets)
-          // then search to get all of the destination names and their positions
-          LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          int stop = dests.size(); // if we add all of our destinations, then stop iterating.
-          Iterator<nodeMetaData> it = dests.iterator();
-          
-          // Iterate through all of the callees in our current node
-          // We already know what they are, but now we need to map
-          // WHERE they are in the visualization screen space.
-          
-          while(it.hasNext()){
-              nodeMetaData temp = it.next();
-              // When we find the key, add the values points
-              if(topOfStackMap.containsKey(temp.name)){
-                  ChordNode value = topOfStackMap.get(temp.name);
-                  // Store some additional information (i.e. update our callees count.
-                  // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                  nodeListStack.peek().get(i).metaData.callees++;
-              }
-          }
-        }
-      }
-                    
-  }
-  
-  
-  
-  
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
   // For each of the nodes that are a destination in the source
@@ -184,31 +139,10 @@ public class DataLayer implements VisualizationLayout{
   // Then we need to store each of these in that ChordNode's list of lines to draw
   // so that when we render we can do it quickly.
   //
-  public void storeLineDrawings(){
-      
-/*     //Original 
-      for(int i =0; i < nodeListStack.peek().size(); i++){
-        // Search to see if our node has outcoming edges
-        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
-        if (dotGraph.graph.containsKey(nodeName)){     // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-          // If we do find that our node is a source(with targets)
-          // then search to get all of the destination names and their positions
-          ArrayList<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          for(int j = 0; j < dests.size(); j++){
-              for(int k =0; k < nodeListStack.peek().size(); k++){
-                if(dests.get(j).name==nodeListStack.peek().get(k).metaData.name){
-                  nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
-                  // Store some additional information
-                  nodeListStack.peek().get(i).metaData.callees++;
-                  break;
-                }
-              }
-          }
-        }
-      }
-*/     
-      
+  // If compute == 1 then compute callees, otherwise do not becaue they have already been done.
+  //
+  public void storeLineDrawings(int compute){
+   
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
 
       // Faster hacked version
@@ -234,28 +168,14 @@ public class DataLayer implements VisualizationLayout{
               // When we find the key, add the values points
               if(topOfStackMap.containsKey(temp.name)){
                   ChordNode value = topOfStackMap.get(temp.name);
-                  nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name);          // Add to our source node the locations that we can point to
+
+                  nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
                   // Store some additional information (i.e. update our callees count.
                   // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                  //nodeListStack.peek().get(i).metaData.callees++;
-              }
-              
-              /*
-              for(int k =0; k < nodeListStack.peek().size(); k++){                  // This loop can likely go
-                  if(temp.name == nodeListStack.peek().get(k).metaData.name){
-                    nodeListStack.peek().get(i).addPoint(nodeListStack.peek().get(k).x,nodeListStack.peek().get(k).y,nodeListStack.peek().get(k).metaData.name);          // Add to our source node the locations that we can point to
-                    // Store some additional information
+                  if(1==compute){
                     nodeListStack.peek().get(i).metaData.callees++;
-                    stop--;
-                    //break;
-                  }
-                  // break out of the while loop if we've added all of our destinations.
-                  if(stop<=0){
-                    break;
                   }
               }
-              // Increment our iterator
-              */
               
           }
         }
