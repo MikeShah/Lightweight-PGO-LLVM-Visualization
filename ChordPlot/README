@@ -24,3 +24,12 @@ Input Formats
 
 Output Formats
 - None currently. Perhaps .dot file for selected nodes in the future.
+
+
+Making improvements:
+
+grep -r -e "TODO" --include="*.pde"
+grep -r -e "FIXME" --include="*.pde"
+grep -r -e "DEPRECATE" --include="*.pde"
+
+
