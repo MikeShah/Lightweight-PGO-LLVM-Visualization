@@ -40,7 +40,10 @@ public class NodeListStack{
     Then compute summary Statistics
   */
   public void push(ChordNodeList activeNodeList){
-    stack.push(activeNodeList);
+    // Make sure we do not push null things to the list.
+    if(activeNodeList != null && activeNodeList.size() > 0){
+      stack.push(activeNodeList);
+    }
     computeSummaryStatistics();
   }
   
@@ -159,9 +162,9 @@ public class NodeListStack{
   //
   // Note that the key is a node's name, as often we want to search by the nodes name
   //
-  public Map<String,ChordNode> getTopStackMap(){
+  public ConcurrentHashMap<String,ChordNode> getTopStackMap(){
     // Create a temporary map
-    Map<String,ChordNode> tempMap = new HashMap<String,ChordNode>();  
+    ConcurrentHashMap<String,ChordNode> tempMap = new ConcurrentHashMap<String,ChordNode>();  
     // Iterate through all of the items on the top of our stack
     for(int i =0; i < stack.peek().size();++i){
         ChordNode temp = stack.peek().get(i);

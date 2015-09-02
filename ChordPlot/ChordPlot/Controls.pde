@@ -55,6 +55,8 @@ void keyPressed() {
     MySimpleCamera.moveDown();
   }
   
+
+  
   // Need to check for Enter and Return so application is cross
   // platform: https://processing.org/reference/keyCode.html
   if(keyCode == ENTER || keyCode == RETURN){
@@ -67,23 +69,21 @@ void keyPressed() {
       
       hw.m_histogram.pushSelectedNodes();
       hw.m_histogram.update(); // Make a call to update the visualization
+      hw.updateFunctionList();
       
       bw.m_buckets.pushSelectedNodes();
       bw.m_buckets.update();
+      bw.updateFunctionList();
       
       // Add our item to the list
       breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
-      
-      updateFunctionList();
   }
   
   // De-select nodes if space is pressed.
   if(key== ' '){
       // Apply the relevant filters
       cd.deselectAllNodes();
-      
       hw.m_histogram.deselectAllNodes();
-      
       bw.m_buckets.deselectAllNodes();
   }
   

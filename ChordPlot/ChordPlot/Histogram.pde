@@ -19,6 +19,7 @@ class HistogramWindow extends commonWidget {
   }
     
   public void setup() { 
+      println("setup Histogram");
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 350);
   }
@@ -88,7 +89,7 @@ class HistogramWindow extends commonWidget {
               fill(0,255,0,255); stroke(255);
             }
             
-            // Draw rectangel for each of the buckets.
+            // Draw rectangle for each of the buckets.
             rect(temp.x,temp.y - temp.rectHeight,temp.rectWidth,temp.rectHeight);
           }
      }   
@@ -103,7 +104,9 @@ class Histogram extends DataLayer{
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
     this.VisualizationName = "Histogram";
+    println("a m_histogram");
     super.init(file, xPosition, yPosition,layout);
+    println("b m_histogram");
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics

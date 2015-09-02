@@ -11,6 +11,8 @@ class BucketsWindow extends commonWidget {
     this.filename = filename;
     println("a");
     m_buckets = new Buckets(filename,0,height-30,0);
+    
+    
   }
   
   public void settings() {
@@ -18,7 +20,8 @@ class BucketsWindow extends commonWidget {
     smooth();
   }
     
-  public void setup() { 
+  public void setup() {
+      println("setup Buckets");
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 0);
   }
@@ -65,9 +68,6 @@ class BucketsWindow extends commonWidget {
                               // Just check if we are within our visualization. The reason is because we want to be able to select 
                               // even very small buckets by just sliding over them.
                               if(m_y < m_buckets.yPosition && m_y > m_buckets.yPosition-m_buckets.yBounds){
-                                 
-                                  text("selected: "+i+" prev: "+p_buckets+" prev2: "+p_buckets_old,200,200);
-                                  fill(255,255,0,255); stroke(255);
                                   // Give some text to tell us which bucket we are in
                                   text("Bucket# "+i,xBucketPosition,m_buckets.yPosition+10);
                                   // Unhighlight all of the previous buckets that were highlighted.
@@ -86,19 +86,25 @@ class BucketsWindow extends commonWidget {
                                   // If the mouse is pressed
                                   if(mousePressed==true ){
                                       // TODO: Do not make me a hard link
-                                      if(mouseButton==LEFT){
-                                        if(selectedBuckets.contains(i)){
-                                          cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
-                                          selectedBuckets.remove(i);
+                                        if(mouseButton==LEFT){
+                                          if(selectedBuckets.contains(i)){
+                                            cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                            selectedBuckets.remove(i);
+                                          }
+                                          else{
+                                            // Highlight the buckets we are over if we have not done so
+                                            cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
+                                            selectedBuckets.add(i);
+                                          }
                                         }
-                                        else{
-                                          // Highlight the buckets we are over if we have not done so
-                                          cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
-                                          selectedBuckets.add(i);
+                                       else if(mouseButton==RIGHT){
+                                          fill(0);
+                                          text("Size:"+m_buckets.bucketLists.get(i).size(),m_x,m_y);
                                         }
-                                      }
                                   }
                               }
+                                  text("selected: "+i+" prev: "+p_buckets+" prev2: "+p_buckets_old,200,200);
+                                  fill(255,255,0,255); stroke(255);
                           }
                           
                           // If we have selected our bucket, then highlight it green.
@@ -135,7 +141,8 @@ class BucketsWindow extends commonWidget {
 class Buckets extends DataLayer{
   
   // Store all of the nodes in each respective bucket
-  ArrayList<ChordNodeList> bucketLists;
+  // Make thread-safe
+  CopyOnWriteArrayList<ChordNodeList> bucketLists;
   // The default number of Buckets
   int numberOfBuckets = 0;
   
@@ -156,7 +163,7 @@ class Buckets extends DataLayer{
     // Call init which seets up the DataLayer.
     super.init(file, xPosition, yPosition,layout);
 
-    bucketLists = new ArrayList<ChordNodeList>();
+    bucketLists = new CopyOnWriteArrayList<ChordNodeList>();
     
     // Set a layout
     this.setLayout(layout);
@@ -345,6 +352,7 @@ class Buckets extends DataLayer{
                     if(mouseButton==LEFT){
                       cd.toggleActiveNodes(bucketLists.get(i));
                     }
+
                   }
                 }
               }

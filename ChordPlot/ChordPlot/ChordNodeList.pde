@@ -6,17 +6,20 @@
 class ChordNodeList{
   
   // Backbone data structure for working with a list of Chord Nodes
-  ArrayList<ChordNode> chordList;
+  // Note that in order to avoid ConcurrentModifcationException, we make a CopyOnWriteArrayList.
+  // This use to be a regular ArrayList, but since we are passing lists around so often, we had to be
+  // extra safe and make sure it is thread-safe.
+  CopyOnWriteArrayList<ChordNode> chordList;
   
   // The name of the ChordNode List if we want to identify how to work with it.
   public String name = "Dataset";
   
   public ChordNodeList(){
-     chordList = new ArrayList<ChordNode>(); 
+     chordList = new CopyOnWriteArrayList<ChordNode>(); 
   }
   
   public ChordNodeList(String name){
-     chordList = new ArrayList<ChordNode>(); 
+     chordList = new CopyOnWriteArrayList<ChordNode>();
      this.name = name;    
   }
   

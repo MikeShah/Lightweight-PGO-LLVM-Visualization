@@ -52,11 +52,31 @@ class DetailsPane extends PApplet {
                  .setColor(color(255,0,0))
                  ;  
                  
-                 detailsPanel.addBang("FindFunction")
+             detailsPanel.addBang("FindFunction")
                  .setPosition(width-180,100)
                  .setSize(180,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
                  ;    
+                 
+             detailsPanel.addRange("CallSites")
+                 // disable broadcasting since setRange and setRangeValues will trigger an event
+                 .setBroadcast(false) 
+                 .setPosition(width-180,120)
+                 .setSize(140,heightOfGUIElements)
+                 .setHandleSize(10)
+                 .setRange(0,maxNumberOfCallsites)
+                 .setRangeValues(callSiteMin,callSiteMax)
+                 // after the initialization we turn broadcast back on again
+                 .setBroadcast(true)
+                 .setColorForeground(color(255,40))
+                 .setColorBackground(color(255,40))
+                 ;
+                 
+              // create a new button for outputting Dot files
+              detailsPanel.addButton("ApplyOurFilters")
+                 .setPosition(width-180,140)
+                 .setSize(180,19)
+                 ;
   
                   
 /*                   
@@ -133,6 +153,8 @@ class DetailsPane extends PApplet {
     cd.nodeListStack.outputDot(".//selected_nodes_plus_some_timestamp.dot",1);
   }
   
+
+  
   /*
       Search for functions that match the string
   */
@@ -148,15 +170,64 @@ class DetailsPane extends PApplet {
         
         hw.m_histogram.functionStartsWith(theText);
         hw.m_histogram.update(); // Make a call to update the visualization
+        hw.updateFunctionList();
         
         bw.m_buckets.functionStartsWith(theText);
         bw.m_buckets.update();
+        bw.updateFunctionList();
         
         // Add our item to the list
         breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
         // Update the functions list with anything we have found.
-        updateFunctionList();
+
     }
   }
+  
+  
+    // function controlEvent will be invoked with every value change 
+    // in any registered controller
+    void controlEvent(ControlEvent theEvent) {
+      if(theEvent.isGroup()) {
+        println("got an event from group "
+                +theEvent.getGroup().getName()
+                +", isOpen? "+theEvent.getGroup().isOpen()
+                );
+                
+      } else if (theEvent.isController()){
+        println("got something from a controller "
+                +theEvent.getController().getName()
+                );
+      }
+    
+      // Get the values from the CallSites range slider.
+      if(theEvent.isFrom("CallSites")) {
+        callSiteMin = int(theEvent.getController().getArrayValue(0));
+        callSiteMax = int(theEvent.getController().getArrayValue(1));
+        //println("range update, done. ("+callSiteMin+","+callSiteMax+")");
+      }
+      
+    }
+    
+    /*
+      Apply a Filter based on the options we have selected.
+    */
+    public void ApplyOurFilters(int theValue){
+      String FilterString = cd.nodeListStack.peek().name;
+      // Apply the relevant filters
+      cd.filterCallSites(callSiteMin, callSiteMax);
+      cd.update(); // Make a call to update the visualization
+      
+      hw.m_histogram.filterCallSites(callSiteMin, callSiteMax);
+      hw.m_histogram.update(); // Make a call to update the visualization
+      hw.updateFunctionList();
+      
+      bw.m_buckets.filterCallSites(callSiteMin, callSiteMax);
+      bw.m_buckets.update();
+      bw.updateFunctionList();
+      
+      // Add our item to the list
+      breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
+      
+    }
     
 }

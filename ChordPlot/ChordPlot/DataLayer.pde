@@ -43,14 +43,15 @@ public class DataLayer implements VisualizationLayout{
 
     // Load up data
     // Note that the dotGraph contains the entire node list, and all of the associated meta-data with it.
-    dotGraph = new DotGraph(file);
+    dotGraph = new DotGraph(file);     println("bbblah"); 
     // Create a list of all of our nodes that will be in the visualization
     // We eventually push a copy of this to the stack
     nodeList = new ChordNodeList("Initial Data");
-    
+println("blah");
+    println("a blah");
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
-    
+
     nodeListStack = new NodeListStack();
     // Push the nodeList onto the stack
     nodeListStack.push(nodeList);
@@ -143,7 +144,7 @@ public class DataLayer implements VisualizationLayout{
   //
   public void storeLineDrawings(int compute){
    
-      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      ConcurrentHashMap<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
 
       // Faster hacked version
       for(int i =0; i < nodeListStack.peek().size(); i++){
@@ -156,7 +157,6 @@ public class DataLayer implements VisualizationLayout{
           // If we do find that our node is a source(with targets)
           // then search to get all of the destination names and their positions
           LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          int stop = dests.size(); // if we add all of our destinations, then stop iterating.
           Iterator<nodeMetaData> it = dests.iterator();
           
           // Iterate through all of the callees in our current node
@@ -199,6 +199,7 @@ public class DataLayer implements VisualizationLayout{
           selectedNodes.add(nodeListStack.peek().get(i));
         }
       }
+      
       nodeListStack.push(selectedNodes);
   }
   
@@ -239,6 +240,8 @@ public class DataLayer implements VisualizationLayout{
   
   /*
       Functions that match the starting characters
+      
+      This will also return matches that 'contain' or are equal to the string
   */
   
     public void functionStartsWith(String text){
@@ -251,7 +254,7 @@ public class DataLayer implements VisualizationLayout{
         // surrounded by quotes to work properly in the .dot format (because if we use
         // periods in the .dot format for function names, things break, thus we surround them
         // in quotes). Thus, the hack is we append a double quote to all searches.
-        if(nodeListStack.peek().get(i).metaData.name.startsWith("\""+text)){
+        if(nodeListStack.peek().get(i).metaData.name.startsWith("\""+text) || nodeListStack.peek().get(i).metaData.name.contains(text)){
           filteredNodes.add(nodeListStack.peek().get(i));
           println("adding: "+nodeListStack.peek().get(i).metaData.name);
         }
@@ -292,6 +295,10 @@ public class DataLayer implements VisualizationLayout{
       // we should be able to just linearly scan from that starting point instead of always
       // starting from the beginning. Note this could lead to a bug if the nodes are unsorted
       // or in some random order.
+      
+      
+      //Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+
       int firstIndex = 0;
       for(int i =0; i < cnl.size(); ++i){
           for(int j = firstIndex; j < nodeListStack.peek().size(); ++j){
@@ -378,7 +385,42 @@ public class DataLayer implements VisualizationLayout{
           nodeListStack.peek().get(j).selected = !nodeListStack.peek().get(j).selected; // Modify the node we have found. 
           break;
         }
-      }
+     }
+  }
+  
+  
+  /*
+      Toggle all of the callees as well as the node we are selecting
+      
+      Based on the node we are selecting
+  */
+  public void toggleCallees(ChordNode cn){
+    println("About to toggle callees:"+cn.LocationPoints.size()); 
+    
+    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).selected = true;//!nodeListStack.peek().get(j).selected; // Modify the node we have found. 
+          for(int i = 0; i < nodeListStack.peek().get(j).LocationPoints.size(); ++i){
+            nodeListStack.peek().get(j).LocationPoints.get(i).selected = true;// nodeListStack.peek().get(j).selected;
+          }
+          break;
+        }
+     }
+  }
+  
+  /*
+      Quickly select nodes by holding down a key
+  */
+  
+  public void select(ChordNode cn, boolean value){
+    println("select: "+value);
+    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
+          println("setting: " + nodeListStack.peek().get(j).metaData.name + " to " +value);
+          break; 
+        }
+     }
   }
   
   

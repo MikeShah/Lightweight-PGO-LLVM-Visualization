@@ -5,7 +5,7 @@
 class ChordDiagram extends DataLayer{
   
   float radius;
-  float nodeSteps = 6;
+  float nodeSteps = 4;
      
   public ChordDiagram(float radius, String file,int layout){
     this.VisualizationName = "Chord Diagram";
@@ -79,16 +79,28 @@ class ChordDiagram extends DataLayer{
   */
   private void plotPointsOnGrid(float numberOfPoints, float steps){
     println("Calling plotPointsOnGrid");  
-    float padding = 10; // padding on the screen
+    float padding = 20; // padding on the screen
+    
+    float pixelsAvailable = (width-padding)*(height-padding);
+    float optimalSize = pixelsAvailable/ nodeListStack.peek().size();
+    // Since we need a square, take the sqrt
+    optimalSize = (int)(sqrt(optimalSize)); // Cast to an int to make things simple
     // Compute the proper aspect ratio so that the visualization is more square.
+    
+    // Update the padding to make sure it is at least the size of the optimal.
+    if(optimalSize > padding){
+      padding += optimalSize;
+    }
+    
+    steps = optimalSize;
     
     // Adjust the aspect ratio
     int pixelsNeeded = (int)(sqrt( steps * nodeListStack.peek().size()));
     
-    float xSize = pixelsNeeded * steps; //(width-padding-200); // FIXME: 200 is because the GUI's width is 200, there needs to be a better way to reference this
+    float xSize = pixelsNeeded * steps; 
     // If our aspect ratio gets messed up, set it to the maximum
-    if(xSize > width-padding-200){
-      xSize = width-padding-200;
+    if(xSize > width-padding){
+      xSize = width-padding;
     }
     
     float ySize = height-padding;
@@ -105,9 +117,7 @@ class ChordDiagram extends DataLayer{
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
           nodeListStack.peek().get(counter).y = yPos;
-          if(nodeListStack.peek().size()<5){
-              println("(x,y)=> ("+xPos+","+yPos+")");
-          }
+
           // Set the size of our visualization here
           nodeListStack.peek().get(counter).nodeSize = (int)(steps/2); // Integer division
           nodeListStack.peek().get(counter).rectWidth = steps;
@@ -118,8 +128,6 @@ class ChordDiagram extends DataLayer{
         }
       }
     }
-    println("xbounds:"+xBounds);
-    println("ybounds:"+yBounds);
   }
   
   /*

@@ -11,17 +11,23 @@
 
 */
 
-public class commonWidget extends PApplet{
+class commonWidget extends PApplet{
   // The main GUI component
   ControlP5 cp5;
   // Window title
   String windowTitle;
+   
+  // This controls the dynamic size of our attributes
+  int heightOfGUIElements = 10;
   
   /*
       Initialize all of the GUI components.
       Ideally this connects to the dataLayer.
   */
   private void  initGUI(){
+    // Setup our GUI
+      cp5 = new ControlP5( this );
+    
       cp5.addSlider( "value-")
            .setRange( 0, 255 )
            .plugTo( this, "setValue" )
@@ -32,10 +38,67 @@ public class commonWidget extends PApplet{
       ButtonBar b = cp5.addButtonBar("filterSelector")
            .setPosition(0, 0)
            .setSize(width, 20)
-           .addItems(split("Metadata Attributes PGO Perf Graph Other"," "))
+           .addItems(split("Metadata Attributes PGO Perf Graph Other Help"," "))
            ;
+
+            
+        // Populate list
+        String[] test = new String[cd.nodeListStack.peek().size()];
+        for(int i = 0; i < cd.nodeListStack.peek().size();i++){
+          test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+        }
+
+        cp5.addScrollableList("Function Scrollable List")
+             .setPosition(width-360,20)
+             .setSize(180,180)
+             .addItems(test)
+             ;
+        
+        cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+
+/*
+              println("setup attributesCheckbox");
+      cp5.addCheckBox("AttributesCheckbox")
+          .setPosition(10, 10)
+          .setSize(10, heightOfGUIElements)
+          .setItemsPerRow(1)
+          .setSpacingRow(1)
+          ;
+*/
+                // Populate the attributes
+        int AttributeSpaceNeeded = 0;
+
+println("a");
+/*
+        for (int i = 0 ; i < attributes.length; i++) {
+            //attributesCheckbox.addItem(attributes[i], 0);
+        }
+*/
+println("b");
+        // Size the panel appropriately
+       // cp5.get(Group.class, "Attribute Filters").setSize(200,AttributeSpaceNeeded+40);
+
+
   }
   
+  
+  /*
+    Update our function list
+  */
+  synchronized public void updateFunctionList(){
+    // Update the functions list with all of the applicable functions
+    String[] test = new String[cd.nodeListStack.peek().size()];
+    for(int i = 0; i < test.length;i++){
+      test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+    }
+    
+    println("test.size()"+test.length);
+    // Update the Function List
+    cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+    println("booom");
+  }
+  
+    
   /*
       For the visualization, select the appropriate window
       to bring up, and restructure the Buckets window
@@ -67,15 +130,18 @@ public class commonWidget extends PApplet{
     else if(n==5){
       println("clicked Other");
     }
+    // Help
+    else if(n==6){
+      println("clicked Help - Showing information about how to use this visualization");
+    }
     
   }
   
   public commonWidget(){
       // Call the constructor for the PApplet
       super();
+      println("aaa commonWidget()");
       PApplet.runSketch(new String[]{this.getClass().getName()}, this);
-      // Setup our GUI
-      cp5 = new ControlP5( this );
       this.initGUI();
       // Set the window title
       this.windowTitle = "No set windowTitle";
@@ -87,9 +153,9 @@ public class commonWidget extends PApplet{
   public commonWidget(String windowTitle){
       // Call the constructor for the PApplet
       super();
+      println("aaa commonWidget(windowTitle)");
       PApplet.runSketch(new String[]{this.getClass().getName()}, this);
       // Setup our GUI
-      cp5 = new ControlP5( this );
       this.initGUI();
       // Set the window title
       this.windowTitle = windowTitle;
@@ -103,6 +169,9 @@ public class commonWidget extends PApplet{
     public void setup() { 
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 400);
+      
+      // Instantiate attributes for the GUI -- This needs to be done before even the constructor! http://forum.processing.org/one/topic/problem-with-loadstrings-file-txt.html
+      attributes = loadStrings("./attributes.txt");
     }
   
     public void draw() {

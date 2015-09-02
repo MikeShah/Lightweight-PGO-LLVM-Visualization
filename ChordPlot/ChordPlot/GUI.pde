@@ -16,15 +16,12 @@ int callSiteMin = 20;
 int callSiteMax = 100;
 int maxNumberOfCallsites = 255;
 
-/* Figure out attributes for our program */
-CheckBox attributesCheckbox;
-String attributes[];
 
-// This controls the dynamic size of our attributes
-int heightOfGUIElements = 10;
 
 // How far many levels to draw to callees when we highlight over nodes.
 int CalleeDepth = 15;
+
+int heightOfGUIElements = 20;
 
 void initGUI(){
   filtersPanel = new ControlP5(this);
@@ -32,96 +29,9 @@ void initGUI(){
   breadCrumbsBar = filtersPanel.addButtonBar("theBreadCrumbsBar")
                        .setPosition(0, height-20)
                        .setSize(width, 20)
-                       ;
-                       
-  Group attributeFiltersSet = filtersPanel.addGroup("Attribute Filters")
-                        .setBackgroundColor(color(64,50))
-                        ;
-                                           
-                    attributesCheckbox = filtersPanel.addCheckBox("AttributesCheckbox")
-                        .setPosition(10, 10)
-                        .setSize(10, heightOfGUIElements)
-                        .setItemsPerRow(1)
-                        .setSpacingRow(1)
-                        .setGroup(attributeFiltersSet)
-                        ;
-                       /* Search for attributes that we can filter in our GUI - Code to Dynamically setup the attributes*/
-                                                                      attributes = loadStrings("./attributes.txt");
-                                                                      // Populate the attributes
-                                                                      int AttributeSpaceNeeded = 0;
-                                                                      for (int i = 0 ; i < attributes.length; i++) {
-                                                                            attributesCheckbox.addItem(attributes[i], 0);
-                                                                            AttributeSpaceNeeded += heightOfGUIElements + 1;
-                                                                      }
-                                                                      // Size the panel appropriately
-                                                                      filtersPanel.get(Group.class, "Attribute Filters").setSize(200,AttributeSpaceNeeded+40);
-                                                                      
-                    filtersPanel.addRange("CallSites")
-                       // disable broadcasting since setRange and setRangeValues will trigger an event
-                       .setBroadcast(false) 
-                       .setPosition(10,AttributeSpaceNeeded+heightOfGUIElements)
-                       .setSize(140,heightOfGUIElements)
-                       .setHandleSize(10)
-                       .setRange(0,maxNumberOfCallsites)
-                       .setRangeValues(callSiteMin,callSiteMax)
-                       // after the initialization we turn broadcast back on again
-                       .setBroadcast(true)
-                       .setColorForeground(color(255,40))
-                       .setColorBackground(color(255,40))
-                       .setGroup(attributeFiltersSet)
-                       ;
-                       
-                    // create a new button for outputting Dot files
-                    filtersPanel.addButton("ApplyOurFilters")
-                       .setPosition(10,AttributeSpaceNeeded+heightOfGUIElements+heightOfGUIElements)
-                       .setSize(180,19)
-                       .setGroup(attributeFiltersSet)
-                       ;
-     
-                        
-  Group functionListGroup = filtersPanel.addGroup("Function List")
-                    .setPosition(600,100)
-                    .setSize(150,240)
-                    .setBackgroundColor(color(64,100))
-                    ;
-                
-              filtersPanel.addScrollableList("Function Scrollable List")
-                   .setPosition(10,10)
-                   .setSize(180,180)
-                   .setGroup(functionListGroup)
-                   .addItems(java.util.Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","L","M","N","O","P","Q","R"))
-                   ;
-                 
-
-
-  // Populate list
-  String[] test = new String[cd.nodeListStack.peek().size()];
-  for(int i = 0; i < cd.nodeListStack.peek().size();i++){
-    test[i] = cd.nodeListStack.peek().get(i).metaData.name;
-  }
-  
-  filtersPanel.get(ScrollableList.class, "Function Scrollable List").setItems(test);
-  
-
-  
-  
-      // create a new accordion
-  // add g1, g2, and g3 to the accordion.
-  accordion = filtersPanel.addAccordion("AccordionLayout")
-                 .setPosition(width-200,0)
-                 .setWidth(200)
-                 .addItem(attributeFiltersSet)
-                 .addItem(functionListGroup)
-                 ;
-                 
-                 
-  // Open all three of our panels by default
-  accordion.open(0,1,2);
-  // Allow us to open multiple levels at a time
-  accordion.setCollapseMode(Accordion.MULTI);
-  
+                       ;                                      
+       
 }
-
 
 
 
@@ -139,13 +49,6 @@ void controlEvent(ControlEvent theEvent) {
             +theEvent.getController().getName()
             );
   }
-
-  // Get the values from the CallSites range slider.
-  if(theEvent.isFrom("CallSites")) {
-    callSiteMin = int(theEvent.getController().getArrayValue(0));
-    callSiteMax = int(theEvent.getController().getArrayValue(1));
-    //println("range update, done. ("+callSiteMin+","+callSiteMax+")");
-  }
   
 }
 
@@ -160,40 +63,7 @@ public void Microarray(int theValue) {
   cd.showData = !cd.showData;
 }
 
-/*
-  Apply a Filter based on the options we have selected.
-*/
-public void ApplyOurFilters(int theValue){
-  String FilterString = cd.nodeListStack.peek().name;
-  // Apply the relevant filters
-  cd.filterCallSites(callSiteMin, callSiteMax);
-  cd.update(); // Make a call to update the visualization
-  
-  hw.m_histogram.filterCallSites(callSiteMin, callSiteMax);
-  hw.m_histogram.update(); // Make a call to update the visualization
-  
-  bw.m_buckets.filterCallSites(callSiteMin, callSiteMax);
-  bw.m_buckets.update();
-  
-  // Add our item to the list
-  breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
-  
-  updateFunctionList();
-}
 
-/*
-  Update our function list
-*/
-public void updateFunctionList(){
-  // Update the functions list with all of the applicable functions
-  String[] test = new String[cd.nodeListStack.peek().size()];
-  for(int i = 0; i < test.length;i++){
-    test[i] = cd.nodeListStack.peek().get(i).metaData.name;
-  }
-  
-  // Update the Function List
-  filtersPanel.get(ScrollableList.class, "Function Scrollable List").setItems(test);
-}
 
 
 /*
@@ -211,6 +81,9 @@ public void theBreadCrumbsBar(int n){
       cd.fastUpdate(); // Make a call to update the visualization
       hw.m_histogram.fastUpdate();
       bw.m_buckets.fastUpdate();
+              
+      hw.updateFunctionList();
+      bw.updateFunctionList();
     }
     if(cd.nodeListStack.size()==1){
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();
@@ -228,6 +101,9 @@ public void theBreadCrumbsBar(int n){
         cd.fastUpdate(); // Make a call to update the visualization
         hw.m_histogram.fastUpdate();
         bw.m_buckets.fastUpdate();
+        
+        hw.updateFunctionList();
+        bw.updateFunctionList();
       }
       if(cd.nodeListStack.size()==1){
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();

@@ -209,6 +209,15 @@ class ChordNode{
                  text(metaData.name,x,y+10);
                popMatrix();
             }
+            
+            if(keyPressed){
+                if      (key == 's'){
+                  cd.select(this,true);
+                }else if(key == 'e'){
+                  cd.select(this,false);
+                }
+            }
+            
         }
     
         // If our node is selected, then highlight it a new color
@@ -226,6 +235,7 @@ class ChordNode{
             if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
               selected = !selected;
             }
+                       
          }
          else if(highlighted){
            if(highlighted) { fill(255,255,0); }  
@@ -239,8 +249,10 @@ class ChordNode{
             rect(x,y-rectHeight,rectWidth,rectHeight);
          }
          
-
   }
+  
+  
+
   
   // Draw to all of the callee locations in 2D
   // Note that we are drawing exclusively to the secondGraphicsLayer here.

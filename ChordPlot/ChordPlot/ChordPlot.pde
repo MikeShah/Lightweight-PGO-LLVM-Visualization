@@ -35,6 +35,7 @@ void setup(){
   //String filename = "output.dot"; // legacy version of dot file loader
   String filename = "horde3d.dot";
 
+ 
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across
   // the entire codebase.
@@ -57,6 +58,7 @@ void setup(){
   println("setup time: " + (millis()-programStart));
   bw.m_buckets.debug();
   
+  
 }
 
 /* =============================================
@@ -71,6 +73,7 @@ void draw(){
    
    text("FPS :"+frameRate,width-100,height-20);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
+   text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-30);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

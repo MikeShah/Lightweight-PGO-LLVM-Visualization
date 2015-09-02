@@ -5,6 +5,7 @@
 import java.util.Hashtable;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.*;
 
 
 /*
@@ -15,10 +16,12 @@ class DotGraph{
   // Contains a hashmap that consits of: 
   // key -- The source node, which is a String
   // value -- The Destination nodes this source points to, which is an arraylist.
-  public Map<nodeMetaData,LinkedHashSet<nodeMetaData>> graph = new Hashtable<nodeMetaData,LinkedHashSet<nodeMetaData>>();
+  public ConcurrentMap<nodeMetaData,LinkedHashSet<nodeMetaData>> graph = new ConcurrentHashMap<nodeMetaData,LinkedHashSet<nodeMetaData>>();
   // Contains a list of all of the nodes (sources and destinations)
   // Can be useful if we need to populate all nodes in a visualization
-  public HashMap<String,nodeMetaData> fullNodeList = new HashMap<String,nodeMetaData>();
+  //
+  // Note, I had to make this Concurrent so things do not crash :)
+  public ConcurrentHashMap<String,nodeMetaData> fullNodeList = new ConcurrentHashMap<String,nodeMetaData>();
   int totalSources = 0;
   
   /* 
@@ -182,8 +185,8 @@ class DotGraph{
     Read a DOT file where node=struct is the default.
   */
   public void readStructDOT(String file){
+    
       String[] lines = loadStrings(file);   
-      
       // Do one iteration through the list to build the nodes
         for(int i =0; i < lines.length-1; i++){
             // Build up all of the sources first
