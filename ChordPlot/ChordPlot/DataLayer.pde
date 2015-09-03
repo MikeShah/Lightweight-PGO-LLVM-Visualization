@@ -87,6 +87,9 @@ println("blah");
       // Do a deep copy
       // This is annoying, but will work for now
       temp.metaData.callees           = m.callees;
+      temp.metaData.calleInto           = m.callees;
+      temp.metaData.recursive           = m.recursive;
+      temp.metaData.maxNestedLoopCount  = m.maxNestedLoopCount;
       temp.metaData.attributes        = m.attributes;
       temp.metaData.annotations       = m.annotations;
       temp.metaData.metaData          = m.metaData;
@@ -94,8 +97,9 @@ println("blah");
       temp.metaData.PGOData           = m.PGOData;
       temp.metaData.PerfData          = m.PerfData;
       temp.metaData.ControlFlowData   = m.ControlFlowData;
+      temp.metaData.bitCodeSize       = m.bitCodeSize;
       temp.metaData.extra_information = m.extra_information;
-    
+          
       nodeList.add(temp);
       nodeListIter.remove(); // Avoid ConcurrentModficiationException
     }

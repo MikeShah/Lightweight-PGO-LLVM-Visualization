@@ -42,7 +42,6 @@ class commonWidget extends PApplet{
            .setSize(width, 20)
            .addItems(split("Metadata Attributes PGO Perf Graph Other Help"," "))
            ;
-
             
         // Populate list
           String[] test = new String[cd.nodeListStack.peek().size()];

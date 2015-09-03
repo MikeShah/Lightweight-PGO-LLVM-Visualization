@@ -9,7 +9,13 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   
   String name;
   String extra_information;
+  // Values that need to be computed after the data is loaded in
   int callees = 0;
+  int calleInto = 0;  // How many functions call this function.
+  boolean recursive = false; // Check to see if function ever calls itself
+  int maxNestedLoopCount = 0;
+  int bitCodeSize = 0;
+  
   float c;  // the color of the node
   
   String attributes;
@@ -20,7 +26,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String PerfData;
   String ControlFlowData;
     
-  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData){
+  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData, int bitCodeSize){
     this.name = name;
     this.extra_information = extra_information;
     this.attributes=attributes;
@@ -30,6 +36,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     this.PGOData=PGOData;
     this.PerfData=PerfData;
     this.ControlFlowData=ControlFlowData;
+    this.bitCodeSize = bitCodeSize;
     
     c = 0;
   }
@@ -50,6 +57,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     result += "PGOData: "+PGOData + "\n";
     result += "PerfData: "+PerfData + "\n";
     result += "ControlFlowData: "+ControlFlowData + "\n";
+    result += "BitCodeSize: "+bitCodeSize + "\n";
     result += "extra_information: "+extra_information + "\n";
     
     return result;

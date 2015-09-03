@@ -1,0 +1,6 @@
+digraph {
+node [shape=record];
+"_ZNSt8ios_base4InitC1Ev"[shape=record,label="_ZNSt8ios_base4InitC1Ev|{Metadata}|{Annotations}|{PGO Data}|{Perf Data}|{Control Flow Data}|{BitcodeSize|0}|"];
+"main"[shape=record,label="main|{Metadata}|{Annotations}|{PGO Data}|{Perf Data}|{Control Flow Data}|{Opcodes|add 7|alloca 5|atomicrmw 3|bitcast 10|br 55|call 116|extractvalue 4|fcmp 3|fdiv 2|fptrunc 1|fsub 4|getelementptr 25|icmp 19|insertvalue 2|invoke 2|landingpad 2|load 33|phi 19|resume 1|ret 1|select 1|sitofp 1|store 11|trunc 2|unreachable 1|zext 2}|{BitcodeSize|60}|"];
+"main" -> "__ZNSt8ios_base4InitC1Ev" [ label="0"];
+}
