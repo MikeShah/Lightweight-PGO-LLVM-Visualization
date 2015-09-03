@@ -1,4 +1,5 @@
 #include "llvm/ADT/Statistic.h"
+#include "llvm/ADT/Optional.h"
 
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
@@ -31,7 +32,7 @@
 #include <vector>
 #include <memory>
 #include <list>
-
+#include <algorithm>
 
 using namespace llvm;
 
@@ -74,14 +75,23 @@ private:
     std::map<std::string,unsigned> opcodeCounter;
     //std::set<const Value*> Vals;
     // Store the Control Flow Graph
+    std::vector<std::string> reversepost_orderList;
+    // Store the meta-data
+    std::string m_metaData;
+
     // Note that items are stored in a topological order (reverse post-order)
-    SmallVector< std::pair<unsigned, MDNode*>, 4> MDForFunction;
+    //SmallVector< std::pair<unsigned, MDNode*>, 4> MDForFunction;
 
 
     // Prints out all of the functions and their associated metadata
     void storeMetaData(){
         std::string s;
         llvm::raw_string_ostream ss(s);
+        std::string m_meta_data;
+        llvm::raw_string_ostream m_meta_ss(m_meta_data);
+
+
+
         // Check to see if we have any meta-data in the first place.
         if(m_function->hasMetadata()){
                 //for(Function::iterator bb = mi.begin(), E = mi.end(); bb != E; ++bb){
@@ -101,16 +111,38 @@ private:
                     ss << node.first << " = ";
                     // redirect the dump output
                     // FIXME: Print this out somewhere so we can reuse it
+                    N->print(m_meta_ss);
+
+                    m_metaData = m_metaData+ m_meta_ss.str() + "|";
                     N->dump();
                     ss << "\n";
                 }
                 ss << "\n";
+
+                    // Clean up the string for output
+                    std::replace(m_metaData.begin(),m_metaData.end(),'\"',' ');
+                    std::replace(m_metaData.begin(),m_metaData.end(),'{' ,' ');
+                    std::replace(m_metaData.begin(),m_metaData.end(),'}' ,' ');
+                    std::replace(m_metaData.begin(),m_metaData.end(),'!' ,' ');
+                    std::replace(m_metaData.begin(),m_metaData.end(),',' ,' ');
 
             //}
         } // if(m_function->hasMetadata()){
         else{
             // Print something like "meta-data: none"
         }
+    }
+
+        // Prints out all of the functions and their associated metadata
+    void storePGOData(){
+        std::string s;
+        llvm::raw_string_ostream ss(s);
+        // Check to see if we have any PGO data in the first place.
+/*        if(m_function->hasEntryCount()){
+
+        }else{
+            ss << "none";
+        }*/
     }
 
     // Prints out all of the function call sites
@@ -271,6 +303,31 @@ private:
     // Dependency: llvm/ADT?SCCITerator.h
     void storeFunctionControlFlowGraph(){
 
+        // Check to make sure our function is not empty
+        if(m_function && m_function->size()>0){
+        // In order to build the CFG we first find the terminating block, and then build up a list of successors
+        //ss() << "\nSCC for " << m_function->getName() << " in post-order (need to reverse to get topological order) \n\n";
+
+            for(scc_iterator<Function *> I = scc_begin(m_function), IE = scc_end(m_function); I != IE; ++I){
+                // Store all of the BB's into a vector
+                const std::vector<BasicBlock*> &SCC_BBs = *I;
+
+                if(!SCC_BBs.empty()){
+                    //ss() << "SCC: ";
+                    std::string components = "";
+                    for(std::vector<BasicBlock*>::const_iterator BBI = SCC_BBs.begin(), BBIE = SCC_BBs.end(); BBI != BBIE; ++BBI){
+                        //ss() << (*BBI)->getName() << " ";
+                        std::string name = (*BBI)->getName();
+                        components = components + name + " ";
+                    }
+                    //ss() << "\n";
+                    reversepost_orderList.push_back(components);
+                }
+            }
+        }
+
+        // Need to reverse the order of the items to have a topological sorted order.
+        std::reverse(reversepost_orderList.begin(),reversepost_orderList.end());
     }
 
     // Takes an instruction and returns all attributes
@@ -294,6 +351,7 @@ private:
     void init(){
         storeArguments();
         storeMetaData();
+        storePGOData();
         storeFunctionCallSites();
         storeAttributes();
         storeOpCodes();
@@ -412,6 +470,8 @@ public:
         std::string s="";
         llvm::raw_string_ostream ss(s);
 
+
+
         // Start with the attributes
         if(m_attributes.size() > 0 ){
             ss << "{";
@@ -424,10 +484,11 @@ public:
         // Output Function Metadata
         //if(.size() > 0){
             ss << "{";
-            ss << "Metadata";
+            ss << "Metadata ";
          //   for(){
          //       ss << ;
          //   }
+            ss << m_metaData;
             ss << "}|";
         //}
 
@@ -444,7 +505,7 @@ public:
         // PGO Data
         //if(.size() > 0){
             ss << "{";
-            ss << "PGO Data";
+            ss << "PGOData";
          //   for(){
          //       ss << ;
          //   }
@@ -454,7 +515,7 @@ public:
         // Perf Data
         //if(.size() > 0){
             ss << "{";
-            ss << "Perf Data";
+            ss << "PerfData";
          //   for(){
          //       ss << ;
          //   }
@@ -464,10 +525,10 @@ public:
         // Control Flow Graph
         //if(.size() > 0){
             ss << "{";
-            ss << "Control Flow Data";
-         //   for(){
-         //       ss << ;
-         //   }
+            ss << "ControlFlowData";
+            for(std::vector<std::string>::iterator it=reversepost_orderList.begin(); it!=reversepost_orderList.end(); ++it){
+                ss << "|" << *it;
+            }
             ss << "}|";
         //}
 
@@ -480,6 +541,11 @@ public:
             }
             ss << "}|";
         }
+        // Output the bitcode size
+            ss << "{";
+            ss << "BitCodeSize";
+            ss << "|" << m_function->size();
+            ss << "}|";
 
         return ss.str();
     }
@@ -491,23 +557,8 @@ public:
         std::string s="";
         llvm::raw_string_ostream ss(s);
 
-        // Check to make sure our function is not empty
-        if(m_function && m_function->size()>0){
-        // In order to build the CFG we first find the terminating block, and then build up a list of successors
-        outs() << "\nSCC for " << m_function->getName() << " in post-order (need to reverse to get topological order) \n\n";
-
-            for(scc_iterator<Function *> I = scc_begin(m_function), IE = scc_end(m_function); I != IE; ++I){
-                // Store all of the BB's into a vector
-                const std::vector<BasicBlock*> &SCC_BBs = *I;
-
-                if(!SCC_BBs.empty()){
-                    outs() << "SCC: ";
-                    for(std::vector<BasicBlock*>::const_iterator BBI = SCC_BBs.begin(), BBIE = SCC_BBs.end(); BBI != BBIE; ++BBI){
-                        outs() << (*BBI)->getName() << " ";
-                    }
-                    outs() << "\n";
-                }
-            }
+        for(std::vector<std::string>::iterator it=reversepost_orderList.begin(); it!=reversepost_orderList.end(); ++it){
+            ss << *it << " | ";
         }
 
         return ss.str();
