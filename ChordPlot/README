@@ -13,7 +13,8 @@ External Dependencies:
 - You need to run mymodulepass2 (name subject to change) to generate a dot file with appropriate meta-data as of 8/17/15.
   In theory any dot file will at least give you a microarray with the callsites.
 
-
+Optional:
+- I recommend using visualvm (apt-get visualvm) on Ubuntu for doing development.
 
 
 
@@ -23,3 +24,12 @@ Input Formats
 
 Output Formats
 - None currently. Perhaps .dot file for selected nodes in the future.
+
+
+Making improvements:
+
+grep -r -e "TODO" --include="*.pde"
+grep -r -e "FIXME" --include="*.pde"
+grep -r -e "DEPRECATE" --include="*.pde"
+
+
