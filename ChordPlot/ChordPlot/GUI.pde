@@ -73,8 +73,8 @@ public void theBreadCrumbsBar(int n){
   if(mouseButton == LEFT){
     println("-------------------------------------------Setting Stack to this node", n);
     ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-    ChordNodeList temp2 = (ChordNodeList)hw.m_histogram.nodeListStack.pop();
-    ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
+                            hw.m_histogram.nodeListStack.pop();
+                              bw.m_buckets.nodeListStack.pop();
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
@@ -93,8 +93,8 @@ public void theBreadCrumbsBar(int n){
     println("Clearing Stack to this node", n);
     while(cd.nodeListStack.size()>n+1){
       ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-      ChordNodeList temp2 = (ChordNodeList)hw.m_histogram.nodeListStack.pop();
-      ChordNodeList temp3 = (ChordNodeList)bw.m_buckets.nodeListStack.pop();
+                              hw.m_histogram.nodeListStack.pop();
+                                bw.m_buckets.nodeListStack.pop();
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);

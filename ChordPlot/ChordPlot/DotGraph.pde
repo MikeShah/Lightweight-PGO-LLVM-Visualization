@@ -2,7 +2,6 @@
   Class for loading DotGraphs
 
 */
-import java.util.Hashtable;
 import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
@@ -16,7 +15,7 @@ class DotGraph{
   // Contains a hashmap that consits of: 
   // key -- The source node, which is a String
   // value -- The Destination nodes this source points to, which is an arraylist.
-  public ConcurrentMap<nodeMetaData,LinkedHashSet<nodeMetaData>> graph = new ConcurrentHashMap<nodeMetaData,LinkedHashSet<nodeMetaData>>();
+  public ConcurrentHashMap<nodeMetaData,LinkedHashSet<nodeMetaData>> graph = new ConcurrentHashMap<nodeMetaData,LinkedHashSet<nodeMetaData>>();
   // Contains a list of all of the nodes (sources and destinations)
   // Can be useful if we need to populate all nodes in a visualization
   //
@@ -29,7 +28,7 @@ class DotGraph{
   */
   public DotGraph(String file){
     //simpleDot(file);
-    
+    println("DotGraph Constructor");
     readStructDOT(file);
   }
   
@@ -184,29 +183,33 @@ class DotGraph{
   /*
     Read a DOT file where node=struct is the default.
   */
-  public void readStructDOT(String file){
-    
+  synchronized public void readStructDOT(String file){
+    println("readStructDOT");
+    println("Something is blowing up here");
       String[] lines = loadStrings(file);   
       // Do one iteration through the list to build the nodes
-        for(int i =0; i < lines.length-1; i++){
+      println("read in file with "+lines.length+" lines");
+        for(String s: lines){
             // Build up all of the sources first
             // For every node we need to add it in our graph
-            if(lines[i].contains("shape=record") && !lines[i].equals("node [shape=record];")){
-              nodeMetaData md = processStruct(lines[i]);
+            if(s.contains("shape=record") && !s.equals("node [shape=record];")){
+              nodeMetaData md = processStruct(s);
             
               fullNodeList.put(md.name, md);
             }
         }
       
+      println("made it to here in readStructDOT");
+      
       // Do a second iteration through the lines to build the relationship(src->dst i.e. caller and callees)
-      for(int i =0; i < lines.length-1; i++){
+      for(String line: lines){
         // Read in a line
         // Find that node in our fullNodeList
         // Add to its destinations
-        if (lines[i].contains("->")){
+        if (line.contains("->")){
             // Split the line, parse it, and retrieve our
             // source and destination nodes.
-            String[] tokens = lines[i].split(" ");
+            String[] tokens = line.split(" ");
             
             // Create temporary nodes with the ones we found
             nodeMetaData src = (nodeMetaData)fullNodeList.get(tokens[0]);

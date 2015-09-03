@@ -11,8 +11,6 @@ class BucketsWindow extends commonWidget {
     this.filename = filename;
     println("a");
     m_buckets = new Buckets(filename,0,height-30,0);
-    
-    
   }
   
   public void settings() {
@@ -24,6 +22,7 @@ class BucketsWindow extends commonWidget {
       println("setup Buckets");
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 0);
+      println("setup Buckets end");
   }
   
   int p_buckets_old = -1;
@@ -32,11 +31,11 @@ class BucketsWindow extends commonWidget {
 
   
   public void draw() {
-    
-    float m_x = mouseX;
-    float m_y = mouseY;   
-    
+     
     if(m_buckets!=null){
+        float m_x = mouseX;
+        float m_y = mouseY; 
+    
                      if(m_buckets.showData){
                       background(0,64,164); fill(0); stroke(0); text("FPS: "+frameRate,20,height-20);
                       //pushMatrix();
@@ -159,7 +158,7 @@ class Buckets extends DataLayer{
   
   // Default Constructor for the Buckets
   public Buckets(String file, float xPosition, float yPosition, int layout){
-    this.VisualizationName = "Buckets";
+    this.visualizationName = "Buckets";
     // Call init which seets up the DataLayer.
     super.init(file, xPosition, yPosition,layout);
 
@@ -168,7 +167,7 @@ class Buckets extends DataLayer{
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics
-    nodeListStack.computeSummaryStatistics();
+    // nodeListStack.computeSummaryStatistics(); // FIXME: Put this back in the code 
   }
   
 
@@ -282,6 +281,7 @@ class Buckets extends DataLayer{
     if(this.layout <= 0){
       plotPoints2D();
     }else{
+      println("No other other layout, using default");
       plotPoints2D();
     }
   }

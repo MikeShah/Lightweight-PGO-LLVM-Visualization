@@ -16,15 +16,17 @@ class commonWidget extends PApplet{
   ControlP5 cp5;
   // Window title
   String windowTitle;
-   
+    
   // This controls the dynamic size of our attributes
   int heightOfGUIElements = 10;
+  
+  ScrollableList FunctionsScrollListWidget;
   
   /*
       Initialize all of the GUI components.
       Ideally this connects to the dataLayer.
   */
-  private void  initGUI(){
+   private void  initGUI(){
     // Setup our GUI
       cp5 = new ControlP5( this );
     
@@ -43,18 +45,18 @@ class commonWidget extends PApplet{
 
             
         // Populate list
-        String[] test = new String[cd.nodeListStack.peek().size()];
-        for(int i = 0; i < cd.nodeListStack.peek().size();i++){
-          test[i] = cd.nodeListStack.peek().get(i).metaData.name;
-        }
-
-        cp5.addScrollableList("Function Scrollable List")
-             .setPosition(width-360,20)
-             .setSize(180,180)
-             .addItems(test)
-             ;
-        
-        cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+          String[] test = new String[cd.nodeListStack.peek().size()];
+          for(int i = 0; i < cd.nodeListStack.peek().size();i++){
+            test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+          }
+  
+        FunctionsScrollListWidget = cp5.addScrollableList("Function Scrollable List")
+               .setPosition(width-360,20)
+               .setSize(180,180)
+               .addItems(test)
+               ;
+          
+        FunctionsScrollListWidget.setItems(test);
 
 /*
               println("setup attributesCheckbox");
@@ -65,11 +67,13 @@ class commonWidget extends PApplet{
           .setSpacingRow(1)
           ;
 */
-                // Populate the attributes
-        int AttributeSpaceNeeded = 0;
 
 println("a");
 /*
+
+        // Populate the attributes
+        int AttributeSpaceNeeded = 0;
+
         for (int i = 0 ; i < attributes.length; i++) {
             //attributesCheckbox.addItem(attributes[i], 0);
         }
@@ -86,16 +90,23 @@ println("b");
     Update our function list
   */
   synchronized public void updateFunctionList(){
+    
     // Update the functions list with all of the applicable functions
-    String[] test = new String[cd.nodeListStack.peek().size()];
-    for(int i = 0; i < test.length;i++){
-      test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+    if(cd.nodeListStack.peek() != null ){
+      String[] test = new String[cd.nodeListStack.peek().size()];
+      for(int i = 0; i < test.length;i++){
+        test[i] = cd.nodeListStack.peek().get(i).metaData.name;
+      }
+      
+      println("test.size()"+test.length);
+      // Update the Function List
+      if(test!=null && FunctionsScrollListWidget != null){
+        FunctionsScrollListWidget.setItems(test);
+        //cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+      }
+      println("booom");
     }
     
-    println("test.size()"+test.length);
-    // Update the Function List
-    cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
-    println("booom");
   }
   
     

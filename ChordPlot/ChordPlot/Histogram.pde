@@ -22,6 +22,7 @@ class HistogramWindow extends commonWidget {
       println("setup Histogram");
       surface.setTitle(windowTitle);
       surface.setLocation(1440, 350);
+      println("setup Histogram end");
   }
   
   int p_node_old = -1;
@@ -29,11 +30,13 @@ class HistogramWindow extends commonWidget {
   Set<Integer> selectedNodes = new HashSet<Integer>();
   
   public void draw() {
-    float m_x = mouseX;
-    float m_y = mouseY;   
     
     if(m_histogram != null){
-    // Refresh the screen    
+    
+      float m_x = mouseX;
+      float m_y = mouseY;   
+    
+      // Refresh the screen    
       background(0,64,128);
         text("FPS :"+frameRate,width-100,height-20);
         text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
@@ -103,14 +106,14 @@ class Histogram extends DataLayer{
   
   // Default Constructor for the Histogram
   public Histogram(String file, float xPosition, float yPosition, int layout){
-    this.VisualizationName = "Histogram";
+    this.visualizationName = "Histogram";
     println("a m_histogram");
     super.init(file, xPosition, yPosition,layout);
     println("b m_histogram");
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics
-    nodeListStack.computeSummaryStatistics();
+    //FIXME: Put me back in later nodeListStack.computeSummaryStatistics();
   }
   
 
@@ -194,6 +197,7 @@ class Histogram extends DataLayer{
     if(this.layout <= 0){
       plotPoints2D();
     }else{
+      println("No other other layout, using default");
       plotPoints2D();
     }
   }

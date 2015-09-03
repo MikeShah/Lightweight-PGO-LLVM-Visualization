@@ -3,6 +3,38 @@
 */
 class DetailsPane extends PApplet {
   
+  
+  
+  /* Purpose:
+  
+     A special mutable version of a java string.
+     It exists within DetailsPane in order to transfer text around.
+   
+  */
+  
+  class DataString{
+    String text;
+    
+    DataString(){
+      text = new String("empty");
+    }
+    
+    void setText(String s){
+      text = new String(s);
+    }
+    
+    String getString(){
+      if(text!=null){
+        return text;
+      }else{
+        return "";
+      }
+    }
+    
+  }
+  
+
+  
   // Used to pass and send data
   DataString dataString;
   
@@ -114,8 +146,10 @@ class DetailsPane extends PApplet {
     smooth();
   }
   public void setup() { 
+    println("setup DetailsPane");
     surface.setTitle("Details View");
     surface.setLocation(0, 800);
+    println("setup DetailsPane end");
   }
 
   public void draw() {
@@ -125,8 +159,9 @@ class DetailsPane extends PApplet {
     int ySize = height;
     
     fill(0); stroke(0,255);
-
-    text(dataString.getString(), 0,0, xSize, ySize);
+    if(dataString!=null){
+      text(dataString.getString(), 0,0, xSize, ySize);
+    }
   }
   
   // 

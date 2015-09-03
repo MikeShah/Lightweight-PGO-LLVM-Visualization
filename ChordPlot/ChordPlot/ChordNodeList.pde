@@ -53,6 +53,9 @@ class ChordNodeList{
   
   /*
       Simple sorting function which takes advantage of the ArrayList
+      
+      We sort by the callees here. We can duplicate this pattern
+      to sort by an arbritrary feature.
   */
   public void sortNodes(){
     Collections.sort(chordList, new Comparator<ChordNode>(){

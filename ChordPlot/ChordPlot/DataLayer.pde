@@ -5,8 +5,10 @@
     This class should not be instantiated (It should just be considered abstract with some functionality implemented)
 */
 public class DataLayer implements VisualizationLayout{
+   
+  
   // The name of the visualization
-  public String VisualizationName = "Data Layer";
+  public String visualizationName = "Data Layer";
 
   // Where to draw the visualization
   public float xPosition;
@@ -14,8 +16,8 @@ public class DataLayer implements VisualizationLayout{
   // The layout of the nodes within the visualization
   public int layout;
   
-  public float centerx = width/2;
-  public float centery = height/2;
+  public float centerx = width/2.0;
+  public float centery = height/2.0;
   
   public float defaultWidth = 4; // The default width of the bars in the histogram
   // Bounds
@@ -31,7 +33,7 @@ public class DataLayer implements VisualizationLayout{
   public DotGraph dotGraph;
   public ChordNodeList nodeList;  // All of the nodes, that will be loaded from the dotGraph
   // Create a stack of the nodes
-  NodeListStack nodeListStack; 
+  public NodeListStack nodeListStack; 
   
   /*
       Function that constructs this object.
@@ -51,10 +53,12 @@ println("blah");
     println("a blah");
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
-
     nodeListStack = new NodeListStack();
+    
     // Push the nodeList onto the stack
     nodeListStack.push(nodeList);
+    println("after push nodeListStack.size(): "+nodeListStack.size());
+    // FIXME: Put this back in the code nodeListStack.computeSummaryStatistics();
     
   }
   
@@ -114,7 +118,8 @@ println("blah");
     // Find the max and min from the ChordNode metadata
     float themin = 0;
     float themax = 0;
-    for(int i = 0; i < nodeListStack.peek().size();i++){
+    int iterations = nodeListStack.peek().size();
+    for(int i = 0; i < iterations; i++){
       themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
       themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
     }
@@ -122,7 +127,8 @@ println("blah");
     println("themax:"+themax);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
-    for(int i = 0; i < nodeListStack.peek().size();i++){
+
+    for(int i = 0; i < iterations;i++){
       // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
       nodeListStack.peek().get(i).metaData.callees = (int)map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, maxHeight);
       
@@ -143,43 +149,44 @@ println("blah");
   // If compute == 1 then compute callees, otherwise do not becaue they have already been done.
   //
   public void storeLineDrawings(int compute){
+   println("I think we might crash around here");
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
    
-      ConcurrentHashMap<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      
 
-      // Faster hacked version
-      for(int i =0; i < nodeListStack.peek().size(); i++){
-        
-        // Search to see if our node has outcoming edges
-        nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-        nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
-        if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-        
-          // If we do find that our node is a source(with targets)
-          // then search to get all of the destination names and their positions
-          LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-          Iterator<nodeMetaData> it = dests.iterator();
-          
-          // Iterate through all of the callees in our current node
-          // We already know what they are, but now we need to map
-          // WHERE they are in the visualization screen space.
-          
-          while(it.hasNext()){
-              nodeMetaData temp = it.next();
-              // When we find the key, add the values points
-              if(topOfStackMap.containsKey(temp.name)){
-                  ChordNode value = topOfStackMap.get(temp.name);
-
-                  nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
-                  // Store some additional information (i.e. update our callees count.
-                  // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                  if(1==compute){
-                    nodeListStack.peek().get(i).metaData.callees++;
+                // Faster hacked version
+                println("size: "+nodeListStack.size());
+                int iterations = nodeListStack.peek().size();
+                for(int i =0; i < iterations; i++){
+                  // Search to see if our node has outcoming edges
+                  nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+                  nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
+                  if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+                    // If we do find that our node is a source(with targets)
+                    // then search to get all of the destination names and their positions
+                    LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+                    Iterator<nodeMetaData> it = dests.iterator();
+                    // Iterate through all of the callees in our current node
+                    // We already know what they are, but now we need to map
+                    // WHERE they are in the visualization screen space.
+                    while(it.hasNext()){
+                        nodeMetaData temp = it.next();
+                        // When we find the key, add the values points
+                        if(topOfStackMap.containsKey(temp.name)){
+                            ChordNode value = topOfStackMap.get(temp.name);
+                            nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
+                            // Store some additional information (i.e. update our callees count.
+                            // TODO: This number is only of the visible callees, perhaps we want a maximum value?
+                            if(1==compute){
+                              nodeListStack.peek().get(i).metaData.callees++;
+                            }
+                            
+                            //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
+                        }
+                        
+                    }
                   }
-              }
-              
-          }
-        }
-      }
+                }
       
   }
   
@@ -190,11 +197,13 @@ println("blah");
   
       Ideally this is tied to some keypress(Enter key)
   */
-  public void pushSelectedNodes(){
+  synchronized public void pushSelectedNodes(){
       String name = "Selected Nodes";
     
       ChordNodeList selectedNodes = new ChordNodeList(name);
-      for(int i =0; i < nodeListStack.peek().size();i++){
+      
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).selected){
           selectedNodes.add(nodeListStack.peek().get(i));
         }
@@ -210,8 +219,10 @@ println("blah");
   
       Ideally this is tied to some keypress(Space key)
   */
-  public void deselectAllNodes(){
-      for(int i =0; i < nodeListStack.peek().size();i++){
+  synchronized public void deselectAllNodes(){
+    int iterations = nodeListStack.peek().size();
+    
+      for(int i =0; i < iterations;i++){
         nodeListStack.peek().get(i).selected = false;
         nodeListStack.peek().get(i).highlighted = false;
       }
@@ -226,11 +237,13 @@ println("blah");
       3.) If they do not meet the criteria, then do not add them to the list.
       4.) Push the arrayList we have built on top of the stack
   */
-  public void filterCallSites(int min, int max){
+  synchronized public void filterCallSites(int min, int max){
       String name = "Callsites "+callSiteMin+"-"+callSiteMax;
     
       ChordNodeList filteredNodes = new ChordNodeList(name);
-      for(int i =0; i < nodeListStack.peek().size();i++){
+      
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
           filteredNodes.add(nodeListStack.peek().get(i));
         }
@@ -244,12 +257,13 @@ println("blah");
       This will also return matches that 'contain' or are equal to the string
   */
   
-    public void functionStartsWith(String text){
+    synchronized public void functionStartsWith(String text){
       String name = "Starts With: "+text;
       // The name we give to our list, so we can pop it off the stack by name if we need to.
       ChordNodeList filteredNodes = new ChordNodeList(name);
       
-      for(int i =0; i < nodeListStack.peek().size();i++){
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations; i++){
         // Small hack we have to do for now, because all of our functions are
         // surrounded by quotes to work properly in the .dot format (because if we use
         // periods in the .dot format for function names, things break, thus we surround them
@@ -286,7 +300,7 @@ println("blah");
   //
   // We can also unhighlight nodes by passing in a value of 'false'
   //
-  public void highlightNodes(ChordNodeList cnl, boolean value){
+  synchronized public void highlightNodes(ChordNodeList cnl, boolean value){
       // It's possible that cnl or the top of the nodeListStack has been filtered
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
@@ -300,8 +314,10 @@ println("blah");
       //Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
 
       int firstIndex = 0;
+      
+      int iterations = nodeListStack.peek().size();
       for(int i =0; i < cnl.size(); ++i){
-          for(int j = firstIndex; j < nodeListStack.peek().size(); ++j){
+          for(int j = firstIndex; j < iterations; ++j){
             if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
               nodeListStack.peek().get(j).highlighted = value;
               firstIndex = j;
@@ -317,8 +333,9 @@ println("blah");
       This function is useful if you're working on a very fine grained
       level, such as a long bargraph with many functions.
   */
-  public void highlightNode(ChordNode cn, boolean value){
-    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+  synchronized public void highlightNode(ChordNode cn, boolean value){
+    int iterations = nodeListStack.peek().size();
+    for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).highlighted = value; // Modify the node we have found. 
           break;
@@ -335,7 +352,7 @@ println("blah");
 
       // Put everything into a hashmap from the cnl list (items we're trying to highlight,
       // and then modify the nodes in another loop
-      HashMap<String, ChordNode> quickConvert = new HashMap<String, ChordNode>();
+      ConcurrentHashMap<String, ChordNode> quickConvert = new ConcurrentHashMap<String, ChordNode>();
       for(int i =0; i < nodeListStack.peek().size(); ++i){
         quickConvert.put(nodeListStack.peek().get(i).metaData.name,nodeListStack.peek().get(i));
       }
@@ -356,14 +373,15 @@ println("blah");
   
     // This command takes in a ChordNodeList from one visualization
     // and then toggles the other visualizations nodes being active.
-    public void toggleActiveNodes(ChordNodeList cnl){
+    synchronized public void toggleActiveNodes(ChordNodeList cnl){
       // It's possible that cnl or the top of the nodeListStack has been filtered
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
-      for(int i =0; i < cnl.size(); ++i){
-        
-          for(int j = 0; j < nodeListStack.peek().size(); ++j){
+      int iterations = nodeListStack.peek().size();
+      
+      for(int i =0; i < cnl.size(); ++i){    
+          for(int j = 0; j < iterations; ++j){
             if(cnl.get(i).metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
               nodeListStack.peek().get(j).selected = !nodeListStack.peek().get(j).selected; // Modify the node we have found. 
               break;
@@ -379,8 +397,10 @@ println("blah");
       This function is useful if you're working on a very fine grained
       level, such as a long bargraph with many functions.
   */
-  public void toggleActiveNode(ChordNode cn){
-    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+  synchronized public void toggleActiveNode(ChordNode cn){
+    int iterations = nodeListStack.peek().size();
+    
+    for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = !nodeListStack.peek().get(j).selected; // Modify the node we have found. 
           break;
@@ -394,10 +414,11 @@ println("blah");
       
       Based on the node we are selecting
   */
-  public void toggleCallees(ChordNode cn){
+  synchronized public void toggleCallees(ChordNode cn){
     println("About to toggle callees:"+cn.LocationPoints.size()); 
+    int iterations = nodeListStack.peek().size();
     
-    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+    for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = true;//!nodeListStack.peek().get(j).selected; // Modify the node we have found. 
           for(int i = 0; i < nodeListStack.peek().get(j).LocationPoints.size(); ++i){
@@ -412,9 +433,11 @@ println("blah");
       Quickly select nodes by holding down a key
   */
   
-  public void select(ChordNode cn, boolean value){
+  synchronized public void select(ChordNode cn, boolean value){
+    int iterations = nodeListStack.peek().size();
+    
     println("select: "+value);
-    for(int j = 0; j < nodeListStack.peek().size(); ++j){
+    for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
           println("setting: " + nodeListStack.peek().get(j).metaData.name + " to " +value);

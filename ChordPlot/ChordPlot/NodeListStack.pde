@@ -1,3 +1,5 @@
+import java.util.concurrent.*;
+
 /*
     This data structure is a stack.
     The elements of the stack are of the type ''
@@ -6,8 +8,38 @@
 */
 public class NodeListStack{
   
+     /*
+        The purpose of this class is to exist within the NodeListStack
+        
+        Instances of this object will collect interesting data information
+        and be able to output and save the statistics somewhere.
+    */
+    class SummaryStatistics{
+      
+       // Attributes
+       int callers; // Total number of caller functions
+       int callees; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+      
+       SummaryStatistics(){
+         this.callers = 0;
+         this.callees = 0;
+       }
+       
+       /*
+         Prints out a string with the statistics
+       */
+       synchronized public String output(){
+         String result = "Callers: " + callers +
+                         "Callees: " + callees;
+         return result;
+       }
+       
+    }
+  
+  
+  
   // The all important stack
-  Deque<ChordNodeList> stack;
+  ConcurrentLinkedDeque <ChordNodeList> stack;
   
   // Store statistics about the data 
   // Note that these statistics are always in reference to
@@ -25,7 +57,7 @@ public class NodeListStack{
   */
   public NodeListStack(){
     // Instantiate our stack
-    stack = new ArrayDeque<ChordNodeList>();
+    stack = new ConcurrentLinkedDeque<ChordNodeList>();
     // Instantiate summary statistics
     summaryStatistics = new SummaryStatistics();
   }
@@ -40,11 +72,8 @@ public class NodeListStack{
     Then compute summary Statistics
   */
   public void push(ChordNodeList activeNodeList){
-    // Make sure we do not push null things to the list.
-    if(activeNodeList != null && activeNodeList.size() > 0){
-      stack.push(activeNodeList);
-    }
-    computeSummaryStatistics();
+        stack.push(activeNodeList);
+        // FIXME: Put this back in the code computeSummaryStatistics();
   }
   
   /*
@@ -55,12 +84,10 @@ public class NodeListStack{
     // We never want our stack to be empty.
   */
   public ChordNodeList pop(){
-    
-    if(stack.size()>1){
-      computeSummaryStatistics();
-      return stack.pop();
-    }
-    
+      if(stack.size()>1){
+        // FIXME: Put this back in the code computeSummaryStatistics();
+        return stack.pop();
+      }
     return null;
   }
   
@@ -68,40 +95,43 @@ public class NodeListStack{
     Peek at the top of our stack
   */
   public ChordNodeList peek(){
-    if(stack.size() >0){
+        
+    if(stack.size() > 0){
       return (ChordNodeList)stack.peek();
-    }else
-    {
+    }else{
       return null;
     }
   }
   
   // Update the summary statistics based on the active nodes.
-  public void computeSummaryStatistics(){
-    
-    
-     summaryStatistics.callers = 0; // Total number of caller functions
-     summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
-     
-      for(int i =0; i < stack.peek().size();i++){
-        summaryStatistics.callees += stack.peek().get(i).metaData.callees;
-        
-        // A caller is defined as a function that calls at least one other callee.
-        if(stack.peek().get(i).metaData.callees > 0){
-           summaryStatistics.callers++; // Total number of caller functions
-        }
-      }
-     
-     // Figure out how much of the data we are seeing.
-     // Store our first push onto the stack here
-     if (stack.size()==1){
-       bottomOfStackCallers = summaryStatistics.callers; // Total number of caller functions
-       bottomOfStackCallees = summaryStatistics.callees; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
-     }
-             
-     println("Total Callers:"+summaryStatistics.callers + " of "+bottomOfStackCallers);
-     println("Total Callees:"+summaryStatistics.callees + " of "+bottomOfStackCallees);
-     printStack();
+  synchronized public void computeSummaryStatistics(){
+    println("computeSummaryStatistics()");
+
+         summaryStatistics.callers = 0; // Total number of caller functions
+         summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+         println("might crash");
+         ChordNodeList temp = stack.peek();
+         println("temp.size():"+temp.size());
+         
+         int iterations = stack.peek().size();
+          for(int i =0; i < iterations;i++){
+            summaryStatistics.callees += stack.peek().get(i).metaData.callees;
+            // A caller is defined as a function that calls at least one other callee.
+            if(stack.peek().get(i).metaData.callees > 0){
+               summaryStatistics.callers++; // Total number of caller functions
+            }
+          }
+         
+         // Figure out how much of the data we are seeing.
+         // Store our first push onto the stack here
+         if (stack.size()==1){
+           bottomOfStackCallers = summaryStatistics.callers; // Total number of caller functions
+           bottomOfStackCallees = summaryStatistics.callees; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
+         }
+                 
+         println("Total Callers:"+summaryStatistics.callers + " of "+bottomOfStackCallers);
+         println("Total Callees:"+summaryStatistics.callees + " of "+bottomOfStackCallees);
+         printStack();
   }
   
   /*  Returns how many active nodes there are on the visualization by getting the
@@ -113,6 +143,7 @@ public class NodeListStack{
   
   // Outputs the stack from top to bottom
   public void printStack(){
+    /*
       Iterator<ChordNodeList> iter = stack.iterator();
       
       int counter = 0;     
@@ -121,7 +152,9 @@ public class NodeListStack{
           System.out.println(counter+".) ");
           counter++;
           iter.next();
+          iter.remove();  // Avoid ConcurrentModificationException
       }
+      */
   }
   
   // Generates a dot graph from the top of the stack
@@ -134,7 +167,8 @@ public class NodeListStack{
     output = createWriter(filepath);
     output.println("digraph{");
     
-    for(int i =0; i < stack.peek().size();i++){
+    int iterations = stack.peek().size();
+    for(int i =0; i < iterations;i++){
       ChordNode currentNode = stack.peek().get(i);
       
       if(mode <= 0){
@@ -162,15 +196,21 @@ public class NodeListStack{
   //
   // Note that the key is a node's name, as often we want to search by the nodes name
   //
-  public ConcurrentHashMap<String,ChordNode> getTopStackMap(){
+  public Map<String,ChordNode> getTopStackMap(){
     // Create a temporary map
-    ConcurrentHashMap<String,ChordNode> tempMap = new ConcurrentHashMap<String,ChordNode>();  
+    Map<String,ChordNode> tempMap = new HashMap<String,ChordNode>();  
+
     // Iterate through all of the items on the top of our stack
-    for(int i =0; i < stack.peek().size();++i){
-        ChordNode temp = stack.peek().get(i);
-        tempMap.put(temp.metaData.name,temp);
-    }
-  
+//    if(stack!=null && stack.peek()!=null){
+//     println("stack is not null");
+      int iterations = stack.peek().size();
+      for(int i =0; i < iterations;++i){
+          // FIXME: Umm, this might be where I need to fix a bunch of crap // println("Doing some dangerous iteration!");
+          ChordNode temp = stack.peek().get(i);
+          tempMap.put(temp.metaData.name,temp);
+      }
+//    }
+
     return tempMap;
   }
 
