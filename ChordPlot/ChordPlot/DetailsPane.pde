@@ -51,7 +51,7 @@ class DetailsPane extends PApplet {
   void initGUI(){
       detailsPanel = new ControlP5(this);
               // create a new button for something
-              detailsPanel.addButton("More (todo)")
+              detailsPanel.addButton("AnnotateSelected")
                    //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
                    .setPosition(width-180,0)
                    .setSize(180,19)
@@ -109,6 +109,14 @@ class DetailsPane extends PApplet {
                  .setPosition(width-180,140)
                  .setSize(180,19)
                  ;
+                 
+              detailsPanel.addSlider("SelectionDepth")
+                 .setRange( 0, 15 )
+                 .setPosition(width-360,0)
+                 .plugTo( this, "SelectionDepth" )
+                 .setValue( 0 )
+                 .setLabel("SelectionDepth")
+                 ;
   
                   
 /*                   
@@ -155,7 +163,7 @@ class DetailsPane extends PApplet {
   public void draw() {
     background(145,160,176);
     
-    int xSize = width-180;
+    int xSize = width-360;
     int ySize = height;
     
     fill(0); stroke(0,255);
@@ -169,6 +177,20 @@ class DetailsPane extends PApplet {
     dataString.setText(s);
   }
   
+  
+  /*
+      This function annotates the selected nodes.
+      
+      This is one of the key functions
+  */
+  void AnnotateSelected(){
+    cd.annotateSelected("ChordPlot_worked");
+  }
+  
+  
+  void SelectionDepth(int theDepth) {
+    CalleeDepth = theDepth;
+  }
   
   /*
        When this button is pressed, we output a 
@@ -234,13 +256,15 @@ class DetailsPane extends PApplet {
                 );
       }
     
+    
       // Get the values from the CallSites range slider.
       if(theEvent.isFrom("CallSites")) {
         callSiteMin = int(theEvent.getController().getArrayValue(0));
         callSiteMax = int(theEvent.getController().getArrayValue(1));
-        //println("range update, done. ("+callSiteMin+","+callSiteMax+")");
+        println("range update, done. ("+callSiteMin+","+callSiteMax+")");
       }
       
+        println("exited okay from Details Pane");
     }
     
     /*

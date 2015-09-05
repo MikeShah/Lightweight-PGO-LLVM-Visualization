@@ -216,6 +216,10 @@ class ChordNode{
                 }else if(key == 'e'){
                   cd.select(this,false);
                 }
+                else if(key == 'a'){
+                  // Select this node and all of its callees up to the callee depth
+                  cd.selectCallees(this,true,CalleeDepth);
+                }
             }
         }
     
@@ -244,30 +248,104 @@ class ChordNode{
             // If we aren't selected or highlighted then
             // Default to coloing nodes based on color in the metaData
             fill(255-metaData.c);
-            stroke(255-metaData.c);
+            stroke(255-metaData.strokeValue);
             rect(x,y-rectHeight,rectWidth,rectHeight);
          }
+         
+         
+      // Apply our encodings to the visualization
+      applyEncodings();
          
   }
   
   
+  public void applyEncodings(){
+    
+   if(metaData.stroke_encode){
+     
+   } 
+    
+   if(metaData.symbol_encode){
+       // Apply Encodings
+       fill(metaData.c);
+       stroke(metaData.c);
+       textSize(rectHeight);
+       text(metaData.symbol,x,y);
+       textSize(12);
+   }
+   
+   if(metaData.rect_encode){
+       fill(metaData.small_rect_color); stroke(255-metaData.small_rect_color);
+       float halfWidth = rectWidth/2;
+       float halfHeight = rectHeight/2;
+        
+       pushMatrix();
+       if(metaData.spin_small_rect){
+         rectMode(CENTER);  // Set rectMode to CENTER
+         translate(x+halfWidth,y-halfWidth);
+         rotate(radians(metaData.spin_rotation));
+         rect(0,0,halfWidth,halfHeight);
+         rectMode(CORNER);  // Set rectMode to CENTER
+         metaData.spin_rotation++;
+       }
+       else{
+         rect(x+halfWidth/2,y-halfWidth*1.5,halfWidth,halfHeight);
+       }   
+       popMatrix();
+   }
+   
 
+   
+   
+   
+
+  }
+  
+  /*
+    Highlight a node in blue.
+    
+    This is used in drawToCallees to distinguish items.
+  */
+  public void drawOutline(float xMark, float yMark){          
+      fill(0,255,0); stroke(0,0,255);
+      strokeWeight(4);  // Thicker
+      line(xMark, yMark, xMark, yMark-rectWidth);
+      line(xMark+rectWidth, yMark, xMark+rectWidth, yMark-rectWidth);
+      line(xMark, yMark, xMark+rectWidth, yMark);
+      line(xMark, yMark-rectHeight, xMark+rectWidth, yMark-rectHeight);
+      strokeWeight(1);  // Default
+  }
   
   // Draw to all of the callee locations in 2D
   // Note that we are drawing exclusively to the secondGraphicsLayer here.
   // The depth is how many levels in the tree to draw to callees (essentially do a BFS).
+  //
+  // If 'h' is pressed, then hide the lines and only draw the rectangles.
   public void drawToCallees(int depth){
-
-      fill(0); stroke(0);
-      for(int i =0; i < LocationPoints.size();i++){
-        line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
-        noFill(); stroke(0);
-        rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-        ChordNode blah = LocationPoints.get(i);
-        if(depth>0){
-          blah.drawToCallees(depth-1);     
+      
+        if(keyPressed && key == 'h'){
+            fill(0); stroke(0);
+            for(int i =0; i < LocationPoints.size();i++){
+                drawOutline(LocationPoints.get(i).x, LocationPoints.get(i).y);
+                
+                //rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
+                ChordNode blah = LocationPoints.get(i);
+                if(depth>0){
+                  blah.drawToCallees(depth-1);     
+                }
+            }
+        }else{
+            fill(0); stroke(0);
+            for(int i =0; i < LocationPoints.size();i++){
+                line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
+                noFill(); stroke(0);
+                rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
+                ChordNode blah = LocationPoints.get(i);
+                if(depth>0){
+                  blah.drawToCallees(depth-1);     
+                }
+            }
         }
-      }
   }
   
   // Draw to all of the callee locations in 3D

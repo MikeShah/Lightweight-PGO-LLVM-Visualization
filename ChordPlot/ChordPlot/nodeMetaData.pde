@@ -11,22 +11,39 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String extra_information;
   // Values that need to be computed after the data is loaded in
   int callees = 0;
-  int calleInto = 0;  // How many functions call this function.
+  int callsInto = 0;  // How many functions call this function.
   boolean recursive = false; // Check to see if function ever calls itself
   int maxNestedLoopCount = 0;
   int bitCodeSize = 0;
   
-  float c;  // the color of the node
-  
   String attributes;
-  String annotations;
+  String annotations;  
   String metaData;
   String OpCodes;
-  String PGOData;
+  String PGOData;  
   String PerfData;
   String ControlFlowData;
+  
+  //  LineInformation
+  int lineNumber;
+  int columnNumber;
+  String sourceFile;
+  
+  // Encodings
+  float c;  // the color of the node
+  boolean stroke_encode=false;
+    float strokeValue; // Outline of the node
+  boolean blink_encode = false;
+    float blink_color = 0;
+  boolean symbol_encode = false;
+    String symbol = "$"; // Draw a symbol on top of the item of some sort.
+  boolean rect_encode = false;  // Draw a smaller rectangle in the middle of another.
+    float small_rect_color = 0;
+    boolean spin_small_rect = false;
+      float spin_rotation = 0;
     
-  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData, int bitCodeSize){
+  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData, int bitCodeSize, int lineNumber, int columnNumber, String sourceFile){
+    
     this.name = name;
     this.extra_information = extra_information;
     this.attributes=attributes;
@@ -37,6 +54,14 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     this.PerfData=PerfData;
     this.ControlFlowData=ControlFlowData;
     this.bitCodeSize = bitCodeSize;
+    
+    this.lineNumber = lineNumber;
+    this.columnNumber = columnNumber;
+    this.sourceFile = sourceFile;
+    if(sourceFile==null){
+      sourceFile="no/information/available";
+    }
+    
     
     c = 0;
   }
@@ -50,7 +75,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   public String getAllMetadata(){
     String result = "";
     result += "\nname: "+name + "\n";
-    result += "Callees: "+callees + "\n";
+    result += "Callees: "+callees + " CallsInto:" + callsInto + " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
     result += "attributes: "+attributes + "\n";
     result += "metaData: "+metaData + "\n";
     result += "OpCodes: "+OpCodes + "\n";
@@ -58,6 +83,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     result += "PerfData: "+PerfData + "\n";
     result += "ControlFlowData: "+ControlFlowData + "\n";
     result += "BitCodeSize: "+bitCodeSize + "\n";
+    result += "LineInformation: "+lineNumber + ":" + columnNumber + " " + sourceFile + "\n";
     result += "extra_information: "+extra_information + "\n";
     
     return result;

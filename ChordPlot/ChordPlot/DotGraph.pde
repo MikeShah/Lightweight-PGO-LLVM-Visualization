@@ -100,12 +100,16 @@ class DotGraph{
     String ControlFlowData = "";
     int bitCodeSize = 0;
     
+    int lineNumber=1;
+    int columnNumber=1;
+    String sourceFile="no/file/information";
+    
     // Parse the data
     // Unfortunately this is going to work as a state machine
     // Perhpas JSON is a better data format for these kinds of things.
     boolean read_attributes = false;    boolean read_annotations = false;    boolean read_metaData = false;
     boolean read_OpCodes = false;       boolean read_PGOData = false;        boolean read_PerfData = false;
-    boolean read_ControlFlowData = false; boolean read_bitCodeSize = false;
+    boolean read_ControlFlowData = false; boolean read_bitCodeSize = false;  boolean read_LineInformation = false;
     
     String[] tokens = restOfLine.split(" ");
     for(int i =0; i < tokens.length; ++i){
@@ -113,59 +117,63 @@ class DotGraph{
         if(tokens[i].equals("Attributes")){
             read_attributes = true;        read_annotations = false;    read_metaData = false;
             read_OpCodes = false;          read_PGOData = false;        read_PerfData = false;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;    read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }else if(tokens[i].equals("Annotations")){
             read_attributes = false;       read_annotations = true;    read_metaData = false;
             read_OpCodes = false;          read_PGOData = false;       read_PerfData = false;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;   read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         else if(tokens[i].equals("Metadata")){
             read_attributes = false;       read_annotations = false;    read_metaData = true;
-            read_OpCodes = false;          read_PGOData = false;         read_PerfData = false;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_OpCodes = false;          read_PGOData = false;        read_PerfData = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;    read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         else if(tokens[i].equals("Opcodes")){
             read_attributes = false;       read_annotations = false;     read_metaData = false;
             read_OpCodes = true;           read_PGOData = false;         read_PerfData = false;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;     read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         
         else if(tokens[i].equals("PGOData")){
             read_attributes = false;       read_annotations = false;    read_metaData = false;
             read_OpCodes = false;          read_PGOData = true;         read_PerfData = false;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;    read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         else if(tokens[i].equals("PerfData")){
             read_attributes = false;       read_annotations = false;    read_metaData = false;
             read_OpCodes = false;          read_PGOData = false;        read_PerfData = true;
-            read_ControlFlowData = false;  read_bitCodeSize = false;
+            read_ControlFlowData = false;  read_bitCodeSize = false;    read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         else if(tokens[i].equals("ControlFlowData")){
             read_attributes = false;      read_annotations = false;    read_metaData = false;
             read_OpCodes = false;         read_PGOData = false;        read_PerfData = false;
-            read_ControlFlowData = true;  read_bitCodeSize = false;
+            read_ControlFlowData = true;  read_bitCodeSize = false;    read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
         else if(tokens[i].equals("BitCodeSize")){
             read_attributes = false;      read_annotations = false;    read_metaData = false;
             read_OpCodes = false;         read_PGOData = false;        read_PerfData = false;
-            read_ControlFlowData = false; read_bitCodeSize = true;
+            read_ControlFlowData = false; read_bitCodeSize = true;     read_LineInformation = false;
             continue; // move on to the next token once we've changed state
         }
-        
+        else if(tokens[i].equals("LineInformation")){
+            read_attributes = false;      read_annotations = false;    read_metaData = false;
+            read_OpCodes = false;         read_PGOData = false;        read_PerfData = false;
+            read_ControlFlowData = false; read_bitCodeSize = false;    read_LineInformation = true;
+            continue; // move on to the next token once we've changed state
+        }
         
         // Clean up tokens[i]
         // Just ignore empty space
         if( tokens[i].equals(" ") || tokens[i].equals("\t") ){
           continue;
         }
-        
         
         // Append to the appropriate field
         if(read_attributes){
@@ -196,9 +204,24 @@ class DotGraph{
               bitCodeSize = Integer.parseInt(tokens[i]);
           }
         }
+        else if(read_LineInformation){
+            //  LineInformation
+            //println("reading in: "+tokens[i]);
+            lineNumber = Integer.parseInt(tokens[i]);
+            // Column Information
+            if(i<tokens.length){++i;}
+            //println("reading in: "+tokens[i]);
+            columnNumber = Integer.parseInt(tokens[i]);
+            // Source code information
+            if(i<tokens.length){++i;}
+            //println("reading in: "+tokens[i]);
+            sourceFile = tokens[i];
+            //println("Did I work?");
+            break;
+        }
     }
         
-    nodeMetaData src = new nodeMetaData(functionName,restOfLine, attributes,annotations,metaData,OpCodes,PGOData,PerfData,ControlFlowData,bitCodeSize);
+    nodeMetaData src = new nodeMetaData(functionName,restOfLine, attributes,annotations,metaData,OpCodes,PGOData,PerfData,ControlFlowData,bitCodeSize,lineNumber,columnNumber,sourceFile);
     
     return src;
   }

@@ -87,7 +87,7 @@ println("blah");
       // Do a deep copy
       // This is annoying, but will work for now
       temp.metaData.callees           = m.callees;
-      temp.metaData.calleInto           = m.callees;
+      temp.metaData.callsInto           = m.callees;
       temp.metaData.recursive           = m.recursive;
       temp.metaData.maxNestedLoopCount  = m.maxNestedLoopCount;
       temp.metaData.attributes        = m.attributes;
@@ -99,6 +99,10 @@ println("blah");
       temp.metaData.ControlFlowData   = m.ControlFlowData;
       temp.metaData.bitCodeSize       = m.bitCodeSize;
       temp.metaData.extra_information = m.extra_information;
+      
+      temp.metaData.lineNumber   = m.lineNumber;
+      temp.metaData.columnNumber = m.columnNumber;
+      temp.metaData.sourceFile   = m.sourceFile;
           
       nodeList.add(temp);
       nodeListIter.remove(); // Avoid ConcurrentModficiationException
@@ -450,6 +454,61 @@ println("blah");
      }
   }
   
+   /*
+      Quickly select node and all of its callees up to the specified depth
+  */
+  
+  synchronized public void selectCallees(ChordNode cn, boolean value, int theDepth){
+    int iterations = nodeListStack.peek().size();
+    
+    println("select: "+value);
+    for(int j = 0; j < iterations; ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
+          
+                for(int i =0; i < cn.LocationPoints.size();i++){
+                    for(int k =0; k < iterations; ++k){
+                        if(cn.LocationPoints.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
+                            nodeListStack.peek().get(k).selected = value; // Modify the node we have found. 
+                            // recursively call our function again.
+                            if(theDepth>0){
+                              selectCallees(nodeListStack.peek().get(k), value, theDepth-1);
+                            }
+                        }
+                    }
+
+                }
+          
+          break; 
+        }
+     }
+  }
+  
+  /* ******************************
+      Annotations
+  ******************************* */
+  // 
+  // The goal of this function is to make a list of functions that will
+  // get read in by a pass and add attributes to a function.
+  //
+  // 
+  // 
+  void annotateSelected(String s){
+        int iterations = nodeListStack.peek().size();
+    
+        println("Annotation: "+s);
+        
+        PrintWriter output;
+        output = createWriter("./annotations.txt");
+        for(int j = 0; j < iterations; ++j){
+            if(nodeListStack.peek().get(j).selected){
+              output.println(nodeListStack.peek().get(j).metaData.name+" "+s);
+            }
+        }
+        
+        output.flush();
+        output.close();
+  }
   
   // Generally this method should be overridden.
   // It is called whenver we need to update what data is active

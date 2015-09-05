@@ -17,9 +17,8 @@ int callSiteMax = 100;
 int maxNumberOfCallsites = 255;
 
 
-
 // How far many levels to draw to callees when we highlight over nodes.
-int CalleeDepth = 15;
+int CalleeDepth = 1;
 
 int heightOfGUIElements = 20;
 
@@ -34,6 +33,9 @@ void initGUI(){
 }
 
 
+/*
+
+DEPRECATED can be removed eventually
 
 // function controlEvent will be invoked with every value change 
 // in any registered controller
@@ -50,8 +52,9 @@ void controlEvent(ControlEvent theEvent) {
             );
   }
   
+  println("exited okay from GUI");
 }
-
+*/
 
 // Histogram
 public void Histogram(int theValue) {
@@ -62,8 +65,6 @@ public void Histogram(int theValue) {
 public void Microarray(int theValue) {
   cd.showData = !cd.showData;
 }
-
-
 
 
 /*
@@ -81,7 +82,7 @@ public void theBreadCrumbsBar(int n){
       cd.fastUpdate(); // Make a call to update the visualization
       hw.m_histogram.fastUpdate();
       bw.m_buckets.fastUpdate();
-              
+
       hw.updateFunctionList();
       bw.updateFunctionList();
     }

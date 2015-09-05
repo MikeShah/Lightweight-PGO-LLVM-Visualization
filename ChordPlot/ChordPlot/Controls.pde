@@ -83,8 +83,8 @@ void keyPressed() {
   if(key== ' '){
       // Apply the relevant filters
       cd.deselectAllNodes();
-      hw.m_histogram.deselectAllNodes();
-      bw.m_buckets.deselectAllNodes();
+      hw.m_histogram.deselectAllNodes();  bw.selectedBuckets.clear();
+      bw.m_buckets.deselectAllNodes();    hw.selectedNodes.clear();
   }
   
 }

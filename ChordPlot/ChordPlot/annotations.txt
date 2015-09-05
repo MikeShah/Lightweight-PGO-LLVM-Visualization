@@ -1,0 +1,15 @@
+"_ZNK16MeleeStateMoving16RateNpcForAttackEP3NpcP6Player" ChordPlot_worked
+"_ZNK16MeleeStateMoving29IsNpcBehindTargetsMeleeTargetEP3NpcP6Player" ChordPlot_worked
+"_Z26CheckProcessAccessConflictPK7Process" ChordPlot_worked
+"_Z14IsNpcAttackingP3Npc" ChordPlot_worked
+"_Z34AcquireProcessCriticalSectionWritePK7ProcessPKcjS3_" ChordPlot_worked
+"_ZNK3Npc10IsGrappledEv" ChordPlot_worked
+"_ZNK12NavCharacter26IsUsingTraversalActionPackEv" ChordPlot_worked
+"llvm.x86.sse.sfence" ChordPlot_worked
+"_ZN9Assertion14GetDisplayFuncEv" ChordPlot_worked
+"llvm.x86.sse2.lfence" ChordPlot_worked
+"_ZNK20MeleeRoundRobinTimer7IsValidEv" ChordPlot_worked
+"_ZN18ProcessMeleeAction11GetAttackerEv" ChordPlot_worked
+"_ZN18ProcessMeleeAction11GetDefenderEv" ChordPlot_worked
+"llvm.debugtrap" ChordPlot_worked
+}

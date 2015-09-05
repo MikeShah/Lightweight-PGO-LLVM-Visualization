@@ -29,7 +29,7 @@ class commonWidget extends PApplet{
    private void  initGUI(){
     // Setup our GUI
       cp5 = new ControlP5( this );
-    
+    /* 
       cp5.addSlider( "value-")
            .setRange( 0, 255 )
            .plugTo( this, "setValue" )
@@ -42,13 +42,17 @@ class commonWidget extends PApplet{
            .setSize(width, 20)
            .addItems(split("Metadata Attributes PGO Perf Graph Other Help"," "))
            ;
-            
+ 
+  // REMOVED For ConcurrentModificationException      
+  // FIXME: Figure out how to add this back in.
+  
         // Populate list
           String[] test = new String[cd.nodeListStack.peek().size()];
           for(int i = 0; i < cd.nodeListStack.peek().size();i++){
             test[i] = cd.nodeListStack.peek().get(i).metaData.name;
           }
   
+
         FunctionsScrollListWidget = cp5.addScrollableList("Function Scrollable List")
                .setPosition(width-360,20)
                .setSize(180,180)
@@ -56,6 +60,7 @@ class commonWidget extends PApplet{
                ;
           
         FunctionsScrollListWidget.setItems(test);
+*/
 
 /*
               println("setup attributesCheckbox");
@@ -88,24 +93,29 @@ println("b");
   /*
     Update our function list
   */
+  
+  
   synchronized public void updateFunctionList(){
-    
+    /*
     // Update the functions list with all of the applicable functions
     if(cd.nodeListStack.peek() != null ){
-      String[] test = new String[cd.nodeListStack.peek().size()];
-      for(int i = 0; i < test.length;i++){
-        test[i] = cd.nodeListStack.peek().get(i).metaData.name;
-      }
-      
-      println("test.size()"+test.length);
-      // Update the Function List
-      if(test!=null && FunctionsScrollListWidget != null){
-        FunctionsScrollListWidget.setItems(test);
-        //cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+      String[] getFunctionsForList = new String[cd.nodeListStack.peek().size()];
+      if(getFunctionsForList != null){
+          for(int i = 0; i < getFunctionsForList.length;i++){
+            getFunctionsForList[i] = cd.nodeListStack.peek().get(i).metaData.name;
+          }
+          
+          println("test.size()"+getFunctionsForList.length);
+          // Update the Function List
+          if(getFunctionsForList != null && FunctionsScrollListWidget != null){
+            println("Do we crash here?");
+            FunctionsScrollListWidget.setItems(getFunctionsForList);
+            //cp5.get(ScrollableList.class, "Function Scrollable List").setItems(test);
+          }
       }
       println("booom");
     }
-    
+    */
   }
   
     
