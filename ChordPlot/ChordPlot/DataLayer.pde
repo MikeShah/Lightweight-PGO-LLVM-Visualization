@@ -379,9 +379,9 @@ println("blah");
   
   */
   
-    // This command takes in a ChordNodeList from one visualization
-    // and then toggles the other visualizations nodes being active.
-    synchronized public void toggleActiveNodes(ChordNodeList cnl){
+  // This command takes in a ChordNodeList from one visualization
+  // and then toggles the other visualizations nodes being active.
+  synchronized public void toggleActiveNodes(ChordNodeList cnl){
       // It's possible that cnl or the top of the nodeListStack has been filtered
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
@@ -484,6 +484,39 @@ println("blah");
      }
   }
   
+  
+  /*
+    
+    Quickly select all the nodes that have some metaData
+        
+  */
+  
+  synchronized public void selectMetaData(){
+    int iterations = nodeListStack.peek().size();
+    
+    for(int j = 0; j < iterations; ++j){
+        if(nodeListStack.peek().get(j).metaData.metaData.length() >0){
+          nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+        }
+     }
+  }
+  
+  /*
+    
+    Quickly select all the nodes that have some attributes
+        
+  */
+  
+  synchronized public void selectAttributes(){
+    int iterations = nodeListStack.peek().size();
+    
+    for(int j = 0; j < iterations; ++j){
+        if(nodeListStack.peek().get(j).metaData.attributes.length() >0){
+          nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+        }
+     }
+  }
+  
   /* ******************************
       Annotations
   ******************************* */
@@ -491,9 +524,10 @@ println("blah");
   // The goal of this function is to make a list of functions that will
   // get read in by a pass and add attributes to a function.
   //
-  // 
-  // 
-  void annotateSelected(String s){
+  // s - the annotation we are adding
+  // value - true/false or some other thing that could effect the annotation.
+  //
+  void annotateSelected(String s, String value){
         int iterations = nodeListStack.peek().size();
     
         println("Annotation: "+s);
@@ -502,7 +536,7 @@ println("blah");
         output = createWriter("./annotations.txt");
         for(int j = 0; j < iterations; ++j){
             if(nodeListStack.peek().get(j).selected){
-              output.println(nodeListStack.peek().get(j).metaData.name+" "+s);
+              output.println(nodeListStack.peek().get(j).metaData.name+" "+s+" "+value);
             }
         }
         

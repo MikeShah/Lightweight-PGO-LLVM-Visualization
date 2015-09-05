@@ -42,6 +42,9 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     boolean spin_small_rect = false;
       float spin_rotation = 0;
     
+    
+    
+    
   public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData, int bitCodeSize, int lineNumber, int columnNumber, String sourceFile){
     
     this.name = name;

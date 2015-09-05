@@ -214,7 +214,14 @@ class Buckets extends DataLayer{
       // Add an actual copy of the ChordNode to the bucket that it is assigned to
       // This will allos us to quickly highlight over a bucket, and select the nodes that fall in that subset.
       bucketLists.get(assignBucket).add(nodeListStack.peek().get(i));
-      
+    }
+    
+    // Clean up our buckets, so if there is nothing in one, get rid of it.
+    for(int i =0; i < bucketLists.size(); ++i){
+      if(bucketLists.get(i).size()==0){
+        // remove the bucket from the list
+        bucketLists.remove(i);
+      }
     }
   }
   
@@ -279,6 +286,7 @@ class Buckets extends DataLayer{
   public void fastUpdate(){
     // Modify all of the positions in our nodeList
     if(this.layout <= 0){
+      //this.generateHeatForCalleeAttribute(scaledHeight);
       plotPoints2D();
     }else{
       println("No other other layout, using default");

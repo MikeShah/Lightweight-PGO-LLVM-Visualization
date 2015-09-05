@@ -118,6 +118,19 @@ class DetailsPane extends PApplet {
                  .setLabel("SelectionDepth")
                  ;
   
+                // create a new button for selecting metaData
+              detailsPanel.addButton("SelectMetaDataFunctions")
+                 .setPosition(width-360,20)
+                 .setSize(180,19)
+                 ;
+                 
+               // create a new button for selecting Attributes
+              detailsPanel.addButton("SelectAttributesFunctions")
+                 .setPosition(width-360,40)
+                 .setSize(180,19)
+                 ;
+                 
+
                   
 /*                   
               // Capture Console output here.
@@ -179,12 +192,30 @@ class DetailsPane extends PApplet {
   
   
   /*
+    TODO: Remove me
+    
+    Temporary function to quickly select things that are interesting.
+  */
+  void SelectMetaDataFunctions(){
+    cd.selectMetaData();
+  }
+    /*
+    TODO: Remove me
+    
+    Temporary function to quickly select things that are interesting.
+  */
+  void SelectAttributesFunctions(){
+    cd.selectAttributes();
+  }
+  
+  
+  /*
       This function annotates the selected nodes.
       
       This is one of the key functions
   */
   void AnnotateSelected(){
-    cd.annotateSelected("ChordPlot_worked");
+    cd.annotateSelected("ChordPlot_worked","true");
   }
   
   
