@@ -87,4 +87,12 @@ void keyPressed() {
       bw.m_buckets.deselectAllNodes();    hw.selectedNodes.clear();
   }
   
+  // Invert all of the nodes that have been selected
+  if(key== 'i'){
+      // Apply the relevant filters
+      cd.invertSelectAllNodes();
+      hw.m_histogram.invertSelectAllNodes();  bw.selectedBuckets.clear();
+      bw.m_buckets.invertSelectAllNodes();    hw.selectedNodes.clear();
+  }
+  
 }

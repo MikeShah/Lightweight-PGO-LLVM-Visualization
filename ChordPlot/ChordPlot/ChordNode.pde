@@ -326,22 +326,21 @@ class ChordNode{
         if(keyPressed && key == 'h'){
             fill(0); stroke(0);
             for(int i =0; i < LocationPoints.size();i++){
-                drawOutline(LocationPoints.get(i).x, LocationPoints.get(i).y);
-                
-                //rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-                ChordNode blah = LocationPoints.get(i);
-                if(depth>0){
+              if(depth>0){
+                  drawOutline(LocationPoints.get(i).x, LocationPoints.get(i).y);
+                  //rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
+                  ChordNode blah = LocationPoints.get(i);
                   blah.drawToCallees(depth-1);     
-                }
+               }
             }
         }else{
             fill(0); stroke(0);
             for(int i =0; i < LocationPoints.size();i++){
-                line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
-                noFill(); stroke(0);
-                rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-                ChordNode blah = LocationPoints.get(i);
-                if(depth>0){
+              if(depth>0){
+                  line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
+                  noFill(); stroke(0);
+                  rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
+                  ChordNode blah = LocationPoints.get(i);
                   blah.drawToCallees(depth-1);     
                 }
             }

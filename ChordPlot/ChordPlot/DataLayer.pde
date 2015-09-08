@@ -236,6 +236,32 @@ println("blah");
       }
   }
     
+    
+    /*
+      If a node is selected it will be deselected.
+      
+      If a node is not selected, it will be selected
+  */
+  synchronized public void invertSelectAllNodes(){
+    int iterations = nodeListStack.peek().size();
+    
+      for(int i =0; i < iterations;i++){
+        nodeListStack.peek().get(i).highlighted = false;
+        
+        if(nodeListStack.peek().get(i).selected){
+          nodeListStack.peek().get(i).selected = false;
+          continue;
+        }
+        
+        if(!nodeListStack.peek().get(i).selected){
+          nodeListStack.peek().get(i).selected = true;
+          continue;
+        }        
+        
+      }
+  }  
+    
+    
   
     /*
       Filter Design pattern
@@ -483,6 +509,8 @@ println("blah");
         }
      }
   }
+  
+  
   
   
   /*

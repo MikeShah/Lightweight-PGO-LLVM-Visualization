@@ -21,7 +21,7 @@ class BucketsWindow extends commonWidget {
   public void setup() {
       println("setup Buckets");
       surface.setTitle(windowTitle);
-      surface.setLocation(1440, 0);
+      surface.setLocation(1440, 450);
       println("setup Buckets end");
   }
   
@@ -69,6 +69,8 @@ class BucketsWindow extends commonWidget {
                               if(m_y < m_buckets.yPosition && m_y > m_buckets.yPosition-m_buckets.yBounds){
                                   // Give some text to tell us which bucket we are in
                                   text("Bucket# "+i,xBucketPosition,m_buckets.yPosition+10);
+                                  text("range "+m_buckets.bucketLists.get(i).m_min+"-"+m_buckets.bucketLists.get(i).m_max,xBucketPosition,m_buckets.yPosition+20);
+                  
                                   // Unhighlight all of the previous buckets that were highlighted.
                                   if(p_buckets != i){
                                     p_buckets_old = p_buckets;
@@ -183,7 +185,10 @@ class Buckets extends DataLayer{
     
     // Allocate memory for all of the buckets we will need.
     for(int i = 0; i < numberOfBuckets; ++i){
-      bucketLists.add(new ChordNodeList());
+      ChordNodeList temp = new ChordNodeList();
+      temp.m_min=i*stepValue;
+      temp.m_max=(i+1)*stepValue;
+      bucketLists.add(temp);
     }
     
     println("numberOfBuckets: "+numberOfBuckets);
@@ -200,15 +205,15 @@ class Buckets extends DataLayer{
       for(int j = 0; j < bucketLists.size(); j++){
         if (nodeListStack.peek().get(i).metaData.callees > j*stepValue){
           assignBucket++;
-        }else
-        {
+        }else{
           break;
         }
       }
       
       // clamp our values within a certain range
       if(assignBucket < 0)                 {  assignBucket = 0;  }
-      if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }
+      if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }  // Clump maximum values here
+      
       // All of the nodes that are within the right bucket get assigned to their proper bucket.
       nodeListStack.peek().get(i).bucket = assignBucket;
       // Add an actual copy of the ChordNode to the bucket that it is assigned to
@@ -217,7 +222,7 @@ class Buckets extends DataLayer{
     }
     
     // Clean up our buckets, so if there is nothing in one, get rid of it.
-    for(int i =0; i < bucketLists.size(); ++i){
+    for(int i = 0; i < bucketLists.size(); ++i){
       if(bucketLists.get(i).size()==0){
         // remove the bucket from the list
         bucketLists.remove(i);
@@ -351,7 +356,9 @@ class Buckets extends DataLayer{
                 if(MySimpleCamera.ySelection > yPosition-yBounds && MySimpleCamera.ySelection < yPosition){
                   fill(0,255,0,255); stroke(255);
                   // Give some text to tell us which bucket we are in
+                  // Also display the min and max of each bucket, which is stored int he chordlist of each bucketlist.
                   text("Bucket# "+i,xBucketPosition,yPosition+10);
+                  text("range "+bucketLists.get(i).m_min+"-"+bucketLists.get(i).m_max,xBucketPosition,yPosition+20);
                   
                   cd.highlightNodes(bucketLists.get(i),true);
                   // If the mouse is pressed

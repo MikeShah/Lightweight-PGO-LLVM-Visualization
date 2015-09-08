@@ -114,7 +114,7 @@ class DetailsPane extends PApplet {
                  .setRange( 0, 15 )
                  .setPosition(width-360,0)
                  .plugTo( this, "SelectionDepth" )
-                 .setValue( 0 )
+                 .setValue( 1 )
                  .setLabel("SelectionDepth")
                  ;
   

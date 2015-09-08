@@ -11,6 +11,12 @@ class ChordNodeList{
   // extra safe and make sure it is thread-safe.
   CopyOnWriteArrayList<ChordNode> chordList;
   
+  /* Store the ranges of the values
+     This can be useful if you are bucketing items together.  
+  */
+  float m_min;
+  float m_max;
+  
   // The name of the ChordNode List if we want to identify how to work with it.
   public String name = "Dataset";
   
