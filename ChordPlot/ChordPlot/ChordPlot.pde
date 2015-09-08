@@ -13,7 +13,7 @@ ChordDiagram cd;
 HistogramWindow hw;
 BucketsWindow bw;
 
-nodeLinkDiagram encodings;
+nodeLinkSystem encodings;
 
 int programStart = 0;
 
@@ -50,7 +50,19 @@ void setup(){
   hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
   
-  encodings = new nodeLinkDiagram();
+  encodings = new nodeLinkSystem();
+  
+  /* What we are encoding(the attribute), and how it is decoded(the visual presentation)*/
+  nodeLink recursive_enc =   new nodeLink("recursive",0,0,0,true,false);       encodings.addNode(recursive_enc);
+  nodeLink callsite_enc =    new nodeLink("Callsite",0,80,0,true,false);       encodings.addNode(callsite_enc);
+  nodeLink bitcode_enc =     new nodeLink("BitCode Size",0,160,0,true,false);  encodings.addNode(bitcode_enc);
+  
+  nodeLink heat_dec =       new nodeLink("heatmap",200,0,0,false,true);           encodings.addNode(heat_dec);
+  nodeLink symbol_dec =     new nodeLink("symbol",200,80,0,false,true);           encodings.addNode(symbol_dec);
+  nodeLink stroke_dec =     new nodeLink("stroke color",200,160,0,false,true);    encodings.addNode(stroke_dec);
+  nodeLink rectangle_dec =  new nodeLink("Rectangle",200,240,0,false,true);       encodings.addNode(rectangle_dec);
+  nodeLink rectspin_dec =   new nodeLink("Rectangle Spin",200,320,0,false,true);  encodings.addNode(rectspin_dec);
+
   
   bw.m_buckets.debug();
   
