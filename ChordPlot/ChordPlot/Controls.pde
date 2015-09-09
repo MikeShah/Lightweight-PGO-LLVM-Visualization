@@ -71,7 +71,9 @@ void keyPressed() {
       hw.m_histogram.update(); // Make a call to update the visualization
       hw.updateFunctionList();
       
-      bw.m_buckets.pushSelectedNodes();
+      //bw.m_buckets.setNodeListStack(cd.nodeListStack);
+      bw.m_buckets.pushSelectedNodes(cd.nodeListStack.peek());
+      //bw.m_buckets.fastUpdate();
       bw.m_buckets.update();
       bw.updateFunctionList();
       

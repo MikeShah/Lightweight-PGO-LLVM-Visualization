@@ -14,14 +14,14 @@ class BucketsWindow extends commonWidget {
   }
   
   public void settings() {
-    size(600, 450, P3D);
+    size(600, 400, P3D);
     smooth();
   }
     
   public void setup() {
       println("setup Buckets");
       surface.setTitle(windowTitle);
-      surface.setLocation(1440, 450);
+      surface.setLocation(1440, 400);
       println("setup Buckets end");
   }
   
@@ -178,6 +178,7 @@ class Buckets extends DataLayer{
   // start is the maximum value where we want to show items
   // step - How big each bucket is
   private void plotPoints2D(){
+    println("buckets plotPoints2D");
     bucketLists.clear();
     
     // How many buckets do we allocate in our arrayList
@@ -211,7 +212,7 @@ class Buckets extends DataLayer{
       }
       
       // clamp our values within a certain range
-      if(assignBucket < 0)                 {  assignBucket = 0;  }
+      if(assignBucket <= 0)                 {  assignBucket = 0;  }
       if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }  // Clump maximum values here
       
       // All of the nodes that are within the right bucket get assigned to their proper bucket.
@@ -235,6 +236,7 @@ class Buckets extends DataLayer{
       Currently there is only one layout supported.
   */
   public void setLayout(int layout){
+    println("buckets setLayout");
     this.layout = layout;
         
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
@@ -260,6 +262,7 @@ class Buckets extends DataLayer{
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
   void generateHeatForCalleeAttribute(float maxHeight){
+    println("buckets generateHeatForCalleeAttribute");
     // Find the max and min from the ChordNode metadata
     for(int i =0; i < nodeListStack.peek().size();i++){
       minValue = min(minValue,nodeListStack.peek().get(i).metaData.callees);
@@ -289,6 +292,7 @@ class Buckets extends DataLayer{
       computations.
   */
   public void fastUpdate(){
+    println("buckets fastUpdate");
     // Modify all of the positions in our nodeList
     if(this.layout <= 0){
       //this.generateHeatForCalleeAttribute(scaledHeight);
@@ -304,9 +308,9 @@ class Buckets extends DataLayer{
   // active data.
   @Override
   public void update(){
+    println("buckets update");
      this.setLayout(layout);
   }
-  
   
   // Output all of the buckets and their respective sizes
   public void debug(){

@@ -166,6 +166,7 @@ println("blah");
                 println("size: "+nodeListStack.size());
                 int iterations = nodeListStack.peek().size();
                 for(int i =0; i < iterations; i++){
+                  
                   // Search to see if our node has outcoming edges
                   nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
                   nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
@@ -185,7 +186,7 @@ println("blah");
                             nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
                             // Store some additional information (i.e. update our callees count.
                             // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                            if(1==compute){
+                            if(1==compute && nodeListStack.size()<=1){
                               nodeListStack.peek().get(i).metaData.callees++;
                             }
                             
@@ -209,6 +210,30 @@ println("blah");
       String name = "Selected Nodes";
     
       ChordNodeList selectedNodes = new ChordNodeList(name);
+      
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
+        if(nodeListStack.peek().get(i).selected){
+          selectedNodes.add(nodeListStack.peek().get(i));
+        }
+      }
+      
+      nodeListStack.push(selectedNodes);
+  }
+  
+    /*
+      Pushes all of the selected nodes onto a stack
+      This is the most generic way to push nodes onto a stack.
+  
+      Ideally this is tied to some keypress(Enter key)
+      
+      In this alternation, you can explicitly push onto your stack
+      an arbritrary list of nodes. This is useful if you are linking
+      together two visualizations and want to push on nodes from one
+      visualization onto another.
+  */
+    synchronized public void pushSelectedNodes(ChordNodeList selectedNodes){
+      String name = "Selected Nodes";
       
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
@@ -510,6 +535,18 @@ println("blah");
      }
   }
   
+  
+  /*
+      This function syncs up two nodeListStack's such that the visualizations
+      are linked together.
+      
+      There is some uncertaintly as if this is the best way to do things, or if
+      one can break the link in a way that makes sense.
+      
+  */
+  synchronized public void setNodeListStack(NodeListStack nsl){
+    this.nodeListStack = nsl;   
+  }
   
   
   
