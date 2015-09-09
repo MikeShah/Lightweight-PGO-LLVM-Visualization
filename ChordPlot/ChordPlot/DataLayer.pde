@@ -147,6 +147,17 @@ println("blah");
   }
   
   
+  /*
+      Sets all the meta-data to 0
+  */
+  public void resetMetaData(){
+        int iterations = nodeListStack.peek().size();
+        for(int i =0; i < iterations; i++){                 
+          nodeListStack.peek().get(i).metaData.callees=0;
+        }
+  }
+  
+  
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
   // For each of the nodes that are a destination in the source
@@ -159,14 +170,17 @@ println("blah");
   public void storeLineDrawings(int compute){
    println("I think we might crash around here");
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
-   
+           
+               if(1==compute && nodeListStack.size()==1){
+                resetMetaData();
+               }
+               
+               boolean printonce = true;
       
-
                 // Faster hacked version
-                println("size: "+nodeListStack.size());
+                println("storeLineDrawings size: "+nodeListStack.size());
                 int iterations = nodeListStack.peek().size();
-                for(int i =0; i < iterations; i++){
-                  
+                for(int i =0; i < iterations; i++){                 
                   // Search to see if our node has outcoming edges
                   nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
                   nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
@@ -186,13 +200,15 @@ println("blah");
                             nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
                             // Store some additional information (i.e. update our callees count.
                             // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                            if(1==compute && nodeListStack.size()<=1){
-                              nodeListStack.peek().get(i).metaData.callees++;
+                            if(1==compute){
+                              if(nodeListStack.size()==1){ // Only compute callees if we are on the first level
+                                if(printonce){printonce=false; println("!!!!!!!!!!!!!!!!!!!!!!!!!!!adding to callees!!!!!!!!!!!!!!!!!!!!!!!!");}
+                                nodeListStack.peek().get(i).metaData.callees++;
+                              }
                             }
                             
                             //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
                         }
-                        
                     }
                   }
                 }

@@ -178,7 +178,7 @@ class Buckets extends DataLayer{
   // start is the maximum value where we want to show items
   // step - How big each bucket is
   private void plotPoints2D(){
-    println("buckets plotPoints2D");
+    //println("buckets plotPoints2D");
     bucketLists.clear();
     
     // How many buckets do we allocate in our arrayList
@@ -236,7 +236,7 @@ class Buckets extends DataLayer{
       Currently there is only one layout supported.
   */
   public void setLayout(int layout){
-    println("buckets setLayout");
+    //println("buckets setLayout");
     this.layout = layout;
         
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
@@ -262,7 +262,7 @@ class Buckets extends DataLayer{
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
   void generateHeatForCalleeAttribute(float maxHeight){
-    println("buckets generateHeatForCalleeAttribute");
+    //println("buckets generateHeatForCalleeAttribute");
     // Find the max and min from the ChordNode metadata
     for(int i =0; i < nodeListStack.peek().size();i++){
       minValue = min(minValue,nodeListStack.peek().get(i).metaData.callees);
@@ -292,7 +292,7 @@ class Buckets extends DataLayer{
       computations.
   */
   public void fastUpdate(){
-    println("buckets fastUpdate");
+    //println("buckets fastUpdate");
     // Modify all of the positions in our nodeList
     if(this.layout <= 0){
       //this.generateHeatForCalleeAttribute(scaledHeight);

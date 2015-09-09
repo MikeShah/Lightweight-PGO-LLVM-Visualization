@@ -190,7 +190,8 @@ class ChordDiagram extends DataLayer{
       computations.
   */
   public void fastUpdate(){
-    println("Calling fastUpdate");
+    println("ChordDiagram fastUpdate");
+    generateHeatForCalleeAttribute();
     // Modify all of the positions in our nodeList
     if(this.layout <=0 ){
       plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle

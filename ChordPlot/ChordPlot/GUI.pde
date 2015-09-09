@@ -79,7 +79,7 @@ public void theBreadCrumbsBar(int n){
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
-      cd.fastUpdate(); // Make a call to update the visualization
+      cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
       hw.m_histogram.fastUpdate();
       bw.m_buckets.fastUpdate();
 
@@ -99,7 +99,7 @@ public void theBreadCrumbsBar(int n){
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
-        cd.fastUpdate(); // Make a call to update the visualization
+        cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
         hw.m_histogram.fastUpdate();
         bw.m_buckets.fastUpdate();
         
