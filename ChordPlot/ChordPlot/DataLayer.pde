@@ -87,7 +87,7 @@ println("blah");
       // Do a deep copy
       // This is annoying, but will work for now
       temp.metaData.callees           = m.callees;
-      temp.metaData.callsInto           = m.callees;
+      temp.metaData.callers           = m.callers;
       temp.metaData.recursive           = m.recursive;
       temp.metaData.maxNestedLoopCount  = m.maxNestedLoopCount;
       temp.metaData.attributes        = m.attributes;
@@ -147,16 +147,7 @@ println("blah");
   }
   
   
-  /*
-      Sets all the meta-data to 0
-  */
-  public void resetMetaData(){
-        int iterations = nodeListStack.peek().size();
-        for(int i =0; i < iterations; i++){                 
-          nodeListStack.peek().get(i).metaData.callees=0;
-        }
-  }
-  
+
   
   // The goal of this function is to look through every node
   // in the DotGraph that is a source.
@@ -167,51 +158,75 @@ println("blah");
   //
   // If compute == 1 then compute callees, otherwise do not becaue they have already been done.
   //
-  public void storeLineDrawings(int compute){
+  public void storeLineDrawings(){
    println("I think we might crash around here");
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
            
-               if(1==compute && nodeListStack.size()==1){
-                resetMetaData();
-               }
-               
-               boolean printonce = true;
-      
                 // Faster hacked version
-                println("storeLineDrawings size: "+nodeListStack.size());
+                println("callees storeLineDrawings size: "+nodeListStack.size());
                 int iterations = nodeListStack.peek().size();
-                for(int i =0; i < iterations; i++){                 
-                  // Search to see if our node has outcoming edges
-                  nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                  nodeListStack.peek().get(i).LocationPoints.clear();                  // Clear our old Locations because we'll be setting up new ones
-                  if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
-                    // If we do find that our node is a source(with targets)
-                    // then search to get all of the destination names and their positions
-                    LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
-                    Iterator<nodeMetaData> it = dests.iterator();
-                    // Iterate through all of the callees in our current node
-                    // We already know what they are, but now we need to map
-                    // WHERE they are in the visualization screen space.
-                    while(it.hasNext()){
-                        nodeMetaData temp = it.next();
-                        // When we find the key, add the values points
-                        if(topOfStackMap.containsKey(temp.name)){
-                            ChordNode value = topOfStackMap.get(temp.name);
-                            nodeListStack.peek().get(i).addPoint(value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).LocationPoints );          // Add to our source node the locations that we can point to
-                            // Store some additional information (i.e. update our callees count.
-                            // TODO: This number is only of the visible callees, perhaps we want a maximum value?
-                            if(1==compute){
-                              if(nodeListStack.size()==1){ // Only compute callees if we are on the first level
-                                if(printonce){printonce=false; println("!!!!!!!!!!!!!!!!!!!!!!!!!!!adding to callees!!!!!!!!!!!!!!!!!!!!!!!!");}
-                                nodeListStack.peek().get(i).metaData.callees++;
-                              }
+                for(int i =0; i < iterations; i++){      
+                  
+                      // Search to see if our node has outcoming edges
+                      nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+                      nodeListStack.peek().get(i).calleeLocations.clear();                  // Clear our old Locations because we'll be setting up new ones
+                      if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
+                        // If we do find that our node is a source(with targets)
+                        // then search to get all of the destination names and their positions
+                        LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(nodeName));
+                        Iterator<nodeMetaData> it = dests.iterator();
+                        // Iterate through all of the callees in our current node
+                        // We already know what they are, but now we need to map
+                        // WHERE they are in the visualization screen space.
+                        while(it.hasNext()){
+                            nodeMetaData temp = it.next();
+                            // When we find the key, add the values points
+                            if(topOfStackMap.containsKey(temp.name)){
+                                ChordNode value = topOfStackMap.get(temp.name);
+                                nodeListStack.peek().get(i).addPoint(0,value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).calleeLocations );          // Add to our source node the locations that we can point to
+                                //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
                             }
-                            
-                            //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
                         }
-                    }
-                  }
-                }
+                      }
+                      
+                      
+                      
+                      
+                     // Search to see if our node has outcoming edges
+                      nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
+                      nodeListStack.peek().get(i).callerLocations.clear();    // Clear our old Locations because we'll be setting up new ones
+                      for(int j=0; j < iterations; ++j){
+                          nodeMetaData potentialCallerNode = nodeListStack.peek().get(j).metaData;        // Compare against this node
+                          if (dotGraph.graph.containsKey(potentialCallerNode)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it could have calls into our node
+                                // If we do find that our node is a source(with targets)
+                                // then search to get all of the destination names and their positions
+                                // See if our potential caller contains the node we are interested in as a destination, thus
+                                // it means we "call into" (caller) nodeName.
+                                LinkedHashSet<nodeMetaData> dests = (dotGraph.graph.get(potentialCallerNode));
+                                Iterator<nodeMetaData> it = dests.iterator();
+                                // Iterate through all of the destinations, and see if the name matches the node we are intersted in.
+                                while(it.hasNext()){
+                                    nodeMetaData temp = it.next();
+                                    // If a destination in our potential Caller matches our function, then we
+                                    // know we call into our function 'nodeName'.
+                                    if(temp.name.equals(nodeName.name)){
+                                         //println("Adding a caller:"+potentialCallerNode.name+" to "+nodeName.name);
+                                         ChordNode value = topOfStackMap.get(potentialCallerNode.name); // Retrieve the nodes values of the caller which contained a destination that matched our 'nodeName'
+                                         nodeListStack.peek().get(i).addPoint(1,value.x,value.y,value.metaData.name, topOfStackMap.get(potentialCallerNode.name).metaData ,topOfStackMap.get(potentialCallerNode.name).callerLocations);
+                                         break;
+                                    }
+                                }
+                          }
+                      }
+                        
+                  
+                  
+                } // for(int i =0; i < iterations; i++){      
+
+                                
+                  
+                
+                
       
   }
   
@@ -349,6 +364,28 @@ println("blah");
         }
       }
       nodeListStack.push(filteredNodes);
+  }
+  
+  /*
+      Functions that match the starting characters
+      
+      This will also return matches that 'contain' and just select them in the current visualization
+  */
+  
+    synchronized public void functionStartsWithSelect(String text){
+      String name = "Select and Starts With: "+text;
+      // The name we give to our list, so we can pop it off the stack by name if we need to.
+
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations; i++){
+        // Small hack we have to do for now, because all of our functions are
+        // surrounded by quotes to work properly in the .dot format (because if we use
+        // periods in the .dot format for function names, things break, thus we surround them
+        // in quotes). Thus, the hack is we append a double quote to all searches.
+        if(nodeListStack.peek().get(i).metaData.name.startsWith("\""+text) || nodeListStack.peek().get(i).metaData.name.contains(text)){
+          nodeListStack.peek().get(i).selected = true;
+        }
+      }
   }
   
   /*
@@ -490,14 +527,14 @@ println("blah");
       Based on the node we are selecting
   */
   synchronized public void toggleCallees(ChordNode cn){
-    println("About to toggle callees:"+cn.LocationPoints.size()); 
+    println("About to toggle callees:"+cn.calleeLocations.size()); 
     int iterations = nodeListStack.peek().size();
     
     for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = true;//!nodeListStack.peek().get(j).selected; // Modify the node we have found. 
-          for(int i = 0; i < nodeListStack.peek().get(j).LocationPoints.size(); ++i){
-            nodeListStack.peek().get(j).LocationPoints.get(i).selected = true;// nodeListStack.peek().get(j).selected;
+          for(int i = 0; i < nodeListStack.peek().get(j).calleeLocations.size(); ++i){
+            nodeListStack.peek().get(j).calleeLocations.get(i).selected = true;// nodeListStack.peek().get(j).selected;
           }
           break;
         }
@@ -521,7 +558,7 @@ println("blah");
      }
   }
   
-   /*
+  /*
       Quickly select node and all of its callees up to the specified depth
   */
   
@@ -533,17 +570,46 @@ println("blah");
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
           
-                for(int i =0; i < cn.LocationPoints.size();i++){
+                for(int i =0; i < cn.calleeLocations.size();i++){
                     for(int k =0; k < iterations; ++k){
-                        if(cn.LocationPoints.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
+                        if(cn.calleeLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
                             nodeListStack.peek().get(k).selected = value; // Modify the node we have found. 
                             // recursively call our function again.
-                            if(theDepth>0){
+                            if(theDepth>1){
                               selectCallees(nodeListStack.peek().get(k), value, theDepth-1);
                             }
                         }
                     }
 
+                }
+          
+          break; 
+        }
+     }
+  }
+  
+  /*
+      Quickly select node and all of its callers up to the specified depth
+  */
+  
+  synchronized public void selectCallers(ChordNode cn, boolean value, int theDepth){
+    int iterations = nodeListStack.peek().size();
+    
+    println("select caller: "+value);
+    for(int j = 0; j < iterations; ++j){
+        if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
+          nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
+          
+                for(int i =0; i < cn.callerLocations.size();i++){
+                    for(int k =0; k < iterations; ++k){
+                        if(cn.callerLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
+                            nodeListStack.peek().get(k).selected = value; // Modify the node we have found. 
+                            // recursively call our function again.
+                            if(theDepth>1){
+                              selectCallers(nodeListStack.peek().get(k), value, theDepth-1);
+                            }
+                        }
+                    }
                 }
           
           break; 

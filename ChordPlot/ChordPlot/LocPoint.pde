@@ -3,6 +3,9 @@
     
     We can also name the point in space.
     The most pragmatic use case will be to name the point in space after the callee.
+    
+    
+    DEPRECATED: This class is not longer used and could be removed.
 */
 
 // Represents a point in space

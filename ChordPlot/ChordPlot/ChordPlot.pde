@@ -32,9 +32,9 @@ void setup(){
   
   ortho(-width/2.0, width/2.0, -height/2.0, height/2.0); // same as ortho()
 
-  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   //String filename = "output.dot"; // legacy version of dot file loader
-  String filename = "horde3d.dot";
+  //String filename = "horde3d.dot";
 
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across
@@ -85,7 +85,7 @@ void draw(){
    text("FPS :"+frameRate,width-100,height-20);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
    text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
-   text("'a' - select all callees of current node | 'h' to hide lines being drawn ",5,height-30);
+   text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes",5,height-30);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

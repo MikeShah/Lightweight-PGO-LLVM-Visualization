@@ -20,7 +20,9 @@ class ChordNode{
   
 
   // This arrayList holds all of the locations that the node points to(all of its callees).
-  ChordNodeList LocationPoints;
+  ChordNodeList calleeLocations;
+  // This arrayList holds all of the locations of functions that call this specific function.
+  ChordNodeList callerLocations;
   
   /*
       The most default constructor that will be used
@@ -31,7 +33,8 @@ class ChordNode{
     this.y = y;
     this.z = z;
     
-    LocationPoints = new ChordNodeList();
+    calleeLocations = new ChordNodeList();
+    callerLocations = new ChordNodeList();
   }
   
   /*
@@ -45,10 +48,16 @@ class ChordNode{
     
     this.metaData = nmd;
     if(cnl==null){
-      LocationPoints = new ChordNodeList();
+      calleeLocations = new ChordNodeList();
     }else{
-      this.LocationPoints = cnl;
+      this.calleeLocations = cnl;
     }
+    
+    if(callerLocations==null){
+      callerLocations = new ChordNodeList();
+    }
+    
+    
   }
   
   void getMetaData(nodeMetaData n){
@@ -56,18 +65,39 @@ class ChordNode{
   }
   
   // for 2D
-  void addPoint(float x, float y, String name){
-    LocationPoints.add(new ChordNode(name,x,y,0));
+  //
+  // mode asks which list to add the point to
+  //
+  void addPoint(int mode, float x, float y, String name){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,0));
+      metaData.callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,0));
+      metaData.callers = callerLocations.size();
+    }
   }
   
     // for 2D
-  void addPoint(float x, float y, String name, nodeMetaData nmd, ChordNodeList cnl){
-    LocationPoints.add(new ChordNode(name,x,y,0, nmd, cnl));
+  void addPoint(int mode, float x, float y, String name, nodeMetaData nmd, ChordNodeList cnl){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
+      metaData.callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
+      metaData.callers = callerLocations.size();
+    }
   }
   
   // For 3D
-  void addPoint(float x, float y, float z, String name){
-    LocationPoints.add(new ChordNode(name,x,y,z));
+  void addPoint(int mode, float x, float y, float z, String name){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,z));
+      metaData.callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,z));
+      metaData.callers = callerLocations.size();
+    }
   }
   
   /*
@@ -220,6 +250,10 @@ class ChordNode{
                   // Select this node and all of its callees up to the callee depth
                   cd.selectCallees(this,true,CalleeDepth);
                 }
+                else if(key == 'b'){
+                  // Select this node and all of its callers up to the selection depth
+                  cd.selectCallers(this,true,CalleeDepth);
+                }
             }
         }
     
@@ -232,7 +266,12 @@ class ChordNode{
             rect(x,y-rectHeight,rectWidth,rectHeight);
             pushMatrix();
               translate(0,0,MySimpleCamera.cameraZ+1);  // Translate forward
-              drawToCallees(CalleeDepth);
+              
+              if(keyPressed && key=='c'){
+                drawToCallers(CalleeDepth);
+              }else{
+                drawToCallees(CalleeDepth);
+              }
             popMatrix();
                         
             if(mousePressed &&  (MySimpleCamera.xSelection > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight)) && mouseButton == LEFT){
@@ -325,33 +364,65 @@ class ChordNode{
       
         if(keyPressed && key == 'h'){
             fill(0); stroke(0);
-            for(int i =0; i < LocationPoints.size();i++){
+            for(int i =0; i < calleeLocations.size();i++){
               if(depth>0){
-                  drawOutline(LocationPoints.get(i).x, LocationPoints.get(i).y);
+                  drawOutline(calleeLocations.get(i).x, calleeLocations.get(i).y);
                   //rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-                  ChordNode blah = LocationPoints.get(i);
+                  ChordNode blah = calleeLocations.get(i);
                   blah.drawToCallees(depth-1);     
                }
             }
         }else{
             fill(0); stroke(0);
-            for(int i =0; i < LocationPoints.size();i++){
+            for(int i =0; i < calleeLocations.size();i++){
               if(depth>0){
-                  line(x,y,LocationPoints.get(i).x,LocationPoints.get(i).y);
+                  line(x,y,calleeLocations.get(i).x,calleeLocations.get(i).y);
                   noFill(); stroke(0);
-                  rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-                  ChordNode blah = LocationPoints.get(i);
+                  rect(calleeLocations.get(i).x,calleeLocations.get(i).y-rectHeight,rectWidth,rectHeight);
+                  ChordNode blah = calleeLocations.get(i);
                   blah.drawToCallees(depth-1);     
                 }
             }
         }
   }
   
+  
+  // Draw to all of the caller locations in 2D
+
+  // The depth is how many levels in the tree to draw to callees (essentially do a BFS).
+  //
+  // If 'h' is pressed, then hide the lines and only draw the rectangles.
+  public void drawToCallers(int depth){
+      
+        if(keyPressed && key == 'h'){
+            fill(0); stroke(0);
+            for(int i =0; i < callerLocations.size();i++){
+              if(depth>0){
+                  drawOutline(callerLocations.get(i).x, callerLocations.get(i).y);
+                  ChordNode blah = callerLocations.get(i);
+                  blah.drawToCallers(depth-1);     
+               }
+            }
+        }else{
+            fill(0); stroke(0);
+            for(int i =0; i < callerLocations.size();i++){
+              if(depth>0){
+                  line(x,y,callerLocations.get(i).x,callerLocations.get(i).y);
+                  noFill(); stroke(0);
+                  rect(callerLocations.get(i).x,callerLocations.get(i).y-rectHeight,rectWidth,rectHeight);
+                  ChordNode blah = callerLocations.get(i);
+                  blah.drawToCallers(depth-1);     
+                }
+            }
+        }
+  }
+  
+  
   // Draw to all of the callee locations in 3D
   public void drawTo3DCallees(int depth){
     fill(255,0,0);
-    for(int i =0; i < LocationPoints.size();i++){
-      line(x,y,z,LocationPoints.get(i).x,LocationPoints.get(i).y,LocationPoints.get(i).z);
+    for(int i =0; i < calleeLocations.size();i++){
+      line(x,y,z,calleeLocations.get(i).x,calleeLocations.get(i).y,calleeLocations.get(i).z);
     }
   }
   

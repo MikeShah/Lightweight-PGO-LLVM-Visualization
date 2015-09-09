@@ -86,9 +86,15 @@ class DetailsPane extends PApplet {
                  
              detailsPanel.addBang("FindFunction")
                  .setPosition(width-180,100)
-                 .setSize(180,19)
+                 .setSize(90,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;    
+                 ;   
+                 
+             detailsPanel.addBang("SelectFunctions")
+                 .setPosition(width-90,100)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
                  
              detailsPanel.addRange("CallSites")
                  // disable broadcasting since setRange and setRangeValues will trigger an event
@@ -242,6 +248,26 @@ class DetailsPane extends PApplet {
   }
   
 
+  /*
+      Search for functions that match the string and just select it
+  */
+ public void SelectFunctions() {
+    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
+    if(theText.length() > 0){
+      
+        // Apply the relevant filters
+        cd.functionStartsWithSelect(theText);
+        cd.update(); // Make a call to update the visualization
+        
+        hw.m_histogram.functionStartsWithSelect(theText);
+        hw.m_histogram.update(); // Make a call to update the visualization
+        hw.updateFunctionList();
+        
+        bw.m_buckets.functionStartsWithSelect(theText);
+        bw.m_buckets.update();
+
+    }
+  }
   
   /*
       Search for functions that match the string

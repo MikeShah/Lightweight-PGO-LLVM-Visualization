@@ -161,7 +161,7 @@ class ChordDiagram extends DataLayer{
 
     println("Setting a new layout");
     // Calculates the number of callees from the caller
-    storeLineDrawings(1);
+    storeLineDrawings();
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
@@ -178,7 +178,7 @@ class ChordDiagram extends DataLayer{
        
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
-    storeLineDrawings(0);
+    storeLineDrawings();
   }
 
   /*

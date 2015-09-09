@@ -11,7 +11,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String extra_information;
   // Values that need to be computed after the data is loaded in
   int callees = 0;
-  int callsInto = 0;  // How many functions call this function.
+  int callers = 0;  // How many functions call this function.
   boolean recursive = false; // Check to see if function ever calls itself
   int maxNestedLoopCount = 0;
   int bitCodeSize = 0;
@@ -78,7 +78,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   public String getAllMetadata(){
     String result = "";
     result += "\nname: "+name + "\n";
-    result += "Callees: "+callees + " CallsInto:" + callsInto + " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
+    result += "Callees: "+callees + " Callers:" + callers + " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
     result += "attributes: "+attributes + "\n";
     result += "metaData: "+metaData + "\n";
     result += "OpCodes: "+OpCodes + "\n";

@@ -138,7 +138,7 @@ class Histogram extends DataLayer{
         
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
-    storeLineDrawings(1);
+    storeLineDrawings();
     // Draw the mapping of the visualization (Different layouts may need different 
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
@@ -152,7 +152,7 @@ class Histogram extends DataLayer{
     
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
-    storeLineDrawings(0);
+    storeLineDrawings();
   }
     
   
