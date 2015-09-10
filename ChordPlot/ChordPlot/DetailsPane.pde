@@ -1,7 +1,7 @@
 /*
     This class serves as the details window to display other information.
 */
-class DetailsPane extends PApplet {
+public class DetailsPane extends PApplet {
   
   
   
@@ -136,6 +136,46 @@ class DetailsPane extends PApplet {
                  .setSize(180,19)
                  ;
                  
+                 
+              detailsPanel.addTextlabel("sortingByLabel")
+                .setText("Sort By")
+                .setPosition(width-360,80)
+                .setColorValue(0xffffffff)
+                ;
+                    
+              detailsPanel.addRadioButton("sortBy")
+                 .setPosition(width-360,100)
+                 .setSize(40,20)
+                 .setColorForeground(color(120))
+                 .setColorActive(color(255))
+                 .setColorLabel(color(255))
+                 .setItemsPerRow(1)
+                 .setSpacingColumn(50)
+                 .addItem("CALLEE",CALLEE)
+                 .addItem("CALLER",CALLER)
+                 .addItem("PGODATA",PGODATA)
+                 .addItem("BITCODESIZE",BITCODESIZE)
+                 ;
+             
+              detailsPanel.addTextlabel("colorByLabel")
+                .setText("Color By")
+                .setPosition(width-270,80)
+                .setColorValue(0xffffffff)
+                ;                 
+                 
+             detailsPanel.addRadioButton("colorizeBy")
+                 .setPosition(width-270,100)
+                 .setSize(40,20)
+                 .setColorForeground(color(120))
+                 .setColorActive(color(255))
+                 .setColorLabel(color(255))
+                 .setItemsPerRow(1)
+                 .setSpacingColumn(50)
+                 .addItem("_CALLEE",CALLEE)
+                 .addItem("_CALLER",CALLER)
+                 .addItem("_PGODATA",PGODATA)
+                 .addItem("_BITCODESIZE",BITCODESIZE)
+                 ;
                   
 /*                   
               // Capture Console output here.
@@ -213,7 +253,7 @@ class DetailsPane extends PApplet {
     cd.selectAttributes();
   }
   
-    /*
+  /*
     TODO: Remove me
     
     Temporary function to quickly select functions with line information .
@@ -221,6 +261,34 @@ class DetailsPane extends PApplet {
   void LineInformationFunctions(){
     cd.selectLineInformation();
   }
+  
+  
+  
+  
+  void sortBy(int a){
+    println("sortby: "+a);
+    cd.setSortBy(a);
+    hw.m_histogram.setSortBy(a);
+    bw.m_buckets.setSortBy(a);
+    
+        cd.update();
+        hw.m_histogram.update();
+        bw.m_buckets.update();
+  }
+  
+  void colorizeBy(int a){
+    println("colorizeBy: "+a);
+    cd.setColorizeBy(a);
+    hw.m_histogram.setColorizeBy(a);
+    bw.m_buckets.setColorizeBy(a);
+    
+        cd.update();
+        hw.m_histogram.update();
+        bw.m_buckets.update();
+  }
+  
+ 
+  
   
   /*
       This function annotates the selected nodes.
@@ -321,6 +389,7 @@ class DetailsPane extends PApplet {
     // function controlEvent will be invoked with every value change 
     // in any registered controller
     void controlEvent(ControlEvent theEvent) {
+      /*
       if(theEvent.isGroup()) {
         println("got an event from group "
                 +theEvent.getGroup().getName()
@@ -332,7 +401,7 @@ class DetailsPane extends PApplet {
                 +theEvent.getController().getName()
                 );
       }
-    
+    */
     
       // Get the values from the CallSites range slider.
       if(theEvent.isFrom("CallSites")) {

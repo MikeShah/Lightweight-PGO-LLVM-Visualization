@@ -1,12 +1,4 @@
-/*
-    The different sorting critiera
-*/
-public enum SortCriteria{
-  CALLEE,
-  CALLER,
-  PGODATA,
-  BITCODESIZE;  
-}
+
 
 
 /*
@@ -46,6 +38,11 @@ public class DataLayer implements VisualizationLayout{
   // Create a stack of the nodes
   public NodeListStack nodeListStack; 
   
+  
+  // Default sorting and colorize values of data
+  int sortBy = CALLEE;
+  int colorizeBy = CALLEE;
+  
   /*
       Function that constructs this object.
       This class should only be extended on, and serves as a base class for other visualizations.
@@ -72,20 +69,20 @@ public class DataLayer implements VisualizationLayout{
     
   }
   
-  public void sortNodesByCallee(SortCriteria sortBy){
+  public void sortNodesBy(){
     
       switch(sortBy){
         case CALLEE:
-              this.nodeListStack.peek().sortNodesByCallee();
+              this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
         case CALLER:
-              this.nodeListStack.peek().sortNodesByCaller();
+              this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
         case PGODATA:
-              this.nodeListStack.peek().sortNodesByPGO();
+              this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
         case BITCODESIZE:
-              this.nodeListStack.peek().sortNodesByBitCodeSize();
+              this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
       }
       
@@ -169,6 +166,20 @@ public class DataLayer implements VisualizationLayout{
      // A bit ugly, but we have to regenerate the layout
      // everytime we move the visualization for now
      regenerateLayout(layout);
+  }
+  
+  /*
+      Set which attribute to sort by
+  */
+  public void setSortBy(int sortBy){
+    this.sortBy = sortBy;
+  }
+  
+  /*
+      Set which attribute to colorize by
+  */
+  public void setColorizeBy(int colorizeBy){
+    this.colorizeBy = colorizeBy;
   }
   
   // Here maxHeight represents how many pixels we scale to (
@@ -255,7 +266,7 @@ public class DataLayer implements VisualizationLayout{
                       }
                       
                    
-                      
+                /*
                 //println("callers storeLineDrawings size: "+nodeListStack.size());                      
                      // Search to see if our node has outcoming edges
                       nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
@@ -284,7 +295,7 @@ public class DataLayer implements VisualizationLayout{
                           }
                       }
                         
-                  
+                  */
                   
                 } // for(int i =0; i < iterations; i++){      
 

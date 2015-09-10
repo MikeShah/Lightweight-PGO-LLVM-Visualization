@@ -63,12 +63,32 @@ class ChordNodeList{
       We sort by the callees here. We can duplicate this pattern
       to sort by an arbritrary feature.
   */
-  public void sortNodesByCallee(){
+  public void sortNodesBy(final int sortBy){
     Collections.sort(chordList, new Comparator<ChordNode>(){
       @Override
       public int compare(ChordNode item1, ChordNode item2){
           Integer val1 = item1.metaData.callees;
           Integer val2 = item2.metaData.callees;
+          
+          switch(sortBy){
+            case CALLEE:
+                  val1 = item1.metaData.callees;
+                  val2 = item2.metaData.callees;
+                  break;
+            case CALLER:
+                  val1 = item1.metaData.callers;
+                  val2 = item2.metaData.callers;
+                  break;
+            case PGODATA:
+                  val1 = item1.metaData.PGOData;
+                  val2 = item2.metaData.PGOData;
+                  break;
+            case BITCODESIZE:
+                  val1 = item1.metaData.bitCodeSize;
+                  val2 = item2.metaData.bitCodeSize;
+                  break;
+          }
+
           
           // Descending order (reverse comare to do ascending order)
           return val2.compareTo(val1);

@@ -22,7 +22,7 @@ class ChordDiagram extends DataLayer{
   /*
       
   */
-  void generateHeatForCalleeAttribute(SortCriteria sortby){
+  void generateHeatForCalleeAttribute(){
     // Find the max and min from the ChordNode metadata
     float minCallees = 0;
     float maxCallees = 0;
@@ -55,7 +55,7 @@ class ChordDiagram extends DataLayer{
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
     for(int i =0; i < nodeListStack.peek().size();i++){
-      switch(sortby){
+      switch(this.colorizeBy){
         case CALLEE:
               nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, minCallees, maxCallees, 0, 255);
               break;
@@ -188,6 +188,8 @@ class ChordDiagram extends DataLayer{
     
   }
 
+
+
   public void setLayout(int layout){
     // Set our layout
     this.layout = layout;
@@ -202,11 +204,11 @@ class ChordDiagram extends DataLayer{
     
     // (2) This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    generateHeatForCalleeAttribute(SortCriteria.CALLER);
+    generateHeatForCalleeAttribute();
     
     // (3) Sort all of the callees in their respective list by some criteria
     // TODO: Make this sorting be due to the Encoding Engine or NodeLinkSystem
-    sortNodesByCallee();
+    sortNodesBy();
     
     // (4) Modify all of the physical locations in our nodeList
     fastUpdate();
@@ -226,7 +228,7 @@ class ChordDiagram extends DataLayer{
   */
   public void fastUpdate(){
     println("ChordDiagram fastUpdate");
-    generateHeatForCalleeAttribute(SortCriteria.CALLEE);
+    generateHeatForCalleeAttribute(CALLEE);
     // Modify all of the positions in our nodeList
     if(this.layout <=0 ){
       plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle

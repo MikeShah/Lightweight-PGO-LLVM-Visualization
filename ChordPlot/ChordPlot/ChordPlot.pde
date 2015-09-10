@@ -2,6 +2,27 @@ import controlP5.*;
 import javax.swing.*; 
 import java.io.*;
 
+
+/*
+    The different sorting critiera
+
+public enum SortCriteria{
+  CALLEE,
+  CALLER,
+  PGODATA,
+  BITCODESIZE;  
+}
+*/
+
+/*
+    Work around because Processing cannot handle enum's properly.
+*/
+public static final int CALLEE = 0;
+public static final int CALLER = 1;
+public static final int PGODATA = 2;
+public static final int BITCODESIZE =3 ;
+
+
 /*
   Create a second window
 */
@@ -33,9 +54,10 @@ void setup(){
   
   ortho(-width/2.0, width/2.0, -height/2.0, height/2.0); // same as ortho()
 
-  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/tlou_pgo.dot"; // has branch weights
   //String filename = "output.dot"; // legacy version of dot file loader
   String filename = "horde3d.dot";
+  
 
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across

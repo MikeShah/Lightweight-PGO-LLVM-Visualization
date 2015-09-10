@@ -250,7 +250,7 @@ class Buckets extends DataLayer{
     // for some attribute that we care about
     this.generateHeatForCalleeAttribute(scaledHeight);
     
-    sortNodesByCallee();
+    sortNodesBy();
     
     // Modify all of the physical locations in our nodeList
     fastUpdate();

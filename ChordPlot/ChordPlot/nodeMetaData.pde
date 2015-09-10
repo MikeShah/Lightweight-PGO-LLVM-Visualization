@@ -110,9 +110,9 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     result += "OpCodes: "+OpCodes + "\n";
     result += "PGOData: "+PGOData + "\n";
     result += "PerfData: "+PerfData + "\n";
-    result += "ControlFlowData: "+ControlFlowData + "\n";
     result += "BitCodeSize: "+bitCodeSize + "\n";
     result += "LineInformation: "+lineNumber + ":" + columnNumber + " " + sourceFile + "\n";
+    result += "ControlFlowData: "+ControlFlowData + "\n";
     result += "extra_information: "+extra_information + "\n";
     
     return result;
