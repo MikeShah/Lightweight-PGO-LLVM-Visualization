@@ -273,8 +273,8 @@ class DotGraph{
             dst.addPoint(1,0,0,0,src.name);
             
             if(src.name.equals(dst.name)){
-              src.recursive = true;
-              dst.recursive = true;
+              src.recursive = 1;
+              dst.recursive = 1;
             }
             
             // If the function exists, then add a new destination

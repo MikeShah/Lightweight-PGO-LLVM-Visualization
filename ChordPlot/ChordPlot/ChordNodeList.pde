@@ -87,6 +87,10 @@ class ChordNodeList{
                   val1 = item1.metaData.bitCodeSize;
                   val2 = item2.metaData.bitCodeSize;
                   break;
+            case RECURSIVE:
+                  val1 = item1.metaData.recursive;
+                  val2 = item2.metaData.recursive;
+                  break;
           }
 
           

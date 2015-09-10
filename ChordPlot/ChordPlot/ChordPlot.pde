@@ -17,11 +17,11 @@ public enum SortCriteria{
 /*
     Work around because Processing cannot handle enum's properly.
 */
-public static final int CALLEE = 0;
-public static final int CALLER = 1;
-public static final int PGODATA = 2;
-public static final int BITCODESIZE =3 ;
-
+public static final int CALLEE       = 0;
+public static final int CALLER       = 1;
+public static final int PGODATA      = 2;
+public static final int BITCODESIZE  = 3 ;
+public static final int RECURSIVE    = 4 ;
 
 /*
   Create a second window

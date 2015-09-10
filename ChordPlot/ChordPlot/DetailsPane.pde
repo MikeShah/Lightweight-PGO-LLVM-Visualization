@@ -155,6 +155,7 @@ public class DetailsPane extends PApplet {
                  .addItem("CALLER",CALLER)
                  .addItem("PGODATA",PGODATA)
                  .addItem("BITCODESIZE",BITCODESIZE)
+                 .addItem("RECURSIVE",RECURSIVE)
                  ;
              
               detailsPanel.addTextlabel("colorByLabel")
@@ -175,6 +176,7 @@ public class DetailsPane extends PApplet {
                  .addItem("_CALLER",CALLER)
                  .addItem("_PGODATA",PGODATA)
                  .addItem("_BITCODESIZE",BITCODESIZE)
+                 .addItem("_RECURSIVE",RECURSIVE)
                  ;
                   
 /*                   

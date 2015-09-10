@@ -17,7 +17,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   // Values that need to be computed after the data is loaded in
   int callees = 0;
   int callers = 0;  // How many functions call this function.
-  boolean recursive = false; // Check to see if function ever calls itself
+  int recursive = 0; // Check to see if function ever calls itself. Note we use 0 or 1 so we can sort.
   int maxNestedLoopCount = 0;
   int bitCodeSize = 0;
   

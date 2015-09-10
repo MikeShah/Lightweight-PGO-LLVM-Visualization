@@ -69,6 +69,14 @@ public class DataLayer implements VisualizationLayout{
     
   }
   
+  /*
+      Sort the nodes
+      
+      TODO: Either make this function a 1-liner,
+      or keep it as the way it is. If Processing decides
+      to properly support Java enums, then the switch statement
+      would make more sense.
+  */
   public void sortNodesBy(){
     
       switch(sortBy){
@@ -82,6 +90,9 @@ public class DataLayer implements VisualizationLayout{
               this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
         case BITCODESIZE:
+              this.nodeListStack.peek().sortNodesBy(sortBy);
+              break;
+        case RECURSIVE:
               this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
       }

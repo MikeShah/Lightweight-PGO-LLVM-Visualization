@@ -35,7 +35,7 @@ class ChordDiagram extends DataLayer{
     
     float minBitCodeSize = 0;
     float maxBitCodeSize = 0;
-    
+        
     for(int i =0; i < nodeListStack.peek().size();i++){
       minCallees = min(minCallees,nodeListStack.peek().get(i).metaData.callees);
       maxCallees = max(maxCallees,nodeListStack.peek().get(i).metaData.callees);
@@ -67,6 +67,9 @@ class ChordDiagram extends DataLayer{
               break;
         case BITCODESIZE:
               nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.bitCodeSize, minBitCodeSize, maxBitCodeSize, 0, 255);
+              break;
+        case RECURSIVE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.recursive, 0, 1, 0, 255);
               break;
       }
 
