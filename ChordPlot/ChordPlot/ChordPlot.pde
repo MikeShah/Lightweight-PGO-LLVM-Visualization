@@ -1,5 +1,6 @@
 import controlP5.*;
 import javax.swing.*; 
+import java.io.*;
 
 /*
   Create a second window
@@ -85,7 +86,7 @@ void draw(){
    text("FPS :"+frameRate,width-100,height-20);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
    text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
-   text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes",5,height-30);
+   text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes | 'o' open source in editor",5,height-30);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

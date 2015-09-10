@@ -25,7 +25,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String annotations;  
   String metaData;
   String OpCodes;
-  String PGOData;  
+  int PGOData;  
   String PerfData;
   String ControlFlowData;
   
@@ -50,7 +50,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     
     
     
-  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, String PGOData, String PerfData, String ControlFlowData, int bitCodeSize, int lineNumber, int columnNumber, String sourceFile){
+  public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, int PGOData, String PerfData, String ControlFlowData, int bitCodeSize, int lineNumber, int columnNumber, String sourceFile){
     
     this.name = name;
     this.extra_information = extra_information;

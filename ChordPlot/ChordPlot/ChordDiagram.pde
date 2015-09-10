@@ -22,21 +22,54 @@ class ChordDiagram extends DataLayer{
   /*
       
   */
-  void generateHeatForCalleeAttribute(){
+  void generateHeatForCalleeAttribute(SortCriteria sortby){
     // Find the max and min from the ChordNode metadata
-    float themin = 0;
-    float themax = 0;
+    float minCallees = 0;
+    float maxCallees = 0;
+    
+    float minCallers = 0;
+    float maxCallers = 0;
+    
+    float minPGO = 0;
+    float maxPGO = 0;
+    
+    float minBitCodeSize = 0;
+    float maxBitCodeSize = 0;
+    
     for(int i =0; i < nodeListStack.peek().size();i++){
-      themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
-      themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
+      minCallees = min(minCallees,nodeListStack.peek().get(i).metaData.callees);
+      maxCallees = max(maxCallees,nodeListStack.peek().get(i).metaData.callees);
+      
+      minCallers = min(minCallers,nodeListStack.peek().get(i).metaData.callers);
+      maxCallers = max(maxCallers,nodeListStack.peek().get(i).metaData.callers);
+      
+      minPGO = min(minPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
+      maxPGO = max(maxPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
+      
+      minBitCodeSize = min(minBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
+      maxBitCodeSize = max(maxBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
+      
     }
-    println("themin:"+themin);
-    println("themax:"+themax);
+    println("themin:"+minCallees);
+    println("themax:"+maxCallees);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
     for(int i =0; i < nodeListStack.peek().size();i++){
-      // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
-      nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, 255);
+      switch(sortby){
+        case CALLEE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, minCallees, maxCallees, 0, 255);
+              break;
+        case CALLER:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callers, minCallers, maxCallers, 0, 255);
+              break;
+        case PGODATA:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.PGOData, minPGO, maxPGO, 0, 255);
+              break;
+        case BITCODESIZE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.bitCodeSize, minBitCodeSize, maxBitCodeSize, 0, 255);
+              break;
+      }
+
     }
     
   }
@@ -169,7 +202,7 @@ class ChordDiagram extends DataLayer{
     
     // (2) This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    generateHeatForCalleeAttribute();
+    generateHeatForCalleeAttribute(SortCriteria.CALLER);
     
     // (3) Sort all of the callees in their respective list by some criteria
     // TODO: Make this sorting be due to the Encoding Engine or NodeLinkSystem
@@ -193,7 +226,7 @@ class ChordDiagram extends DataLayer{
   */
   public void fastUpdate(){
     println("ChordDiagram fastUpdate");
-    generateHeatForCalleeAttribute();
+    generateHeatForCalleeAttribute(SortCriteria.CALLEE);
     // Modify all of the positions in our nodeList
     if(this.layout <=0 ){
       plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle

@@ -63,7 +63,7 @@ class ChordNodeList{
       We sort by the callees here. We can duplicate this pattern
       to sort by an arbritrary feature.
   */
-  public void sortNodes(){
+  public void sortNodesByCallee(){
     Collections.sort(chordList, new Comparator<ChordNode>(){
       @Override
       public int compare(ChordNode item1, ChordNode item2){

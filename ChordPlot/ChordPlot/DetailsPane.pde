@@ -82,15 +82,9 @@ class DetailsPane extends PApplet {
                  .setSize(180,19)
                  .setFocus(true)
                  .setColor(color(255,0,0))
-                 ;  
-                 
-             detailsPanel.addBang("FindFunction")
-                 .setPosition(width-180,100)
-                 .setSize(90,19)
-                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
                  ;   
                  
-             detailsPanel.addBang("SelectFunctions")
+             detailsPanel.addButton("SelectFunctions")
                  .setPosition(width-90,100)
                  .setSize(90,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
@@ -131,8 +125,14 @@ class DetailsPane extends PApplet {
                  ;
                  
                // create a new button for selecting Attributes
-              detailsPanel.addButton("SelectAttributesFunctions")
+              detailsPanel.addButton("AttributesFunctions")
                  .setPosition(width-360,40)
+                 .setSize(180,19)
+                 ;
+                 
+               // create a new button for selecting Line Information
+              detailsPanel.addButton("LineInformationFunctions")
+                 .setPosition(width-360,60)
                  .setSize(180,19)
                  ;
                  
@@ -199,20 +199,28 @@ class DetailsPane extends PApplet {
   /*
     TODO: Remove me
     
-    Temporary function to quickly select things that are interesting.
+    Temporary function to quickly select nodes with metadata.
   */
   void SelectMetaDataFunctions(){
     cd.selectMetaData();
   }
-    /*
+  /*
     TODO: Remove me
     
-    Temporary function to quickly select things that are interesting.
+    Temporary function to quickly select functions with attributes.
   */
   void SelectAttributesFunctions(){
     cd.selectAttributes();
   }
   
+    /*
+    TODO: Remove me
+    
+    Temporary function to quickly select functions with line information .
+  */
+  void LineInformationFunctions(){
+    cd.selectLineInformation();
+  }
   
   /*
       This function annotates the selected nodes.
@@ -256,21 +264,33 @@ class DetailsPane extends PApplet {
       
         // Apply the relevant filters
         cd.functionStartsWithSelect(theText);
-        cd.update(); // Make a call to update the visualization
-        
         hw.m_histogram.functionStartsWithSelect(theText);
-        hw.m_histogram.update(); // Make a call to update the visualization
-        hw.updateFunctionList();
-        
-        bw.m_buckets.functionStartsWithSelect(theText);
-        bw.m_buckets.update();
+        //bw.m_buckets.functionStartsWithSelect(theText);
 
     }
   }
   
+  
+  /*
+      TODO: Implement highlighting as you start to type
+      
+      Will need to test on very large programs to see if
+      the 
+  */
+  /*
+  public void StartsWith(){
+    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
+    if(theText.length() > 0){
+      println("Typing in"+theText);
+    }
+  }
+  */
+  
   /*
       Search for functions that match the string
-  */
+ 
+ DEPRECATED: We just want to select things quickly, not necessarily
+ immedietely push. All pushing needs to be done with enter
  
   public void FindFunction() {
     String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
@@ -295,7 +315,8 @@ class DetailsPane extends PApplet {
 
     }
   }
-  
+   */
+ 
   
     // function controlEvent will be invoked with every value change 
     // in any registered controller

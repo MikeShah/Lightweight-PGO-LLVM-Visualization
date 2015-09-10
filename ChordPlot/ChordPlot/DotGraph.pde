@@ -98,7 +98,7 @@ class DotGraph{
     String annotations = "";
     String metaData = "";
     String OpCodes = "";
-    String PGOData = "";
+    int PGOData = -1;
     String PerfData = ""; 
     String ControlFlowData = "";
     int bitCodeSize = 0;
@@ -192,7 +192,7 @@ class DotGraph{
           OpCodes += tokens[i];
         }
         if(read_PGOData){
-          PGOData += tokens[i];
+          // PGOData += tokens[i]; // FIXME: PGO data is currently read from metadata, this should really be taken care of in the C++ pass.
         }
         else if(read_PerfData){
           PerfData += tokens[i];

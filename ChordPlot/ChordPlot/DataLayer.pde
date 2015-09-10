@@ -1,4 +1,15 @@
 /*
+    The different sorting critiera
+*/
+public enum SortCriteria{
+  CALLEE,
+  CALLER,
+  PGODATA,
+  BITCODESIZE;  
+}
+
+
+/*
     This is a class that other classes can extend from to get data from
     The goal of this class is to store all common information from a visualization.
     
@@ -61,8 +72,23 @@ public class DataLayer implements VisualizationLayout{
     
   }
   
-  public void sortNodesByCallee(){
-    this.nodeListStack.peek().sortNodes();
+  public void sortNodesByCallee(SortCriteria sortBy){
+    
+      switch(sortBy){
+        case CALLEE:
+              this.nodeListStack.peek().sortNodesByCallee();
+              break;
+        case CALLER:
+              this.nodeListStack.peek().sortNodesByCaller();
+              break;
+        case PGODATA:
+              this.nodeListStack.peek().sortNodesByPGO();
+              break;
+        case BITCODESIZE:
+              this.nodeListStack.peek().sortNodesByBitCodeSize();
+              break;
+      }
+      
   }
   
   /*
@@ -94,7 +120,7 @@ public class DataLayer implements VisualizationLayout{
       temp.metaData.annotations       = m.annotations;
       temp.metaData.metaData          = m.metaData;
       temp.metaData.OpCodes           = m.OpCodes;
-      temp.metaData.PGOData           = m.PGOData;
+      temp.metaData.PGOData           = parseMetaDataToPGO(temp.metaData.metaData); //m.PGOData;
       temp.metaData.PerfData          = m.PerfData;
       temp.metaData.ControlFlowData   = m.ControlFlowData;
       temp.metaData.bitCodeSize       = m.bitCodeSize;
@@ -103,6 +129,8 @@ public class DataLayer implements VisualizationLayout{
       temp.metaData.lineNumber   = m.lineNumber;
       temp.metaData.columnNumber = m.columnNumber;
       temp.metaData.sourceFile   = m.sourceFile;
+      
+
       
       /*
           Copy all of the callee and caller information
@@ -116,6 +144,22 @@ public class DataLayer implements VisualizationLayout{
     }
   }
   
+  /*
+    Takes whatever metadata we have loaded,
+    and specificially pulls out the functionentrycounts
+  */
+  public int parseMetaDataToPGO(String parseMe){
+
+     int start = parseMe.indexOf("function_entry_counti64");
+     if(start<0){
+       return -1;
+     }else{
+       start += "function_entry_counti64".length();
+     }
+     int end = parseMe.length();
+     
+     return parseInt(parseMe.substring(start,end));
+  }
   /*
       Sets the position of our visualization
   */
@@ -181,6 +225,8 @@ public class DataLayer implements VisualizationLayout{
         
         
            */
+          
+           
                 // Faster hacked version
                 println("callees storeLineDrawings size: "+nodeListStack.size());
                 int iterations = nodeListStack.peek().size();
@@ -208,7 +254,7 @@ public class DataLayer implements VisualizationLayout{
                         }
                       }
                       
-                      
+                   
                       
                 //println("callers storeLineDrawings size: "+nodeListStack.size());                      
                      // Search to see if our node has outcoming edges
@@ -680,6 +726,23 @@ public class DataLayer implements VisualizationLayout{
     
     for(int j = 0; j < iterations; ++j){
         if(nodeListStack.peek().get(j).metaData.attributes.length() >0){
+          nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+        }
+     }
+  }
+  
+  
+  /*
+    
+    Quickly select all the nodes that have line information
+        
+  */
+  
+  synchronized public void selectLineInformation(){
+    int iterations = nodeListStack.peek().size();
+    
+    for(int j = 0; j < iterations; ++j){
+        if(!nodeListStack.peek().get(j).metaData.sourceFile.equals("/n/a") && !nodeListStack.peek().get(j).metaData.sourceFile.equals("no/information/found")){
           nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
         }
      }
