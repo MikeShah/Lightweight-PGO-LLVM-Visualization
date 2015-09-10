@@ -7,6 +7,11 @@ import java.util.*;
 */
 class nodeMetaData implements Comparable<nodeMetaData>{
   
+    // This arrayList holds all of the locations that the node points to(all of its callees).
+  ChordNodeList calleeLocations;
+  // This arrayList holds all of the locations of functions that call this specific function.
+  ChordNodeList callerLocations;
+  
   String name;
   String extra_information;
   // Values that need to be computed after the data is loaded in
@@ -67,11 +72,32 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     
     
     c = 0;
+    
+    calleeLocations = new ChordNodeList();
+    callerLocations = new ChordNodeList();
+    
+    
   }
   
   public nodeMetaData(String name){
     this.name = name;
     c = 0;
+    
+    calleeLocations = new ChordNodeList();
+    callerLocations = new ChordNodeList();
+    
+    /*
+    if(cnl==null){
+      calleeLocations = new ChordNodeList();
+    }else{
+      this.calleeLocations = cnl;
+    }
+    
+    if(callerLocations==null){
+      callerLocations = new ChordNodeList();
+    }
+    
+    */
   }
   
   // Prints all of the metaData to a string.
@@ -91,6 +117,44 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     
     return result;
   }
+ 
+ 
+   // for 2D
+  //
+  // mode asks which list to add the point to
+  //
+  public void addPoint(int mode, float x, float y, String name){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,0));
+      callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,0));
+      callers = callerLocations.size();
+    }
+  }
+  
+    // for 2D
+  public void addPoint(int mode, float x, float y, String name, nodeMetaData nmd, ChordNodeList cnl){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
+      callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
+      callers = callerLocations.size();
+    }
+  }
+  
+  // For 3D
+  public void addPoint(int mode, float x, float y, float z, String name){
+    if(mode<=0){
+      calleeLocations.add(new ChordNode(name,x,y,z));
+      callees = calleeLocations.size();
+    }else if(mode==1){
+      callerLocations.add(new ChordNode(name,x,y,z));
+      callers = callerLocations.size();
+    }
+  }
+ 
  
   // Copies in the metadata from another node into this one.
   // Generally this is used for making new instances (i.e. we need a copy constructor)

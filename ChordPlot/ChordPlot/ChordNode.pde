@@ -18,11 +18,6 @@ class ChordNode{
   // Highlighted
   boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
   
-
-  // This arrayList holds all of the locations that the node points to(all of its callees).
-  ChordNodeList calleeLocations;
-  // This arrayList holds all of the locations of functions that call this specific function.
-  ChordNodeList callerLocations;
   
   /*
       The most default constructor that will be used
@@ -32,9 +27,6 @@ class ChordNode{
     this.x = x;
     this.y = y;
     this.z = z;
-    
-    calleeLocations = new ChordNodeList();
-    callerLocations = new ChordNodeList();
   }
   
   /*
@@ -46,59 +38,14 @@ class ChordNode{
     this.y = y;
     this.z = z;
     
-    this.metaData = nmd;
-    if(cnl==null){
-      calleeLocations = new ChordNodeList();
-    }else{
-      this.calleeLocations = cnl;
-    }
-    
-    if(callerLocations==null){
-      callerLocations = new ChordNodeList();
-    }
-    
-    
+    this.metaData = nmd;   
   }
   
   void getMetaData(nodeMetaData n){
     metaData.copyMetaData(metaData);
   }
   
-  // for 2D
-  //
-  // mode asks which list to add the point to
-  //
-  void addPoint(int mode, float x, float y, String name){
-    if(mode<=0){
-      calleeLocations.add(new ChordNode(name,x,y,0));
-      metaData.callees = calleeLocations.size();
-    }else if(mode==1){
-      callerLocations.add(new ChordNode(name,x,y,0));
-      metaData.callers = callerLocations.size();
-    }
-  }
-  
-    // for 2D
-  void addPoint(int mode, float x, float y, String name, nodeMetaData nmd, ChordNodeList cnl){
-    if(mode<=0){
-      calleeLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
-      metaData.callees = calleeLocations.size();
-    }else if(mode==1){
-      callerLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
-      metaData.callers = callerLocations.size();
-    }
-  }
-  
-  // For 3D
-  void addPoint(int mode, float x, float y, float z, String name){
-    if(mode<=0){
-      calleeLocations.add(new ChordNode(name,x,y,z));
-      metaData.callees = calleeLocations.size();
-    }else if(mode==1){
-      callerLocations.add(new ChordNode(name,x,y,z));
-      metaData.callers = callerLocations.size();
-    }
-  }
+
   
   /*
     A Mode of 0 (by default) if we render in 2D as ellipses
@@ -364,22 +311,26 @@ class ChordNode{
       
         if(keyPressed && key == 'h'){
             fill(0); stroke(0);
-            for(int i =0; i < calleeLocations.size();i++){
+            for(int i =0; i < metaData.calleeLocations.size();i++){
               if(depth>0){
-                  drawOutline(calleeLocations.get(i).x, calleeLocations.get(i).y);
+                  drawOutline(metaData.calleeLocations.get(i).x, metaData.calleeLocations.get(i).y);
                   //rect(LocationPoints.get(i).x,LocationPoints.get(i).y-rectHeight,rectWidth,rectHeight);
-                  ChordNode blah = calleeLocations.get(i);
+                  ChordNode blah = metaData.calleeLocations.get(i);
                   blah.drawToCallees(depth-1);     
                }
             }
         }else{
             fill(0); stroke(0);
-            for(int i =0; i < calleeLocations.size();i++){
+            for(int i =0; i < metaData.calleeLocations.size();i++){
               if(depth>0){
-                  line(x,y,calleeLocations.get(i).x,calleeLocations.get(i).y);
                   noFill(); stroke(0);
-                  rect(calleeLocations.get(i).x,calleeLocations.get(i).y-rectHeight,rectWidth,rectHeight);
-                  ChordNode blah = calleeLocations.get(i);
+                  rect(metaData.calleeLocations.get(i).x,metaData.calleeLocations.get(i).y-rectHeight,rectWidth,rectHeight);
+                  pushMatrix();
+                    translate(0,0,MySimpleCamera.cameraZ+10);
+                    fill(0); stroke(0);
+                    line(x+rectWidth/2,y-rectHeight/2,metaData.calleeLocations.get(i).x,metaData.calleeLocations.get(i).y);
+                  popMatrix();
+                  ChordNode blah = metaData.calleeLocations.get(i);
                   blah.drawToCallees(depth-1);     
                 }
             }
@@ -396,21 +347,25 @@ class ChordNode{
       
         if(keyPressed && key == 'h'){
             fill(0); stroke(0);
-            for(int i =0; i < callerLocations.size();i++){
+            for(int i =0; i < metaData.callerLocations.size();i++){
               if(depth>0){
-                  drawOutline(callerLocations.get(i).x, callerLocations.get(i).y);
-                  ChordNode blah = callerLocations.get(i);
+                  drawOutline(metaData.callerLocations.get(i).x, metaData.callerLocations.get(i).y);
+                  ChordNode blah = metaData.callerLocations.get(i);
                   blah.drawToCallers(depth-1);     
                }
             }
         }else{
             fill(0); stroke(0);
-            for(int i =0; i < callerLocations.size();i++){
+            for(int i =0; i < metaData.callerLocations.size();i++){
               if(depth>0){
-                  line(x,y,callerLocations.get(i).x,callerLocations.get(i).y);
                   noFill(); stroke(0);
-                  rect(callerLocations.get(i).x,callerLocations.get(i).y-rectHeight,rectWidth,rectHeight);
-                  ChordNode blah = callerLocations.get(i);
+                  rect(metaData.callerLocations.get(i).x,metaData.callerLocations.get(i).y-rectHeight,rectWidth,rectHeight);
+                  pushMatrix();
+                    translate(0,0,MySimpleCamera.cameraZ+10);
+                    fill(255,0,0); stroke(255,0,0);
+                    line(x+rectWidth/2,y-rectHeight/2,metaData.callerLocations.get(i).x,metaData.callerLocations.get(i).y);
+                  popMatrix();
+                  ChordNode blah = metaData.callerLocations.get(i);
                   blah.drawToCallers(depth-1);     
                 }
             }
@@ -421,8 +376,8 @@ class ChordNode{
   // Draw to all of the callee locations in 3D
   public void drawTo3DCallees(int depth){
     fill(255,0,0);
-    for(int i =0; i < calleeLocations.size();i++){
-      line(x,y,z,calleeLocations.get(i).x,calleeLocations.get(i).y,calleeLocations.get(i).z);
+    for(int i =0; i < metaData.calleeLocations.size();i++){
+      line(+rectWidth/2,y-rectHeight/2,z,metaData.calleeLocations.get(i).x,metaData.calleeLocations.get(i).y,metaData.calleeLocations.get(i).z);
     }
   }
   

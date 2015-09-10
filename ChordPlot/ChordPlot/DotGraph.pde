@@ -264,6 +264,13 @@ class DotGraph{
             // Create temporary nodes with the ones we found
             nodeMetaData src = (nodeMetaData)fullNodeList.get(tokens[0]);
             nodeMetaData dst = (nodeMetaData)fullNodeList.get(tokens[2]);
+                             
+            // Store the relationship between the source and destination
+            // These locations will be set later on in layout algorithms,
+            // but now we don't have to worry about computing this graph
+            // feature.
+            src.addPoint(0,0,0,0,dst.name);
+            dst.addPoint(1,0,0,0,src.name);
             
             if(src.name.equals(dst.name)){
               src.recursive = true;
@@ -277,6 +284,13 @@ class DotGraph{
               graph.put(src,temp);
             }else{
               // Create a new node
+              // Store the relationship between the source and destination
+              // These locations will be set later on in layout algorithms,
+              // but now we don't have to worry about computing this graph
+              // feature.
+              src.addPoint(0,0,0,0,dst.name);
+              dst.addPoint(1,0,0,0,src.name);
+            
               LinkedHashSet<nodeMetaData> incidentEdges = new LinkedHashSet<nodeMetaData>();
               incidentEdges.add(dst);
               graph.put(src,incidentEdges);

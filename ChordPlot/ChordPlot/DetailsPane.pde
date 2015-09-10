@@ -111,7 +111,7 @@ class DetailsPane extends PApplet {
                  ;
                  
               // create a new button for outputting Dot files
-              detailsPanel.addButton("ApplyOurFilters")
+              detailsPanel.addButton("CalleeSelectionFilters")
                  .setPosition(width-180,140)
                  .setSize(180,19)
                  ;
@@ -136,7 +136,6 @@ class DetailsPane extends PApplet {
                  .setSize(180,19)
                  ;
                  
-
                   
 /*                   
               // Capture Console output here.
@@ -327,23 +326,11 @@ class DetailsPane extends PApplet {
     /*
       Apply a Filter based on the options we have selected.
     */
-    public void ApplyOurFilters(int theValue){
-      String FilterString = cd.nodeListStack.peek().name;
+    public void CalleeSelectionFilters(int theValue){
       // Apply the relevant filters
-      cd.filterCallSites(callSiteMin, callSiteMax);
-      cd.update(); // Make a call to update the visualization
-      
-      hw.m_histogram.filterCallSites(callSiteMin, callSiteMax);
-      hw.m_histogram.update(); // Make a call to update the visualization
-      hw.updateFunctionList();
-      
-      bw.m_buckets.filterCallSites(callSiteMin, callSiteMax);
-      bw.m_buckets.update();
-      bw.updateFunctionList();
-      
-      // Add our item to the list
-      breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
-      
+      cd.selectCallSites(callSiteMin, callSiteMax);
+      hw.m_histogram.selectCallSites(callSiteMin, callSiteMax);
+      bw.m_buckets.selectCallSites(callSiteMin, callSiteMax);
     }
     
 }

@@ -177,8 +177,8 @@ public class NodeListStack{
         // Check if our node is selected first, and then output it. Otherwise we don't care.
         if(currentNode.selected){
           // Get all of the callees from our node that has been selected
-          for(int j = 0; j < currentNode.calleeLocations.size(); j++){
-            output.println(currentNode.metaData.name + " -> " + currentNode.calleeLocations.get(j).metaData.name);
+          for(int j = 0; j < currentNode.metaData.calleeLocations.size(); j++){
+            output.println(currentNode.metaData.name + " -> " + currentNode.metaData.calleeLocations.get(j).metaData.name);
           }          
         }
       }

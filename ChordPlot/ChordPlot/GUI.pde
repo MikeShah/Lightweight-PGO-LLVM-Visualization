@@ -20,6 +20,10 @@ int maxNumberOfCallsites = 255;
 // How far many levels to draw to callees when we highlight over nodes.
 int CalleeDepth = 1;
 
+// This is the string we push onto the bread crumbs bar to remind
+// us what filter we last ran when we push.
+String breadCrumbsString = "";
+
 int heightOfGUIElements = 20;
 
 void initGUI(){
@@ -79,7 +83,7 @@ public void theBreadCrumbsBar(int n){
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
-      cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
+      cd.fastUpdate(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
       hw.m_histogram.fastUpdate();
       bw.m_buckets.fastUpdate();
 
@@ -99,7 +103,7 @@ public void theBreadCrumbsBar(int n){
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
-        cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
+        cd.fastUpdate(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
         hw.m_histogram.fastUpdate();
         bw.m_buckets.fastUpdate();
         

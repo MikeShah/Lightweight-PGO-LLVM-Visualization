@@ -32,9 +32,9 @@ void setup(){
   
   ortho(-width/2.0, width/2.0, -height/2.0, height/2.0); // same as ortho()
 
-  String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
+  //String filename = "/home/mdshah/Desktop/LLVMSample/fullDot.dot";
   //String filename = "output.dot"; // legacy version of dot file loader
-  //String filename = "horde3d.dot";
+  String filename = "horde3d.dot";
 
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across

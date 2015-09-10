@@ -160,23 +160,25 @@ class ChordDiagram extends DataLayer{
     this.layout = layout;
 
     println("Setting a new layout");
-    // Calculates the number of callees from the caller
-    storeLineDrawings();
-    
+    // (1) Calculates the number of callees from the caller 
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     // Draw the mapping of the visualization (Different layouts may need different 
     // functions called.
-    // This function cycles through all of the nodes and generates a numerical value that can be sorted by
+    storeLineDrawings();
+    
+    // (2) This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
     generateHeatForCalleeAttribute();
     
+    // (3) Sort all of the callees in their respective list by some criteria
+    // TODO: Make this sorting be due to the Encoding Engine or NodeLinkSystem
     sortNodesByCallee();
     
-    // Modify all of the physical locations in our nodeList
+    // (4) Modify all of the physical locations in our nodeList
     fastUpdate();
        
-    // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
+    // (5) Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
   }

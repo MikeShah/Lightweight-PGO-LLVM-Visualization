@@ -14,7 +14,7 @@ class BucketsWindow extends commonWidget {
   }
   
   public void settings() {
-    size(600, 400, P3D);
+    size(600, 325, P3D);
     smooth();
   }
     
@@ -238,6 +238,8 @@ class Buckets extends DataLayer{
   public void setLayout(int layout){
     //println("buckets setLayout");
     this.layout = layout;
+    
+    bucketLists.clear();        
         
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
@@ -294,6 +296,7 @@ class Buckets extends DataLayer{
   public void fastUpdate(){
     //println("buckets fastUpdate");
     // Modify all of the positions in our nodeList
+    this.generateHeatForCalleeAttribute(scaledHeight);
     if(this.layout <= 0){
       //this.generateHeatForCalleeAttribute(scaledHeight);
       plotPoints2D();

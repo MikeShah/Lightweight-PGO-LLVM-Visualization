@@ -49,8 +49,7 @@ public class DataLayer implements VisualizationLayout{
     // Create a list of all of our nodes that will be in the visualization
     // We eventually push a copy of this to the stack
     nodeList = new ChordNodeList("Initial Data");
-println("blah");
-    println("a blah");
+
     // Plot the points in some default configuration
     this.regenerateLayout(layout);
     nodeListStack = new NodeListStack();
@@ -58,7 +57,7 @@ println("blah");
     // Push the nodeList onto the stack
     nodeListStack.push(nodeList);
     println("after push nodeListStack.size(): "+nodeListStack.size());
-    // FIXME: Put this back in the code nodeListStack.computeSummaryStatistics();
+    // nodeListStack.computeSummaryStatistics(); FIXME: Put this back in the code 
     
   }
   
@@ -81,6 +80,7 @@ println("blah");
     // Get access to all of our nodes
     Iterator nodeListIter = dotGraph.fullNodeList.entrySet().iterator();
     while(nodeListIter.hasNext()){
+      // Retrieve our pair from the dotgraph
       Map.Entry pair = (Map.Entry)nodeListIter.next();
       nodeMetaData m = (nodeMetaData)pair.getValue(); 
       ChordNode temp = new ChordNode(m.name,xPosition,yPosition,0);
@@ -103,7 +103,14 @@ println("blah");
       temp.metaData.lineNumber   = m.lineNumber;
       temp.metaData.columnNumber = m.columnNumber;
       temp.metaData.sourceFile   = m.sourceFile;
-          
+      
+      /*
+          Copy all of the callee and caller information
+      */
+      temp.metaData.calleeLocations = m.calleeLocations;
+      temp.metaData.callerLocations = m.callerLocations;     
+//    println("temp.metaData.calleeLocations.size():"+temp.metaData.calleeLocations.size()+" | m.calleeLocations.size():"+m.calleeLocations.size());  
+                  
       nodeList.add(temp);
       nodeListIter.remove(); // Avoid ConcurrentModficiationException
     }
@@ -160,8 +167,20 @@ println("blah");
   //
   public void storeLineDrawings(){
    println("I think we might crash around here");
+     // Get the top of the Stack and figure out which nodes actually exist.
+     // We are only concerned with updating the nodes who are active.
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
            
+       /*
+       // Update all of the positions of the callees from here quickly.
+        int iterations = nodeListStack.peek().size();
+        for(int i =0; i < iterations; i++){
+            // Update all of the nodes.
+            //nodeListStack.peek().get(i).
+        }
+        
+        
+           */
                 // Faster hacked version
                 println("callees storeLineDrawings size: "+nodeListStack.size());
                 int iterations = nodeListStack.peek().size();
@@ -169,7 +188,7 @@ println("blah");
                   
                       // Search to see if our node has outcoming edges
                       nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                      nodeListStack.peek().get(i).calleeLocations.clear();                  // Clear our old Locations because we'll be setting up new ones
+                      nodeListStack.peek().get(i).metaData.calleeLocations.clear();        // Clear our old Locations because we'll be setting up new ones
                       if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
                         // If we do find that our node is a source(with targets)
                         // then search to get all of the destination names and their positions
@@ -183,7 +202,7 @@ println("blah");
                             // When we find the key, add the values points
                             if(topOfStackMap.containsKey(temp.name)){
                                 ChordNode value = topOfStackMap.get(temp.name);
-                                nodeListStack.peek().get(i).addPoint(0,value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).calleeLocations );          // Add to our source node the locations that we can point to
+                                nodeListStack.peek().get(i).metaData.addPoint(0,value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).metaData.calleeLocations );          // Add to our source node the locations that we can point to
                                 //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
                             }
                         }
@@ -191,10 +210,10 @@ println("blah");
                       
                       
                       
-                      
+                //println("callers storeLineDrawings size: "+nodeListStack.size());                      
                      // Search to see if our node has outcoming edges
                       nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                      nodeListStack.peek().get(i).callerLocations.clear();    // Clear our old Locations because we'll be setting up new ones
+                      nodeListStack.peek().get(i).metaData.callerLocations.clear();    // Clear our old Locations because we'll be setting up new ones
                       for(int j=0; j < iterations; ++j){
                           nodeMetaData potentialCallerNode = nodeListStack.peek().get(j).metaData;        // Compare against this node
                           if (dotGraph.graph.containsKey(potentialCallerNode)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it could have calls into our node
@@ -212,7 +231,7 @@ println("blah");
                                     if(temp.name.equals(nodeName.name)){
                                          //println("Adding a caller:"+potentialCallerNode.name+" to "+nodeName.name);
                                          ChordNode value = topOfStackMap.get(potentialCallerNode.name); // Retrieve the nodes values of the caller which contained a destination that matched our 'nodeName'
-                                         nodeListStack.peek().get(i).addPoint(1,value.x,value.y,value.metaData.name, topOfStackMap.get(potentialCallerNode.name).metaData ,topOfStackMap.get(potentialCallerNode.name).callerLocations);
+                                         nodeListStack.peek().get(i).metaData.addPoint(1,value.x,value.y,value.metaData.name, topOfStackMap.get(potentialCallerNode.name).metaData ,topOfStackMap.get(potentialCallerNode.name).metaData.callerLocations);
                                          break;
                                     }
                                 }
@@ -223,11 +242,6 @@ println("blah");
                   
                 } // for(int i =0; i < iterations; i++){      
 
-                                
-                  
-                
-                
-      
   }
   
   
@@ -264,7 +278,7 @@ println("blah");
       visualization onto another.
   */
     synchronized public void pushSelectedNodes(ChordNodeList selectedNodes){
-      String name = "Selected Nodes";
+      //String name = "Selected Nodes";
       
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
@@ -315,8 +329,9 @@ println("blah");
         }        
         
       }
+      
+      breadCrumbsString += "invertSelected";
   }  
-    
     
   
     /*
@@ -324,21 +339,19 @@ println("blah");
       
       1.) Create a new ArrayList<ChordNode>
       2.) Loop through all nodes that are on the top of the stack
-      3.) If they do not meet the criteria, then do not add them to the list.
-      4.) Push the arrayList we have built on top of the stack
+      3.) If they do not meet the criteria, then do not select them.
+      4.) 
   */
-  synchronized public void filterCallSites(int min, int max){
-      String name = "Callsites "+callSiteMin+"-"+callSiteMax;
-    
-      ChordNodeList filteredNodes = new ChordNodeList(name);
-      
+  synchronized public void selectCallSites(int min, int max){
+      String result = "Callsites "+callSiteMin+"-"+callSiteMax;
+
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
-          filteredNodes.add(nodeListStack.peek().get(i));
+          nodeListStack.peek().get(i).selected = true; 
         }
       }
-      nodeListStack.push(filteredNodes);
+      breadCrumbsString += result;
   }
   
   /*
@@ -364,6 +377,8 @@ println("blah");
         }
       }
       nodeListStack.push(filteredNodes);
+      
+      breadCrumbsString += "functionsStartWith "+ text;
   }
   
   /*
@@ -373,7 +388,7 @@ println("blah");
   */
   
     synchronized public void functionStartsWithSelect(String text){
-      String name = "Select and Starts With: "+text;
+      //String name = "Select and Starts With: "+text;
       // The name we give to our list, so we can pop it off the stack by name if we need to.
 
       int iterations = nodeListStack.peek().size();
@@ -386,6 +401,8 @@ println("blah");
           nodeListStack.peek().get(i).selected = true;
         }
       }
+      
+      breadCrumbsString += "functionStartWIth "+text;
   }
   
   /*
@@ -527,14 +544,14 @@ println("blah");
       Based on the node we are selecting
   */
   synchronized public void toggleCallees(ChordNode cn){
-    println("About to toggle callees:"+cn.calleeLocations.size()); 
+    println("About to toggle callees:"+cn.metaData.calleeLocations.size()); 
     int iterations = nodeListStack.peek().size();
     
     for(int j = 0; j < iterations; ++j){
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = true;//!nodeListStack.peek().get(j).selected; // Modify the node we have found. 
-          for(int i = 0; i < nodeListStack.peek().get(j).calleeLocations.size(); ++i){
-            nodeListStack.peek().get(j).calleeLocations.get(i).selected = true;// nodeListStack.peek().get(j).selected;
+          for(int i = 0; i < nodeListStack.peek().get(j).metaData.calleeLocations.size(); ++i){
+            nodeListStack.peek().get(j).metaData.calleeLocations.get(i).selected = true;// nodeListStack.peek().get(j).selected;
           }
           break;
         }
@@ -570,9 +587,9 @@ println("blah");
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
           
-                for(int i =0; i < cn.calleeLocations.size();i++){
+                for(int i =0; i < cn.metaData.calleeLocations.size();i++){
                     for(int k =0; k < iterations; ++k){
-                        if(cn.calleeLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
+                        if(cn.metaData.calleeLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
                             nodeListStack.peek().get(k).selected = value; // Modify the node we have found. 
                             // recursively call our function again.
                             if(theDepth>1){
@@ -586,6 +603,8 @@ println("blah");
           break; 
         }
      }
+     
+     breadCrumbsString += "select Callees";
   }
   
   /*
@@ -600,9 +619,9 @@ println("blah");
         if(cn.metaData.name.equals(nodeListStack.peek().get(j).metaData.name)){
           nodeListStack.peek().get(j).selected = value; // Modify the node we have found. 
           
-                for(int i =0; i < cn.callerLocations.size();i++){
+                for(int i =0; i < cn.metaData.callerLocations.size();i++){
                     for(int k =0; k < iterations; ++k){
-                        if(cn.callerLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
+                        if(cn.metaData.callerLocations.get(i).metaData.name.equals(nodeListStack.peek().get(k).metaData.name)){
                             nodeListStack.peek().get(k).selected = value; // Modify the node we have found. 
                             // recursively call our function again.
                             if(theDepth>1){
@@ -615,6 +634,8 @@ println("blah");
           break; 
         }
      }
+     
+     breadCrumbsString += "select Callers";
   }
   
   

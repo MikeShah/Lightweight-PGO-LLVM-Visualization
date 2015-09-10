@@ -77,7 +77,13 @@ void keyPressed() {
       bw.updateFunctionList();
       
       // Add our item to the list
-      breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
+      
+      breadCrumbsBar.addItem(FilterString+breadCrumbsString,cd.nodeListStack.size()-1);
+      // Note that we also clean up the breadCrumbString which logged all of our actions.
+      // TODO: Implement some sort of Macro system that can parse this string of events
+      // and recreate steps user took in visualiation.
+      // NOTE: This is a BIG TODO task!
+      breadCrumbsString = "";
   }
   
   // De-select nodes if space is pressed.
