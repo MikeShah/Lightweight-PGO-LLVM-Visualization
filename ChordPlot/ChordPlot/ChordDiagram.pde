@@ -123,29 +123,47 @@ class ChordDiagram extends DataLayer{
     optimalSize = (int)(sqrt(optimalSize)); // Cast to an int to make things simple
     // Compute the proper aspect ratio so that the visualization is more square.     
     // Adjust the aspect ratio
-    int pixelsNeeded = (int)(sqrt( optimalSize * nodeListStack.peek().size()));
+    //int pixelsNeeded = (int)(sqrt( optimalSize * nodeListStack.peek().size()));
     
-    float xSize = pixelsNeeded * optimalSize; 
-    
+    //float xSize = pixelsNeeded * optimalSize; 
+    float xSize = sqrt(nodeListStack.peek().size()) * optimalSize; 
+        
     // If our aspect ratio gets messed up, set it to the maximum
-    if(xSize > width-padding-padding){
-      xSize = width-padding-padding;
+    if(xSize > width-padding-optimalSize){
+       xSize = width-padding-optimalSize;
     }
     
-    float ySize = height-padding-padding;
+    float ySize = height-padding-padding; 
     
-    xBounds = xSize+padding; // Set the bounds
+    // If we exceed our ySize, then we need to de-squarify the xSize by
+    // making it more rectangular.
+    float tempValue = sqrt(nodeListStack.peek().size()) * (optimalSize+1);
+    while(tempValue > ySize){
+      tempValue--;
+      xSize++;
+    }
+    println("==============plotPointsOnGrid==============");
+    println("nodeListStack.peek().size():"+nodeListStack.peek().size());
+    println("width:"+width);
+    println("padding:"+padding);
+    println("xSize:"+xSize);
+    println("OptimalSize is:"+optimalSize);
+    println("==============plotPointsOnGrid==============");
+    
+    
+    // Set the bounds of our visualization
+    xBounds = xSize+padding+optimalSize; 
     
     // We can set a default steps(that is passed in the parameter)
     // But we can re-adjust it to fit the xBo
     
     println("======About to replot=========");
     int counter = 0; // draw a new point at each step
-    for(  float yPos = padding; yPos+optimalSize < ySize; yPos+=optimalSize){
-      for(float xPos = padding; xPos+optimalSize < xSize; xPos+=optimalSize){
+    for(  float yPos = optimalSize; yPos <= ySize+optimalSize; yPos+=optimalSize){
+      for(float xPos = padding; xPos <= xSize; xPos+=optimalSize){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
-          nodeListStack.peek().get(counter).y = yPos+optimalSize;
+          nodeListStack.peek().get(counter).y = yPos;
 
           // Set the size of our visualization here
           nodeListStack.peek().get(counter).nodeSize = (int)(optimalSize/2); // Integer division

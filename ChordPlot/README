@@ -33,3 +33,8 @@ grep -r -e "FIXME" --include="*.pde"
 grep -r -e "DEPRECATE" --include="*.pde"
 
 
+Some metric of project development:
+Count lines of code of project.
+wc -l *.pde
+
+

@@ -106,8 +106,8 @@ class ChordNode{
           }
           else{
               // Color nodes based on callees
-              fill(255-metaData.c);
-              stroke(255-metaData.c);
+              fill  (255-metaData.c,255-metaData.c,255-metaData.c);
+              stroke(255-metaData.c,255-metaData.c,255-metaData.c);
               ellipse(x,y,nodeSize*2,nodeSize*2);
           }
      }
@@ -137,7 +137,7 @@ class ChordNode{
      }
      else{
         // Color nodes based on callees
-        fill(255-metaData.c);
+        fill(255-metaData.c,255-metaData.c,255-metaData.c);
         pushMatrix();
         translate(x,y,z);
           sphere(nodeSize);
@@ -247,7 +247,7 @@ class ChordNode{
          else{
             // If we aren't selected or highlighted then
             // Default to coloing nodes based on color in the metaData
-            fill(255-metaData.c);
+            fill(255-metaData.c,255-metaData.c,255-metaData.c);
             stroke(255-metaData.strokeValue);
             rect(x,y-rectHeight,rectWidth,rectHeight);
          }
@@ -267,8 +267,8 @@ class ChordNode{
     
    if(metaData.symbol_encode){
        // Apply Encodings
-       fill(metaData.c);
-       stroke(metaData.c);
+       fill(metaData.c,0,0);
+       stroke(metaData.c,0,0);
        textSize(rectHeight);
        text(metaData.symbol,x,y);
        textSize(12);

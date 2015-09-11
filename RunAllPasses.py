@@ -4,7 +4,9 @@ import time
 
 # This is the variable you change in order to choose a name for your program
 # No need to touch anything else
-PROGRAM_1 = 'randprog1'
+#
+# In general this is the program name without any extensions.
+PROGRAM_1 = 'merged'
 
 PROGRAM_1_GENERATE = PROGRAM_1+'.cpp' # Name of the .cpp file generated
 PROGRAM_1_OUT = PROGRAM_1+'.ll'       # The textual bitcode representation output
@@ -17,7 +19,7 @@ DIR = './RandomPrograms/'
 
 ################# Command line to run FuncBlockCount ###################
 print('|==========Running "funcblockcount"===========|')
-os.system('../llvm/bin/opt -load ../llvm/lib/funcblockcount.so -funcblockcount ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+DIR+PROGRAM_1_OUT+'.bc')
+os.system('../llvm/bin/opt -load ../llvm/lib/funcblockcount.so -funcblockcount2 ./RandomPrograms/'+PROGRAM_1_OUT+' -o '+DIR+PROGRAM_1_OUT+'.bc')
 
 ################## Command line to run FunctionBlockCounts ##############
 print('|==========Running "functionblockcounts"==========|')
@@ -41,3 +43,11 @@ os.system('../llvm/bin/opt -load ../llvm/lib/myaliasanalysis.so -must-aa '+DIR+P
 print('|=========Running Module Pass===========|')
 os.system('../llvm/bin/opt -load ../llvm/lib/mymodulepass.so -mymodulepass '+DIR+PROGRAM_1_OUT)
 
+############### Command line to perform Module Pass 2 ##################
+print('|=========Running Module Pass 2 ===========|')
+os.system('../llvm/bin/opt -load ../llvm/lib/mymodulepass2.so -mymodulepass2 '+DIR+PROGRAM_1_OUT)
+
+############### Command line to perform myAnnotation Pass ##################
+print('|=========Running Module Pass 2 ===========|')
+os.system('../llvm/bin/opt -load ../llvm/lib/myannotation.so -myannotation '+DIR+PROGRAM_1_OUT+' -o '+DIR+PROGRAM_1_OUT+'annotated.bc')
+os.system('../llvm/bin/llvm-dis '+DIR+PROGRAM_1_OUT+'annotated.bc -o ' + DIR+PROGRAM_1_OUT+'annotated.ll')
