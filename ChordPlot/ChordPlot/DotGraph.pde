@@ -264,14 +264,8 @@ class DotGraph{
             // Create temporary nodes with the ones we found
             nodeMetaData src = (nodeMetaData)fullNodeList.get(tokens[0]);
             nodeMetaData dst = (nodeMetaData)fullNodeList.get(tokens[2]);
-                             
-            // Store the relationship between the source and destination
-            // These locations will be set later on in layout algorithms,
-            // but now we don't have to worry about computing this graph
-            // feature.
-            src.addPoint(0,0,0,0,dst.name);
-            dst.addPoint(1,0,0,0,src.name);
-            
+                                                              
+            // If a function calls itself, then mark it as recursive.
             if(src.name.equals(dst.name)){
               src.recursive = 1;
               dst.recursive = 1;
@@ -283,19 +277,31 @@ class DotGraph{
               temp.add(dst);
               graph.put(src,temp);
             }else{
-              // Create a new node
-              // Store the relationship between the source and destination
-              // These locations will be set later on in layout algorithms,
-              // but now we don't have to worry about computing this graph
-              // feature.
-              src.addPoint(0,0,0,0,dst.name);
-              dst.addPoint(1,0,0,0,src.name);
-            
+              // Create a new node           
               LinkedHashSet<nodeMetaData> incidentEdges = new LinkedHashSet<nodeMetaData>();
               incidentEdges.add(dst);
               graph.put(src,incidentEdges);
               totalSources++;
             }
+
+/*
+            // Check if the destination exists in our graph. If it does, immedietely add
+            // to its caller count
+            if(graph.containsKey(dst)){
+              LinkedHashSet<nodeMetaData> temp = (LinkedHashSet<nodeMetaData>)(graph.get(dst));
+              temp.addPoint(1,0,0,0,src.name);
+              graph.put(dst,temp);
+            }else{
+              // If our node does not exist, then we need to create it.
+            }
+            
+            // Store the relationship between the source and destination
+            // These locations will be set later on in layout algorithms,
+            // but now we don't have to worry about computing this graph
+            // feature.
+            src.addPoint(0,0,0,0,dst.name);
+            dst.addPoint(1,0,0,0,src.name);
+*/            
           
         } // if (lines[i].contains("->"))
       } // for(int i =0; i < lines.length; i++)

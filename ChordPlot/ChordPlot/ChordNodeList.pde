@@ -44,6 +44,18 @@ class ChordNodeList{
   }
   
   /*
+      Untested way of adding to a list
+  */
+  public void addUnique(ChordNode element){
+    for(int i =0; i < chordList.size();++i){
+      if(element.metaData.name.equals(chordList.get(i).metaData.name)){
+        return;
+      }
+    }
+    chordList.add(element);
+  }
+  
+  /*
       Clear all of the elements
   */
   public void clear(){

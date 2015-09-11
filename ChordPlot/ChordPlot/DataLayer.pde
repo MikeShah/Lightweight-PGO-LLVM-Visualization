@@ -95,8 +95,7 @@ public class DataLayer implements VisualizationLayout{
         case RECURSIVE:
               this.nodeListStack.peek().sortNodesBy(sortBy);
               break;
-      }
-      
+      }   
   }
   
   /*
@@ -137,8 +136,6 @@ public class DataLayer implements VisualizationLayout{
       temp.metaData.lineNumber   = m.lineNumber;
       temp.metaData.columnNumber = m.columnNumber;
       temp.metaData.sourceFile   = m.sourceFile;
-      
-
       
       /*
           Copy all of the callee and caller information
@@ -229,13 +226,26 @@ public class DataLayer implements VisualizationLayout{
   // Then we need to store each of these in that ChordNode's list of lines to draw
   // so that when we render we can do it quickly.
   //
-  // If compute == 1 then compute callees, otherwise do not becaue they have already been done.
   //
   public void storeLineDrawings(){
-   println("I think we might crash around here");
+   println("I think we might crash around here");                
+   
+   int iterations = nodeListStack.peek().size();
+   
      // Get the top of the Stack and figure out which nodes actually exist.
      // We are only concerned with updating the nodes who are active.
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      
+      // Indexes
+      // Create a map tha tis a string, and the value is the index into the top of the stack
+      Map<String, Integer> topOfStackMapQuickAccess = new HashMap<String,Integer>();
+      for(int i = 0; i < iterations; ++i){
+        topOfStackMapQuickAccess.put(nodeListStack.peek().get(i).metaData.name,i);
+        // Clear callees and callers because that gets mucked up
+        nodeListStack.peek().get(i).metaData.calleeLocations.clear();
+        nodeListStack.peek().get(i).metaData.callerLocations.clear();
+      }
+      
            
        /*
        // Update all of the positions of the callees from here quickly.
@@ -251,8 +261,8 @@ public class DataLayer implements VisualizationLayout{
            
                 // Faster hacked version
                 println("callees storeLineDrawings size: "+nodeListStack.size());
-                int iterations = nodeListStack.peek().size();
-                for(int i =0; i < iterations; i++){      
+
+                for(int i = 0; i < iterations; i++){      
                   
                       // Search to see if our node has outcoming edges
                       nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
@@ -272,6 +282,20 @@ public class DataLayer implements VisualizationLayout{
                                 ChordNode value = topOfStackMap.get(temp.name);
                                 nodeListStack.peek().get(i).metaData.addPoint(0,value.x,value.y,value.metaData.name, topOfStackMap.get(temp.name).metaData ,topOfStackMap.get(temp.name).metaData.calleeLocations );          // Add to our source node the locations that we can point to
                                 //topOfStackMap.remove(temp); // Try to avoid ConcurrentModificationException Since top of stack is a temporary thing, this should be okay to do.
+                                
+                                // In theory there is a 1:1 relationship, so for every callee, it has a caller.
+                                // TODO: Verify this pans out for leaf nodes, which might not have any callees(thus, dests.iterator() will return 0), but may have callers.
+                                //       It is possible that this may not be a problem however.
+                                float x_pos = nodeListStack.peek().get(i).x;
+                                float y_pos = nodeListStack.peek().get(i).y;
+                                String callerName = nodeListStack.peek().get(i).metaData.name;
+                                
+                                nodeMetaData n = topOfStackMap.get(nodeListStack.peek().get(i).metaData.name).metaData;
+                                ChordNodeList cnl = topOfStackMap.get(nodeListStack.peek().get(i).metaData.name).metaData.callerLocations;
+                                
+                                // Add to our destination, a caller.
+                                int dest_index = topOfStackMapQuickAccess.get(temp.name);
+                                nodeListStack.peek().get(dest_index).metaData.addPoint(1,x_pos,y_pos,callerName,n,cnl);
                             }
                         }
                       }

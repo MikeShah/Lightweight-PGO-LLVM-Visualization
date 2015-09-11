@@ -128,11 +128,11 @@ class ChordDiagram extends DataLayer{
     float xSize = pixelsNeeded * optimalSize; 
     
     // If our aspect ratio gets messed up, set it to the maximum
-    if(xSize > width-padding){
-      xSize = width-padding;
+    if(xSize > width-padding-padding){
+      xSize = width-padding-padding;
     }
     
-    float ySize = height-padding;
+    float ySize = height-padding-padding;
     
     xBounds = xSize+padding; // Set the bounds
     
@@ -141,8 +141,8 @@ class ChordDiagram extends DataLayer{
     
     println("======About to replot=========");
     int counter = 0; // draw a new point at each step
-    for(  float yPos = padding; yPos < ySize; yPos+=optimalSize){
-      for(float xPos = padding; xPos < xSize; xPos+=optimalSize){
+    for(  float yPos = padding; yPos+optimalSize < ySize; yPos+=optimalSize){
+      for(float xPos = padding; xPos+optimalSize < xSize; xPos+=optimalSize){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
           nodeListStack.peek().get(counter).y = yPos+optimalSize;
@@ -152,7 +152,7 @@ class ChordDiagram extends DataLayer{
           nodeListStack.peek().get(counter).rectWidth = optimalSize;
           nodeListStack.peek().get(counter).rectHeight = optimalSize;
           
-          yBounds = yPos+padding; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
+          yBounds = yPos+padding+optimalSize; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
           counter++;
         }
       }
