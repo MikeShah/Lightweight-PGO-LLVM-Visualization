@@ -21,3 +21,5 @@ Installing perf is important
 Installing sysstat is important
 
 Installing Python is important
+
+If you do autofdo stuff, you might need to install: sudo apt-get install libpcap-dev libssl-dev on Ubuntu for openssl/md5.h
