@@ -22,4 +22,6 @@ Installing sysstat is important
 
 Installing Python is important
 
+Install findbugs and jvisualvm could be important for debugging the processing environment
+
 If you do autofdo stuff, you might need to install: sudo apt-get install libpcap-dev libssl-dev on Ubuntu for openssl/md5.h
