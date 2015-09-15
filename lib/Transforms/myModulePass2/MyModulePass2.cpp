@@ -28,6 +28,9 @@
 #include "llvm/ADT/SCCIterator.h"
 #include "llvm/ADT/SmallVector.h"
 
+#include "llvm/Analysis/InlineCost.h"
+#include "llvm/Transforms/IPO/InlinerPass.h"
+
 #include <set>
 #include <vector>
 #include <memory>
@@ -78,6 +81,11 @@ private:
     std::vector<std::string> reversepost_orderList;
     // Store the meta-data
     std::string m_metaData;
+    // Store the line, column, and file information
+    unsigned m_line;
+    unsigned m_column;
+    std::string m_directory;
+    std::string m_filename;
 
     // Note that items are stored in a topological order (reverse post-order)
     //SmallVector< std::pair<unsigned, MDNode*>, 4> MDForFunction;
@@ -89,8 +97,6 @@ private:
         llvm::raw_string_ostream ss(s);
         std::string m_meta_data;
         llvm::raw_string_ostream m_meta_ss(m_meta_data);
-
-
 
         // Check to see if we have any meta-data in the first place.
         if(m_function->hasMetadata()){
@@ -161,7 +167,12 @@ private:
                     std::pair <std::string,unsigned long int> callSite;
                     // ss << "\t\tDirect call to function: " << f->getName() << "\n";
                     callSite.first = f->getName();
-
+                    // Get an inline cost
+//                    InlineCost test;
+//                    InlineCost ic = InlineCostAnalysis::getInlineCost(cs,m_function,0);
+                    //bool shouldInline =
+                    //Inliner::getInlineThreshold
+                    //InlineCost iCost = getInlineCost(cs,20);
                    // Figure out how many entries into this function there are.
                     if(f->getEntryCount().hasValue()){
                         long unsigned int val = f->getEntryCount().getValue();
@@ -254,6 +265,8 @@ private:
         for(Function::iterator bb = m_function->begin(), e = m_function->end(); bb != e; ++bb){
             // Grab all of the basic blocks, and then iterate through their opcodes
             for(BasicBlock::iterator i = bb->begin(), e=bb->end(); i!= e; ++i){
+                // Store the line information
+                getLineInformation(i); // TODO: Either only update this once, or map it to every single instruction for better granulatrity.
                 // If the opcode is not in our map, then add it in, otherwise increment it.
                 if(opcodeCounter.find(i->getOpcodeName())==opcodeCounter.end()){
                     opcodeCounter[i->getOpcodeName()] = 1;
@@ -328,6 +341,32 @@ private:
 
         // Need to reverse the order of the items to have a topological sorted order.
         std::reverse(reversepost_orderList.begin(),reversepost_orderList.end());
+    }
+
+
+    // Store line information for the function.
+    // This allows us to quickly open up an editor.
+    void getLineInformation(Instruction *i){
+        DebugLoc DL = i->getDebugLoc();
+        m_filename = "n/a";
+        std::string directory = "";
+        m_line = 1; // default values set to 1
+        m_column = 1; // default value set to 1
+        if(DL){
+            DIScope *Scope = DL->getScope();
+/*          Not sure this is needed yet
+            if(DL.getInlinedAt()){
+                ss() << "Inlined:" << DL.getInlinedAt();
+            }
+*/
+            // If we have additional debuggin info available
+            // then output that data.
+            m_directory = Scope->getDirectory();
+            m_filename = Scope->getFilename();
+            m_line = DL.getLine();
+            m_column = DL.getCol();
+            // DL.get
+        }
     }
 
     // Takes an instruction and returns all attributes
@@ -470,8 +509,6 @@ public:
         std::string s="";
         llvm::raw_string_ostream ss(s);
 
-
-
         // Start with the attributes
         if(m_attributes.size() > 0 ){
             ss << "{";
@@ -547,6 +584,11 @@ public:
             ss << "|" << m_function->size();
             ss << "}|";
 
+            ss << "{";
+            ss << "LineInformation";
+            ss << "|" << printLineInformation();
+            ss << "}|";
+
         return ss.str();
     }
 
@@ -557,10 +599,23 @@ public:
         std::string s="";
         llvm::raw_string_ostream ss(s);
 
-        for(std::vector<std::string>::iterator it=reversepost_orderList.begin(); it!=reversepost_orderList.end(); ++it){
-            ss << *it << " | ";
+        for(std::vector<std::string>::iterator it=reversepost_orderList.begin(); it != reversepost_orderList.end(); ++it){
+            ss << *it << "|";
         }
 
+        return ss.str();
+    }
+
+
+    std::string printLineInformation(){
+        std::string s="";
+        llvm::raw_string_ostream ss(s);
+        // If we do not find a filename, then return empty values
+        if(m_filename.length() > 0){
+            ss << m_line << "|" << m_column << "|" << (m_directory+"/"+m_filename);
+        }else{
+            ss << "1|1|no/information/found";
+        }
         return ss.str();
     }
 
@@ -845,6 +900,8 @@ public:
             // From each function, we will need to get all of its callers
             // Store these in cs
             std::vector<std::pair<std::string,unsigned long int>>* cs = functionList[i]->getCallSites();
+
+
 
             for(unsigned j = 0; j < cs->size(); ++j){
                 std::pair<std::string,unsigned long int> cs_pair = cs->at(j);

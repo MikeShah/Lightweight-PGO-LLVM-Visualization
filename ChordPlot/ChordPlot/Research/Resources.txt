@@ -1,0 +1,111 @@
+JSON Beautifier
+http://codebeautify.org/jsonviewer
+
+Handbook of Graph Drawing and Visualization
+https://cs.brown.edu/~rt/gdhandbook/
+Treemap
+http://wiki.scipy.org/Cookbook/Matplotlib/TreeMap
+NicheWorks -- Interactive Visualization of Very Large Graphs
+http://www.soundartarchive.net/articles/wills,%20grham%20j,%20nicheworks%20-%20interactive%20visualisation%20of%20very%20large%20graphs%20-%20amstat.org.pdf
+LLVM Visualization Tool User Guide
+https://llvm.org/svn/llvm-project/television/trunk/docs/UserGuide.html
+
+perf Examples
+http://www.brendangregg.com/perf.html
+PERF tutorial: Finding Execution hot spots
+http://sandsoftwaresound.net/perf/perf-tutorial-hot-spots/
+Brendan Gregg's Performance Analysis Blog
+http://www.brendangregg.com/blog/2015-03-17/linux-performance-analysis-perf-tools.html
+
+LLVM and Clang Samples
+https://github.com/eliben/llvm-clang-samples
+LLVM Language Reference Manual
+http://llvm.org/docs/LangRef.html
+Writing an LLVM Pass
+http://llvm.org/docs/WritingAnLLVMPass.html#example-implementations-of-getanalysisusage
+LLVM Compiler Framework and Infrastructure
+http://llvm.org/pubs/2004-09-22-LCPCLLVMTutorial.pdf
+Programmers Manual
+http://llvm.org/docs/ProgrammersManual.html
+Source Level Debugging with LLVM
+http://llvm.org/docs/SourceLevelDebugging.html
+
+
+LLVM Branch Weight Metadata
+http://llvm.org/docs/BranchWeightMetadata.html
+LLVM Block Frequency Terminology
+http://llvm.org/docs/BlockFrequencyTerminology.html
+llvm::MDNode Class Reference
+http://llvm.org/docs/doxygen/html/classllvm_1_1MDNode.html
+CodeGenPGO.h
+http://clang.llvm.org/doxygen/CodeGenPGO_8h_source.html
+Coverage Mapping Format
+http://llvm.org/docs/CoverageMappingFormat.html
+llvm-cov emit coverage information
+http://llvm.org/docs/CommandGuide/llvm-cov.html
+LLVM Metadata tutorial
+https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=llvm%20metadata%20tutorial
+
+
+Mapping source code to bitcode
+https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=llvm%20map%20source%20to%20bitcode
+DILocation Class Reference
+http://llvm.org/docs/doxygen/html/classllvm_1_1DILocation.html
+
+Auto-Vectorization in LLVM
+http://llvm.org/docs/Vectorizers.html#diagnostics
+
+Tools for Manual Profile-Guided Optimization
+https://msdn.microsoft.com/en-us/library/41sck3ys(v=vs.140).aspx
+Guided Auto Parallelism Overview
+https://software.intel.com/en-us/node/524689
+
+LLVM a First Function
+http://llvm.org/releases/2.6/docs/tutorial/JITTutorial1.html
+LLVM Project Blog
+http://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html
+
+Clang Diagnostics
+http://clang.llvm.org/diagnostics.html
+Clang FixItRewriter
+http://clang.llvm.org/doxygen/classclang_1_1FixItRewriter.html
+LLDB Debugger
+http://lldb.llvm.org/tutorial.html
+An Introduction to the Clang API
+https://www.qtdeveloperdays.com/2013/sites/default/files/presentation_pdf/IntroToClangAPIForDevDays2013_0.pdf
+
+AsmWriter in LLVM
+http://llvm.org/docs/doxygen/html/AsmWriter_8cpp_source.html
+Slot Tracker
+https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=llvm%20slottracker
+
+Merging functions
+http://llvm.org/docs/doxygen/html/MergeFunctions_8cpp_source.html
+
+Compiler Optimization
+Understanding the behavior of compiler optimizations
+http://www-plan.cs.colorado.edu/hanlee/pubs/compiler_optimizations.pdf
+State of the art C compiler optimization tricks
+http://lambda-the-ultimate.org/node/3674
+Compilers - What Every Programmer Should Know About Compiler Optimizations
+https://msdn.microsoft.com/en-us/magazine/Dn904673.aspx
+
+(For Fun)
+Rockwell Retro Enabulator
+https://www.youtube.com/watch?v=RXJKdh1KZ0w
+http://www.paulgraham.com/ds.html
+http://www.ccs.neu.edu/home/stamourv/papers/profile-guided-meta-programming.pdf
+http://www.whyprogramsfail.com/
+The Two LLVM Books on Amazon
+
+Things to look at 
+Gprof
+https://docs.freebsd.org/44doc/psd/18.gprof/paper.pdf
+
+
+• Instrumentation, profile info and block placement
+(2004, Chris Lattner)
+• Branch weights and block frequencies
+(2011, Jakub Staszak)
+• Setting branch weights from execution counts
+(2012, Alastair Murray)

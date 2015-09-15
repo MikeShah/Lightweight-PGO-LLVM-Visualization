@@ -1,0 +1,9 @@
+SHIP
+https://social.msdn.microsoft.com/Profile/ankit%20asthana/activity
+
+http://blogs.msdn.com/b/vcblog/archive/2013/04/08/profile-guided-optimization-pgo.aspx
+http://blogs.msdn.com/b/vcblog/archive/2013/05/28/profile-guided-optimization-pgo-under-the-hood.aspx
+
+https://channel9.msdn.com/Shows/C9-GoingNative/C9GoingNative-12-C-at-BUILD-2012-Inside-Profile-Guided-Optimization
+https://www.youtube.com/watch?v=zEsdBcu4R00
+
