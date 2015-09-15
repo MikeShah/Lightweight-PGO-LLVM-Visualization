@@ -84,6 +84,7 @@ class ChordDiagram extends DataLayer{
    numberOfPoints = How many points to draw on the circle
    
   */
+  /*
   private void plotPointsOnCircle(float numberOfPoints){
     
     float steps = 360/numberOfPoints; // Based on how many points we have, 
@@ -109,6 +110,7 @@ class ChordDiagram extends DataLayer{
     println("Nodes edited:"+counter);
     
   }
+  */
   
   /*
       Plot points in the microarary
@@ -180,6 +182,7 @@ class ChordDiagram extends DataLayer{
   /*
     Plot Points on a Sphere
   */
+  /*
   private void plotPointsOnSphere(float numberOfPoints){   
     float steps = 360/numberOfPoints; // Based on how many points we have, 
                                       // draw a new point at each step
@@ -194,11 +197,7 @@ class ChordDiagram extends DataLayer{
       float xPos = centerx + p*sin(phi)*cos(theta);
       float yPos = centery + p*sin(phi)*sin(theta);
       float zPos = p*cos(phi);
-      /*
-      float xPos = centerx + radius*cos(theta);
-      float yPos = centery - radius*sin(theta);
-      float zPos = radius*sin(theta);
-      */
+
       nodeListStack.peek().get(counter).x = xPos;
       nodeListStack.peek().get(counter).y = yPos;
       nodeListStack.peek().get(counter).z = zPos;
@@ -208,7 +207,7 @@ class ChordDiagram extends DataLayer{
     }
     
   }
-
+  */
 
 
   public void setLayout(int layout){
@@ -252,11 +251,11 @@ class ChordDiagram extends DataLayer{
     generateHeatForCalleeAttribute(CALLEE);
     // Modify all of the positions in our nodeList
     if(this.layout <=0 ){
-      plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
+      // DEPRECATED function call plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
     }else if(this.layout == 1){
       plotPointsOnGrid(nodeListStack.peek().size());
     }else if(this.layout >= 2){
-      plotPointsOnSphere(nodeListStack.peek().size());
+      // DEPRECATED function call plotPointsOnSphere(nodeListStack.peek().size());
     }
   }
 

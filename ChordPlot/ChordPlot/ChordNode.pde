@@ -61,7 +61,7 @@ class ChordNode{
           render2D(1);
         }else if(mode==1){
           sphereDetail(6);
-          render3D();
+          //render3D(); // DEPRECATED: Handling 3D rendering is not supported right now.
         }
         else if(mode==2){
           render2DRects(rectWidth,rectHeight);
@@ -113,6 +113,8 @@ class ChordNode{
      }
   }
   
+  
+/*  
   // Imlements selection and onHover for 3D spheres
   private void render3D(){
      if( dist(x,y,0,MySimpleCamera.xSelection,MySimpleCamera.ySelection,0) < nodeSize || selected){
@@ -144,7 +146,8 @@ class ChordNode{
         popMatrix();
      }
   }
-  
+*/
+
   /*
   
   */
@@ -390,7 +393,7 @@ class ChordNode{
         }
   }
   
-  
+  /*
   // Draw to all of the callee locations in 3D
   public void drawTo3DCallees(int depth){
     fill(255,0,0);
@@ -398,12 +401,24 @@ class ChordNode{
       line(+rectWidth/2,y-rectHeight/2,z,metaData.calleeLocations.get(i).x,metaData.calleeLocations.get(i).y,metaData.calleeLocations.get(i).z);
     }
   }
+  */
+  
   
   /*
       Return information about a ChordNode
   */
   public String debug(){
     return "(x,y,z)=> (" + x + "," + y + "," + z + ")" + " name; "+metaData.name + "callees: "+metaData.callees;
+  }
+  
+  /*
+      Debug function that shows what information is in the node
+      
+      Useful to see what is being pushed
+  */
+  public String printAll(){
+        String result = "(x,y,z)=> (" + x + "," + y + "," + z + ")" + metaData.getAllMetadata();
+        return result;
   }
   
     

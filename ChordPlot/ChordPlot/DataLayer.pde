@@ -351,10 +351,15 @@ public class DataLayer implements VisualizationLayout{
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).selected){
+          // Do a deep copy of the nodes we are pushing
+          ChordNode temp = nodeListStack.peek().get(i);
+          println(temp.printAll());
+          
           selectedNodes.add(nodeListStack.peek().get(i));
         }
       }
       
+      // Push the entire list
       nodeListStack.push(selectedNodes);
   }
   
