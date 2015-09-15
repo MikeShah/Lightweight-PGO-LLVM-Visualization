@@ -48,9 +48,12 @@ class HistogramWindow extends commonWidget {
           // ChordNode itself. This way we can have any arbritrary shape in ChordNode
           // drawn and handle all of the selection there. It also would allow us to have
           // different types of shaped nodes mixed in a visualization much more easily.
-          for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){
+          
+          
+          for(int i =0; i < m_histogram.nodeListStack.peek().size();i++){ // FIXME: Well, this visualization is only useful if it is directly attached to the 'cd', so just work with that data directly.
+                                                                          //        Current bug is 
             ChordNode temp = (ChordNode)m_histogram.nodeListStack.peek().get(i);
-                       
+            
             fill(temp.metaData.c); stroke(255);
             
             // Highlight nodes we are over
@@ -83,6 +86,22 @@ class HistogramWindow extends commonWidget {
                        cd.toggleActiveNode(temp);
                        selectedNodes.add(i);
                      }
+                   }
+                   if(mouseButton==RIGHT){
+                         float _w = 500;
+                         float _h = 200;
+                         float padding = 5;
+                         
+                         pushMatrix();
+                           translate(0,0,MySimpleCamera.cameraZ+20);
+                           fill(192,192);
+                           rect(m_x,m_y,_w,_h);
+                           fill(0,255);
+                           text("MetaData: "+temp.metaData.getAllMetadata(),m_x+padding,m_y+padding,_w-padding,_h-padding);
+                         popMatrix();
+                       
+                       // Pass a data string to our child applet and store it here.
+                        dp.setDataString("Data:"+temp.metaData.getAllMetadata());
                    }
                 }
             }

@@ -56,7 +56,6 @@ void keyPressed() {
   }
   
 
-  
   // Need to check for Enter and Return so application is cross
   // platform: https://processing.org/reference/keyCode.html
   if(keyCode == ENTER || keyCode == RETURN){

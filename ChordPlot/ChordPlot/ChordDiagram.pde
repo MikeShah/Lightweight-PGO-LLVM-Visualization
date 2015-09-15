@@ -120,7 +120,7 @@ class ChordDiagram extends DataLayer{
   
     float optimalSize = pixelsAvailable/ nodeListStack.peek().size();
     // Since we need a square, take the sqrt
-    optimalSize = (int)(sqrt(optimalSize)); // Cast to an int to make things simple
+    optimalSize = (sqrt(optimalSize)); // Cast to an int to make things simple
     // Compute the proper aspect ratio so that the visualization is more square.     
     // Adjust the aspect ratio
     //int pixelsNeeded = (int)(sqrt( optimalSize * nodeListStack.peek().size()));
@@ -137,7 +137,7 @@ class ChordDiagram extends DataLayer{
     
     // If we exceed our ySize, then we need to de-squarify the xSize by
     // making it more rectangular.
-    float tempValue = sqrt(nodeListStack.peek().size()) * (optimalSize+1);
+    float tempValue = sqrt(nodeListStack.peek().size()) * (optimalSize);
     while(tempValue > ySize){
       tempValue--;
       xSize++;
@@ -159,7 +159,7 @@ class ChordDiagram extends DataLayer{
     
     println("======About to replot=========");
     int counter = 0; // draw a new point at each step
-    for(  float yPos = optimalSize; yPos <= ySize+optimalSize; yPos+=optimalSize){
+    for(  float yPos = optimalSize; yPos <= ySize; yPos+=optimalSize){
       for(float xPos = padding; xPos <= xSize; xPos+=optimalSize){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;

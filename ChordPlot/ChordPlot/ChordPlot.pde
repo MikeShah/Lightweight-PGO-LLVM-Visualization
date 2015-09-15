@@ -40,7 +40,7 @@ nodeLinkSystem encodings;
 int programStart = 0;
 
 void settings(){
-  size(1240 ,800, P3D);
+  size(900 ,900, P3D);
 }
 
 /*

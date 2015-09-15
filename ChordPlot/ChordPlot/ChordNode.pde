@@ -159,7 +159,7 @@ class ChordNode{
          fill(192,192);
          rect(x,y,_w,_h);
          fill(0,255);
-         text("MetaData: "+metaData.getAllMetadata()+" \n Lorem ipsum dolor sit amet, phasellus pede tempus magna elit sed integer, aliquam ut mollit turpis, magna at a, non dui",x+padding,y+padding,_w-padding,_h-padding);
+         text("MetaData: "+metaData.getAllMetadata(),x+padding,y+padding,_w-padding,_h-padding);
        popMatrix();
        
      }
@@ -342,7 +342,9 @@ class ChordNode{
                   pushMatrix();
                     translate(0,0,MySimpleCamera.cameraZ+10);
                     fill(0); stroke(0);
-                    line(x+rectWidth/2,y-rectHeight/2,metaData.calleeLocations.get(i).x,metaData.calleeLocations.get(i).y);
+                    // TODO: FIXME: calleeLocations does not currently store rectWidth, only the position. So in the future
+                    // we will have a problem if we have nodes that are not all square shaped. Remember, we are in Java land, in C++ this would be easy to fix...
+                    line(x+rectWidth/2,y-rectHeight/2,metaData.calleeLocations.get(i).x+rectWidth/2,metaData.calleeLocations.get(i).y-rectHeight/2);
                   popMatrix();
                   ChordNode blah = metaData.calleeLocations.get(i);
                   blah.drawToCallees(depth-1);     
@@ -377,7 +379,9 @@ class ChordNode{
                   pushMatrix();
                     translate(0,0,MySimpleCamera.cameraZ+10);
                     fill(255,0,0); stroke(255,0,0);
-                    line(x+rectWidth/2,y-rectHeight/2,metaData.callerLocations.get(i).x,metaData.callerLocations.get(i).y);
+                    // TODO: FIXME: calleeLocations does not currently store rectWidth, only the position. So in the future
+                    // we will have a problem if we have nodes that are not all square shaped. Remember, we are in Java land, in C++ this would be easy to fix...
+                    line(x+rectWidth/2,y-rectHeight/2,metaData.callerLocations.get(i).x+rectWidth/2,metaData.callerLocations.get(i).y-rectHeight/2);
                   popMatrix();
                   ChordNode blah = metaData.callerLocations.get(i);
                   blah.drawToCallers(depth-1);     
