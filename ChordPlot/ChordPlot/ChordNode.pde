@@ -218,6 +218,21 @@ class ChordNode{
                      exec(params);
                    }
                 }
+                else if(key=='p'){
+                  String find = metaData.name.replace("\"","");
+                  String[] params = {"gnome-terminal", "-e","/usr/bin/vim +/"+find+" "+llbitcodefile};
+
+                  // nodeMetaData.columnNumber; // TODO: Open to the appropriate column number 
+               
+                   // Create a delay so we don't open too many editors. This might need to be tweaked a bit.
+                   int time = millis();
+                   int delay = 1500;
+                   // Loop that stalls the program so we don't click too many times
+                   while(millis() - time <= delay){}
+                   if(metaData.sourceFile!=null){
+                     exec(params);
+                   }
+                }
             }
         }
     

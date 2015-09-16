@@ -18,7 +18,9 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   String extra_information;
   // Values that need to be computed after the data is loaded in
   int callees = 0;
+  int max_callees = 0;
   int callers = 0;  // How many functions call this function.
+  int max_callers = 0;
   int recursive = 0; // Check to see if function ever calls itself. Note we use 0 or 1 so we can sort.
   int maxNestedLoopCount = 0;
   int bitCodeSize = 0;
@@ -101,12 +103,12 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     
     */
   }
-  
+
   // Prints all of the metaData to a string.
   public String getAllMetadata(){
     String result = "";
     result += "\nname: "+name + "\n";
-    result += "Callees: "+callees + " Callers:" + callers + " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
+    result += "Callees: "+callees +"/"+ max_callees + " Callers:" + callers +"/" + max_callers+ " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
     result += "attributes: "+attributes + "\n";
     result += "metaData: "+metaData + "\n";
     result += "OpCodes: "+OpCodes + "\n";
@@ -129,9 +131,11 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     if(mode<=0){
       calleeLocations.add(new ChordNode(name,x,y,0));
       callees = calleeLocations.size();
+      max_callees = max(max_callees,callees);  // Set the maximum (which shouldn't change anyway)
     }else if(mode==1){
       callerLocations.add(new ChordNode(name,x,y,0));
       callers = callerLocations.size();
+      max_callers = max(max_callers,callers);  // Set the maximum (which shouldn't change anyway)
     }
   }
   
@@ -140,9 +144,11 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     if(mode<=0){
       calleeLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
       callees = calleeLocations.size();
+      max_callees = max(max_callees,callees);  // Set the maximum (which shouldn't change anyway)
     }else if(mode==1){
       callerLocations.add(new ChordNode(name,x,y,0, nmd, cnl));
       callers = callerLocations.size();
+      max_callers = max(max_callers,callers);  // Set the maximum (which shouldn't change anyway)
     }
   }
   
@@ -151,9 +157,11 @@ class nodeMetaData implements Comparable<nodeMetaData>{
     if(mode<=0){
       calleeLocations.add(new ChordNode(name,x,y,z));
       callees = calleeLocations.size();
+      max_callees = max(max_callees,callees);  // Set the maximum (which shouldn't change anyway)
     }else if(mode==1){
       callerLocations.add(new ChordNode(name,x,y,z));
       callers = callerLocations.size();
+      max_callers = max(max_callers,callers);  // Set the maximum (which shouldn't change anyway)
     }
   }
  

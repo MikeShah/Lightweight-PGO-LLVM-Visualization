@@ -13,6 +13,11 @@ class BucketsWindow extends commonWidget {
     m_buckets = new Buckets(filename,0,height-30,0);
   }
   
+  public BucketsWindow(){
+    println("a");
+    m_buckets = new Buckets(filename,0,height-30,0);
+  }
+  
   public void settings() {
     size(600, 325, P3D);
     smooth();
@@ -170,8 +175,7 @@ class Buckets extends DataLayer{
     this.setLayout(layout);
     // Compute initial statistics
     // nodeListStack.computeSummaryStatistics(); // FIXME: Put this back in the code 
-  }
-  
+  } 
 
   // Get all of the points into our node list
   //

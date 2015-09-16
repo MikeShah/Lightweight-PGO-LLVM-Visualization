@@ -129,7 +129,7 @@ class ChordDiagram extends DataLayer{
     
     //float xSize = pixelsNeeded * optimalSize; 
     float xSize = sqrt(nodeListStack.peek().size()) * optimalSize; 
-        
+    
     // If our aspect ratio gets messed up, set it to the maximum
     if(xSize > width-padding-optimalSize){
        xSize = width-padding-optimalSize;
@@ -144,31 +144,26 @@ class ChordDiagram extends DataLayer{
       tempValue--;
       xSize++;
     }
+    println("==============plotPointsOnGrid==============");println("nodeListStack.peek().size():"+nodeListStack.peek().size());
+    println("width:"+width);println("padding:"+padding);println("xSize:"+xSize); println("ySize:"+ySize); println("OptimalSize is:"+optimalSize);
     println("==============plotPointsOnGrid==============");
-    println("nodeListStack.peek().size():"+nodeListStack.peek().size());
-    println("width:"+width);
-    println("padding:"+padding);
-    println("xSize:"+xSize);
-    println("OptimalSize is:"+optimalSize);
-    println("==============plotPointsOnGrid==============");
-    
     
     // Set the bounds of our visualization
     xBounds = xSize+padding+optimalSize; 
     
     // We can set a default steps(that is passed in the parameter)
     // But we can re-adjust it to fit the xBo
-    
     println("======About to replot=========");
+    rectMode(CORNER);
     int counter = 0; // draw a new point at each step
-    for(  float yPos = optimalSize; yPos <= ySize; yPos+=optimalSize){
+    for(  float yPos = 0; yPos <= ySize+100; yPos+=optimalSize){
       for(float xPos = padding; xPos <= xSize; xPos+=optimalSize){
         if(counter < nodeListStack.peek().size()){
           nodeListStack.peek().get(counter).x = xPos;
           nodeListStack.peek().get(counter).y = yPos;
 
           // Set the size of our visualization here
-          nodeListStack.peek().get(counter).nodeSize = (int)(optimalSize/2); // Integer division
+          nodeListStack.peek().get(counter).nodeSize = (int)(optimalSize/2); // Integer division // DEPRECATED, in the sense that we only render rects. If we render ellipse/spheres, this could be valuable.
           nodeListStack.peek().get(counter).rectWidth = optimalSize;
           nodeListStack.peek().get(counter).rectHeight = optimalSize;
           

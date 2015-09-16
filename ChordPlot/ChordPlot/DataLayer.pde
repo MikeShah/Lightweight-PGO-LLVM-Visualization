@@ -43,6 +43,10 @@ public class DataLayer implements VisualizationLayout{
   int sortBy = CALLEE;
   int colorizeBy = CALLEE;
   
+  
+
+  
+  
   /*
       Function that constructs this object.
       This class should only be extended on, and serves as a base class for other visualizations.
@@ -68,6 +72,7 @@ public class DataLayer implements VisualizationLayout{
     // nodeListStack.computeSummaryStatistics(); FIXME: Put this back in the code 
     
   }
+  
   
   /*
       Sort the nodes
@@ -120,7 +125,9 @@ public class DataLayer implements VisualizationLayout{
       // Do a deep copy
       // This is annoying, but will work for now
       temp.metaData.callees           = m.callees;
+      temp.metaData.max_callees       = m.max_callees;
       temp.metaData.callers           = m.callers;
+      temp.metaData.max_callers       = m.max_callers;
       temp.metaData.recursive           = m.recursive;
       temp.metaData.maxNestedLoopCount  = m.maxNestedLoopCount;
       temp.metaData.attributes        = m.attributes;
@@ -353,7 +360,7 @@ public class DataLayer implements VisualizationLayout{
         if(nodeListStack.peek().get(i).selected){
           // Do a deep copy of the nodes we are pushing
           ChordNode temp = nodeListStack.peek().get(i);
-          println(temp.printAll());
+          //println(temp.printAll());
           
           selectedNodes.add(nodeListStack.peek().get(i));
         }
@@ -539,6 +546,7 @@ public class DataLayer implements VisualizationLayout{
       
       //Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
 
+/*
       int firstIndex = 0;
       
       int iterations = nodeListStack.peek().size();
@@ -551,6 +559,33 @@ public class DataLayer implements VisualizationLayout{
             }
           }
       }
+      
+*/
+      /*
+      (1) Convert the top of the stack to a map
+      (2) Iterate through the list once, and in another map, and get indicess into it
+      (3) 
+      
+      
+      */
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      Map<String,Integer> nameToIndex = new HashMap<String,Integer>();
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations; ++i){
+        nameToIndex.put(nodeListStack.peek().get(i).metaData.name,i);
+      }
+      
+      
+      // Now look through our list
+      for(int i =0; i < cnl.size(); ++i){
+          // If something from cnl is in our stack
+          // then we record the index and edit our actual nodeListStack
+          if(topOfStackMap.containsKey(cnl.get(i).metaData.name)){
+            int index = nameToIndex.get(cnl.get(i).metaData.name);
+            nodeListStack.peek().get(index).highlighted = value;
+          }
+      }
+      
   }
   
   /* 
@@ -604,6 +639,8 @@ public class DataLayer implements VisualizationLayout{
       // so we need to make sure we check every node against each other.
       // Unfortunately, since we have lists as data structures, this mean O(N^2) time.
       // TODO: Possibly convert everything to map's so we can reduced this to O(N) time.
+     /*
+      
       int iterations = nodeListStack.peek().size();
       
       for(int i =0; i < cnl.size(); ++i){    
@@ -614,6 +651,28 @@ public class DataLayer implements VisualizationLayout{
             }
           }
       }
+      
+      */
+      
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      Map<String,Integer> nameToIndex = new HashMap<String,Integer>();
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations; ++i){
+        nameToIndex.put(nodeListStack.peek().get(i).metaData.name,i);
+      }
+      
+      
+      // Now look through our list
+      for(int i =0; i < cnl.size(); ++i){
+          // If something from cnl is in our stack
+          // then we record the index and edit our actual nodeListStack
+          if(topOfStackMap.containsKey(cnl.get(i).metaData.name)){
+            int index = nameToIndex.get(cnl.get(i).metaData.name);
+            nodeListStack.peek().get(index).selected = !nodeListStack.peek().get(index).selected;
+          }
+      }
+      
+      
   }
   
   
@@ -749,6 +808,13 @@ public class DataLayer implements VisualizationLayout{
     this.nodeListStack = nsl;   
   }
   
+    
+  /*
+      Returns all of data from this data structure
+  */
+  public NodeListStack getNodeListStack(){
+    return this.nodeListStack;
+  }
   
   
   /*

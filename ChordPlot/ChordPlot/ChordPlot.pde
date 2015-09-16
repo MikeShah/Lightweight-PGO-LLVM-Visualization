@@ -20,8 +20,8 @@ public enum SortCriteria{
 public static final int CALLEE       = 0;
 public static final int CALLER       = 1;
 public static final int PGODATA      = 2;
-public static final int BITCODESIZE  = 3 ;
-public static final int RECURSIVE    = 4 ;
+public static final int BITCODESIZE  = 3;
+public static final int RECURSIVE    = 4;
 
 /*
   Create a second window
@@ -38,6 +38,8 @@ BucketsWindow bw;
 nodeLinkSystem encodings;
 
 int programStart = 0;
+
+String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago.ll";
 
 void settings(){
   size(900 ,900, P3D);
@@ -70,8 +72,11 @@ void setup(){
   dp = new DetailsPane();
   dp.setDataString("File Loaded: "+filename);
   
+  // Try to speed up loading times.
   hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
+  
+  
   
   encodings = new nodeLinkSystem();
   
@@ -107,8 +112,10 @@ void draw(){
    
    text("FPS :"+frameRate,width-100,height-20);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
+   text("'p' - Open bitcode file to function",5,height-70);
    text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
    text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes | 'o' open source in editor",5,height-30);
+   
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);
