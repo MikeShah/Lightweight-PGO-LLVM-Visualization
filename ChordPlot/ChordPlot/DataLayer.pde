@@ -124,6 +124,7 @@ public class DataLayer implements VisualizationLayout{
       ChordNode temp = new ChordNode(m.name,xPosition,yPosition,0);
       // Do a deep copy
       // This is annoying, but will work for now
+
       temp.metaData.callees           = m.callees;
       temp.metaData.max_callees       = m.max_callees;
       temp.metaData.callers           = m.callers;
@@ -199,31 +200,93 @@ public class DataLayer implements VisualizationLayout{
   
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
-  void generateHeatForCalleeAttribute(float maxHeight){
-    // Find the max and min from the ChordNode metadata
-    float themin = 0;
-    float themax = 0;
-    int iterations = nodeListStack.peek().size();
-    for(int i = 0; i < iterations; i++){
-      themin = min(themin,nodeListStack.peek().get(i).metaData.callees);
-      themax = max(themax,nodeListStack.peek().get(i).metaData.callees);
+  void generateHeatForCalleeAttribute(float maxHeight, boolean setShape){
+
+    
+        // Find the max and min from the ChordNode metadata
+    float minCallees = 0;
+    float maxCallees = 0;
+    
+    float minCallers = 0;
+    float maxCallers = 0;
+    
+    float minPGO = 0;
+    float maxPGO = 0;
+    
+    float minBitCodeSize = 0;
+    float maxBitCodeSize = 0;
+        
+    for(int i =0; i < nodeListStack.peek().size();i++){
+      minCallees = min(minCallees,nodeListStack.peek().get(i).metaData.callees);
+      maxCallees = max(maxCallees,nodeListStack.peek().get(i).metaData.callees);
+      
+      minCallers = min(minCallers,nodeListStack.peek().get(i).metaData.callers);
+      maxCallers = max(maxCallers,nodeListStack.peek().get(i).metaData.callers);
+      
+      minPGO = min(minPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
+      maxPGO = max(maxPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
+      
+      minBitCodeSize = min(minBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
+      maxBitCodeSize = max(maxBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
+      
     }
-    println("themin:"+themin);
-    println("themax:"+themax);
+    println("themin:"+minCallees);
+    println("themax:"+maxCallees);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
+    for(int i =0; i < nodeListStack.peek().size();i++){
 
-    for(int i = 0; i < iterations;i++){
-      // Get our callees and map it agains the min and max of other callees so we know how to make it stand out
-      nodeListStack.peek().get(i).metaData.callees = (int)map(nodeListStack.peek().get(i).metaData.callees, themin, themax, 0, maxHeight);
+      switch(this.colorizeBy){
+        case CALLEE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, minCallees, maxCallees, 0, 255);
+              // Our shapes are rectangular, so we need to set this in the ChordNode
+              if(setShape){
+                nodeListStack.peek().get(i).rectWidth = defaultWidth;
+                nodeListStack.peek().get(i).rectHeight = map(nodeListStack.peek().get(i).metaData.callees, minCallees, maxCallees, 0, maxHeight);
+              }
+              break;
+        case CALLER:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callers, minCallers, maxCallers, 0, 255);
+              // Our shapes are rectangular, so we need to set this in the ChordNode
+              if(setShape){
+                nodeListStack.peek().get(i).rectWidth = defaultWidth;
+                nodeListStack.peek().get(i).rectHeight = map(nodeListStack.peek().get(i).metaData.callers, minCallers, maxCallers, 0, maxHeight);
+              }
+              break;
+        case PGODATA:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.PGOData, minPGO, maxPGO, 0, 255);
+              // Our shapes are rectangular, so we need to set this in the ChordNode
+              if(setShape){
+                nodeListStack.peek().get(i).rectWidth = defaultWidth;
+                nodeListStack.peek().get(i).rectHeight = map(nodeListStack.peek().get(i).metaData.PGOData, minPGO, maxPGO, 0, maxHeight);
+              }
+              break;
+        case BITCODESIZE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.bitCodeSize, minBitCodeSize, maxBitCodeSize, 0, 255);
+              // Our shapes are rectangular, so we need to set this in the ChordNode
+              if(setShape){
+                nodeListStack.peek().get(i).rectWidth = defaultWidth;
+                nodeListStack.peek().get(i).rectHeight = map(nodeListStack.peek().get(i).metaData.bitCodeSize, minBitCodeSize, maxBitCodeSize, 0, maxHeight);
+              }
+              break;
+        case RECURSIVE:
+              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.recursive, 0, 1, 0, 255);
+              // Our shapes are rectangular, so we need to set this in the ChordNode
+              if(setShape){
+                nodeListStack.peek().get(i).rectWidth = defaultWidth;
+                nodeListStack.peek().get(i).rectHeight = map(nodeListStack.peek().get(i).metaData.recursive, 0, 1, maxHeight/2, maxHeight);
+              }
+              break;
+      }
+
+
       
-      // Our shapes are rectangular, so we need to set this in the ChordNode
-      nodeListStack.peek().get(i).rectWidth = defaultWidth;
-      nodeListStack.peek().get(i).rectHeight = nodeListStack.peek().get(i).metaData.callees;
     }
+    
+    
   }
-  
-  
+
+
 
   
   // The goal of this function is to look through every node
@@ -273,7 +336,6 @@ public class DataLayer implements VisualizationLayout{
                   
                       // Search to see if our node has outcoming edges
                       nodeMetaData nodeName = nodeListStack.peek().get(i).metaData;        // This is the node we are interested in finding sources
-                      nodeListStack.peek().get(i).metaData.calleeLocations.clear();        // Clear our old Locations because we'll be setting up new ones
                       if (dotGraph.graph.containsKey(nodeName)){                           // If we find out that it exists as a key(i.e. it is not a leaf node), then it has targets
                         // If we do find that our node is a source(with targets)
                         // then search to get all of the destination names and their positions
@@ -352,13 +414,14 @@ public class DataLayer implements VisualizationLayout{
   */
   synchronized public void pushSelectedNodes(){
       String name = "Selected Nodes";
-    
+     
       ChordNodeList selectedNodes = new ChordNodeList(name);
       
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).selected){
           // Do a deep copy of the nodes we are pushing
+          nodeListStack.peek().get(i).selected = false; // deselect the node?
           ChordNode temp = nodeListStack.peek().get(i);
           //println(temp.printAll());
           
@@ -366,8 +429,26 @@ public class DataLayer implements VisualizationLayout{
         }
       }
       
+      if(selectedNodes.size()!=0){
       // Push the entire list
       nodeListStack.push(selectedNodes);
+      }
+  }
+  
+  /*
+      Get selected Node Count
+  */
+  synchronized public int getSelectedNodeCount(){
+      int result=0;
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
+          if(nodeListStack.peek().get(i).selected){
+            result++;
+          }
+
+      }
+      
+      return result;
   }
   
     /*
@@ -444,14 +525,82 @@ public class DataLayer implements VisualizationLayout{
       1.) Create a new ArrayList<ChordNode>
       2.) Loop through all nodes that are on the top of the stack
       3.) If they do not meet the criteria, then do not select them.
-      4.) 
   */
   synchronized public void selectCallSites(int min, int max){
-      String result = "Callsites "+callSiteMin+"-"+callSiteMax;
+      String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
 
       int iterations = nodeListStack.peek().size();
       for(int i =0; i < iterations;i++){
         if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
+          nodeListStack.peek().get(i).selected = true; 
+        }
+      }
+      breadCrumbsString += result;
+  }
+  
+  
+   /*
+      Filter Design pattern
+      
+      1.) Create a new ArrayList<ChordNode>
+      2.) Loop through all nodes that are on the top of the stack
+      3.) If they do not meet the criteria, then do not select them.
+      
+      Takes an input that corresponds to the feature that we want to select.
+  */
+  synchronized public void selectRange(int input, int min, int max){
+      String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
+
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
+
+            switch(input){
+                case CALLEE:
+                      if(nodeListStack.peek().get(i).metaData.callees >= min && nodeListStack.peek().get(i).metaData.callees <= max){
+                        nodeListStack.peek().get(i).selected = true; 
+                      }
+                      break;
+                case CALLER:
+                      if(nodeListStack.peek().get(i).metaData.callers >= min && nodeListStack.peek().get(i).metaData.callers <= max){
+                        nodeListStack.peek().get(i).selected = true; 
+                      }
+                      break;
+                case PGODATA:
+                      if(nodeListStack.peek().get(i).metaData.PGOData >= min && nodeListStack.peek().get(i).metaData.PGOData <= max){
+                        nodeListStack.peek().get(i).selected = true; 
+                      }
+                      break;
+                case BITCODESIZE:
+                      if(nodeListStack.peek().get(i).metaData.bitCodeSize >= min && nodeListStack.peek().get(i).metaData.bitCodeSize <= max){
+                        nodeListStack.peek().get(i).selected = true; 
+                      }
+                      break;
+                case RECURSIVE:
+                      if(nodeListStack.peek().get(i).metaData.recursive >= min && nodeListStack.peek().get(i).metaData.recursive <= max){
+                        nodeListStack.peek().get(i).selected = true; 
+                      }
+                      break;
+              }
+        
+        
+      }
+      breadCrumbsString += result;
+  }
+  
+  
+  /*
+      Filter Design pattern
+      
+      1.) Create a new ArrayList<ChordNode>
+      2.) Loop through all nodes that are on the top of the stack
+      3.) If they do not meet the criteria, then do not select them.
+  */
+  synchronized public void selectCallers(int min, int max){
+      String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
+
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations;i++){
+        if(nodeListStack.peek().get(i).metaData.callers >= min && nodeListStack.peek().get(i).metaData.callers <= max){
           nodeListStack.peek().get(i).selected = true; 
         }
       }

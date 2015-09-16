@@ -19,63 +19,7 @@ class ChordDiagram extends DataLayer{
     // FIXME: Put this back in the code nodeListStack.computeSummaryStatistics();
   }
   
-  /*
-      
-  */
-  void generateHeatForCalleeAttribute(){
-    // Find the max and min from the ChordNode metadata
-    float minCallees = 0;
-    float maxCallees = 0;
-    
-    float minCallers = 0;
-    float maxCallers = 0;
-    
-    float minPGO = 0;
-    float maxPGO = 0;
-    
-    float minBitCodeSize = 0;
-    float maxBitCodeSize = 0;
-        
-    for(int i =0; i < nodeListStack.peek().size();i++){
-      minCallees = min(minCallees,nodeListStack.peek().get(i).metaData.callees);
-      maxCallees = max(maxCallees,nodeListStack.peek().get(i).metaData.callees);
-      
-      minCallers = min(minCallers,nodeListStack.peek().get(i).metaData.callers);
-      maxCallers = max(maxCallers,nodeListStack.peek().get(i).metaData.callers);
-      
-      minPGO = min(minPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
-      maxPGO = max(maxPGO,parseInt(nodeListStack.peek().get(i).metaData.PGOData));
-      
-      minBitCodeSize = min(minBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
-      maxBitCodeSize = max(maxBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
-      
-    }
-    println("themin:"+minCallees);
-    println("themax:"+maxCallees);
-    // Then map that value into the ChordNode so that it can render correctly.
-    // We scale from 
-    for(int i =0; i < nodeListStack.peek().size();i++){
-      switch(this.colorizeBy){
-        case CALLEE:
-              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callees, minCallees, maxCallees, 0, 255);
-              break;
-        case CALLER:
-              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.callers, minCallers, maxCallers, 0, 255);
-              break;
-        case PGODATA:
-              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.PGOData, minPGO, maxPGO, 0, 255);
-              break;
-        case BITCODESIZE:
-              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.bitCodeSize, minBitCodeSize, maxBitCodeSize, 0, 255);
-              break;
-        case RECURSIVE:
-              nodeListStack.peek().get(i).metaData.c = map(nodeListStack.peek().get(i).metaData.recursive, 0, 1, 0, 255);
-              break;
-      }
 
-    }
-    
-  }
   
   /*
    h = center
@@ -117,33 +61,24 @@ class ChordDiagram extends DataLayer{
   */
   private void plotPointsOnGrid(float numberOfPoints){
     println("Calling plotPointsOnGrid");  
-    float padding = 20; // padding on the screen
+    float padding = 10; // padding on the screen
     float pixelsAvailable = (width-padding-padding)*(height-padding-padding);
-  
-    float optimalSize = pixelsAvailable/ nodeListStack.peek().size();
     // Since we need a square, take the sqrt
-    optimalSize = (sqrt(optimalSize)); // Cast to an int to make things simple
-    // Compute the proper aspect ratio so that the visualization is more square.     
-    // Adjust the aspect ratio
-    //int pixelsNeeded = (int)(sqrt( optimalSize * nodeListStack.peek().size()));
+    float optimalSize = (sqrt(pixelsAvailable/ nodeListStack.peek().size()));
     
     //float xSize = pixelsNeeded * optimalSize; 
-    float xSize = sqrt(nodeListStack.peek().size()) * optimalSize; 
-    
-    // If our aspect ratio gets messed up, set it to the maximum
-    if(xSize > width-padding-optimalSize){
-       xSize = width-padding-optimalSize;
-    }
-    
+    float xSize = (sqrt(nodeListStack.peek().size()) * optimalSize); 
+    // By default, always try to use the ySize.
     float ySize = height-padding-padding; 
+    // We will lose the optimalSize * the number of rows we have, so we need
+    // to adjust the optimalSize to make up for this.
     
-    // If we exceed our ySize, then we need to de-squarify the xSize by
-    // making it more rectangular.
-    float tempValue = sqrt(nodeListStack.peek().size()) * (optimalSize);
-    while(tempValue > ySize){
-      tempValue--;
-      xSize++;
-    }
+    // recompute once more
+    pixelsAvailable = (width-padding-padding-optimalSize)*(height-padding-padding-optimalSize);
+    // Since we need a square, take the sqrt
+    optimalSize = (sqrt(pixelsAvailable/ nodeListStack.peek().size()));
+
+    
     println("==============plotPointsOnGrid==============");println("nodeListStack.peek().size():"+nodeListStack.peek().size());
     println("width:"+width);println("padding:"+padding);println("xSize:"+xSize); println("ySize:"+ySize); println("OptimalSize is:"+optimalSize);
     println("==============plotPointsOnGrid==============");
@@ -153,25 +88,31 @@ class ChordDiagram extends DataLayer{
     
     // We can set a default steps(that is passed in the parameter)
     // But we can re-adjust it to fit the xBo
-    println("======About to replot=========");
+    println("======About to replot========="+nodeListStack.peek().size());
     rectMode(CORNER);
     int counter = 0; // draw a new point at each step
-    for(  float yPos = 0; yPos <= ySize+100; yPos+=optimalSize){
-      for(float xPos = padding; xPos <= xSize; xPos+=optimalSize){
-        if(counter < nodeListStack.peek().size()){
-          nodeListStack.peek().get(counter).x = xPos;
-          nodeListStack.peek().get(counter).y = yPos;
-
-          // Set the size of our visualization here
-          nodeListStack.peek().get(counter).nodeSize = (int)(optimalSize/2); // Integer division // DEPRECATED, in the sense that we only render rects. If we render ellipse/spheres, this could be valuable.
-          nodeListStack.peek().get(counter).rectWidth = optimalSize;
-          nodeListStack.peek().get(counter).rectHeight = optimalSize;
-          
-          yBounds = yPos+padding+optimalSize; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
-          counter++;
+    float xPos = 0;
+    float yPos = optimalSize;
+    while(counter <  nodeListStack.peek().size()){
+        nodeListStack.peek().get(counter).nodeSize = (int)(optimalSize/2); // Integer division // DEPRECATED, in the sense that we only render rects. If we render ellipse/spheres, this could be valuable.
+        //println("Positioning "+nodeListStack.peek().get(counter).metaData.name+": ("+(xPos*optimalSize)+","+yPos+")");
+        nodeListStack.peek().get(counter).x = padding+xPos*optimalSize;
+        nodeListStack.peek().get(counter).y = padding+yPos;
+        
+        nodeListStack.peek().get(counter).rectWidth = optimalSize;
+        nodeListStack.peek().get(counter).rectHeight = optimalSize;
+        
+        xPos++;;
+        // If the next node we are trying to place is going to go off the screen,
+        // then we need to move down a row.
+        if(xPos*optimalSize > xSize-optimalSize){
+          xPos = 0;
+          yPos+=optimalSize;
         }
-      }
+        yBounds = yPos+padding+optimalSize; // Set the bounds to the last yPos we find (which would be the maximum Y Value)
+        counter++;
     }
+
   }
   
   /*
@@ -219,7 +160,8 @@ class ChordDiagram extends DataLayer{
     
     // (2) This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    generateHeatForCalleeAttribute();
+    // Note we do not want to use the heat for setting te size of any attribute
+    generateHeatForCalleeAttribute(0,false);
     
     // (3) Sort all of the callees in their respective list by some criteria
     // TODO: Make this sorting be due to the Encoding Engine or NodeLinkSystem
@@ -243,8 +185,8 @@ class ChordDiagram extends DataLayer{
   */
   public void fastUpdate(){
     println("ChordDiagram fastUpdate");
-    generateHeatForCalleeAttribute(CALLEE);
-    // Modify all of the positions in our nodeList
+    //generateHeatForCalleeAttribute(CALLEE);  // FIXME: Is this a bug, why am I always passing in by CALLEE?
+    //// Modify all of the positions in our nodeList
     if(this.layout <=0 ){
       // DEPRECATED function call plotPointsOnCircle(nodeListStack.peek().size()); // Plot points on the circle
     }else if(this.layout == 1){

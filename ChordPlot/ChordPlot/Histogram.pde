@@ -162,7 +162,7 @@ class Histogram extends DataLayer{
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    this.generateHeatForCalleeAttribute(scaledHeight);
+    generateHeatForCalleeAttribute(scaledHeight,true);
     
     sortNodesBy();
     
@@ -174,7 +174,7 @@ class Histogram extends DataLayer{
     storeLineDrawings();
   }
     
-  
+  /*
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
   void generateHeatForCalleeAttribute(float maxHeight){
@@ -202,6 +202,7 @@ class Histogram extends DataLayer{
       nodeListStack.peek().get(i).rectHeight = nodeListStack.peek().get(i).metaData.callees;
     }
   }
+  */
   
   /*
       Useful for being used in update where we don't need to do anything else with the data.

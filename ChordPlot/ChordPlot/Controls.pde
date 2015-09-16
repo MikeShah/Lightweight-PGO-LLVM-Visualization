@@ -61,28 +61,28 @@ void keyPressed() {
   if(keyCode == ENTER || keyCode == RETURN){
       
       String FilterString = cd.nodeListStack.peek().name;
-      
-      // Apply the relevant filters
-      cd.pushSelectedNodes();
-      cd.update(); // Make a call to update the visualization
-      
-      hw.m_histogram.pushSelectedNodes();
-      hw.m_histogram.update(); // Make a call to update the visualization
-      hw.updateFunctionList();
-      
-      //bw.m_buckets.setNodeListStack(cd.nodeListStack);
-      bw.m_buckets.pushSelectedNodes(cd.nodeListStack.peek());
-      bw.m_buckets.update();
-      bw.updateFunctionList();
-      
-      // Add our item to the list
-      
-      breadCrumbsBar.addItem(FilterString+breadCrumbsString,cd.nodeListStack.size()-1);
-      // Note that we also clean up the breadCrumbString which logged all of our actions.
-      // TODO: Implement some sort of Macro system that can parse this string of events
-      // and recreate steps user took in visualiation.
-      // NOTE: This is a BIG TODO task!
-      breadCrumbsString = "";
+      // Only push nodes if at least one is selected.
+      if(cd.getSelectedNodeCount()>0){
+          // Apply the relevant filters
+          cd.pushSelectedNodes();
+          cd.update(); // Make a call to update the visualization
+          
+          hw.m_histogram.pushSelectedNodes();
+          hw.m_histogram.update(); // Make a call to update the visualization
+          hw.updateFunctionList();
+          
+          //bw.m_buckets.setNodeListStack(cd.nodeListStack);
+          bw.m_buckets.pushSelectedNodes(cd.nodeListStack.peek());
+          bw.m_buckets.update();
+          bw.updateFunctionList();
+          
+            breadCrumbsBar.addItem(FilterString+breadCrumbsString,cd.nodeListStack.size()-1);
+            // Note that we also clean up the breadCrumbString which logged all of our actions.
+            // TODO: Implement some sort of Macro system that can parse this string of events
+            // and recreate steps user took in visualiation.
+            // NOTE: This is a BIG TODO task!
+            breadCrumbsString = "";
+      }
   }
   
   // De-select nodes if space is pressed.

@@ -41,6 +41,8 @@ class BucketsWindow extends commonWidget {
         float m_x = mouseX;
         float m_y = mouseY; 
     
+        int m_bucketsSizeTotal = 0;
+        
                      if(m_buckets.showData){
                       background(0,64,164); fill(0); stroke(0); text("FPS: "+frameRate,20,height-20);
                       //pushMatrix();
@@ -62,6 +64,9 @@ class BucketsWindow extends commonWidget {
                                                 
                         // Render the rectangles
                         for(int i =0; i < m_buckets.bucketLists.size(); ++i){
+                          // Tally total nodes in visualization
+                          m_bucketsSizeTotal += m_buckets.bucketLists.get(i).size();
+                          
                           fill(192,255); stroke(255);
                           float bucketHeight = m_buckets.bucketLists.get(i).size();
                           float xBucketPosition = m_buckets.xPosition+(i*((int)m_buckets.bucketWidth));
@@ -126,7 +131,26 @@ class BucketsWindow extends commonWidget {
                       //popMatrix();
                 
                   } 
-    }
+                  
+                  
+                  String sortingString = "";
+                  if(m_buckets.sortBy==CALLEE){
+                    sortingString = "Callee";
+                  }else if(m_buckets.sortBy==CALLER){
+                    sortingString = "Caller";                    
+                  }else if(m_buckets.sortBy==PGODATA){
+                    sortingString = "PGO Function Entry Counts";
+                  }else if(m_buckets.sortBy==BITCODESIZE){
+                    sortingString = "Bit Code Size";
+                  }else if(m_buckets.sortBy==RECURSIVE){
+                    sortingString = "Contains Recursion";
+                  }
+                  
+                  text("Total Nodes: "+m_bucketsSizeTotal,20,10);
+                  text("Sorting by: "+sortingString,20,30);
+                  
+                  
+    } // m_buckets != null
 
   }  
   
@@ -208,11 +232,36 @@ class Buckets extends DataLayer{
       // Increment which bucket we need to put our node in based on the step value.
       // If the attribute we're analyzing is less then the bucket size, then we know we have finished.
       for(int j = 0; j < bucketLists.size(); j++){
-        if (nodeListStack.peek().get(i).metaData.callees > j*stepValue){
-          assignBucket++;
-        }else{
-          break;
-        }
+        
+        // Assign buckets  
+        switch(sortBy){
+            case CALLEE:
+                  if (nodeListStack.peek().get(i).metaData.callees > j*stepValue){
+                    assignBucket++;
+                  }
+                  break;
+            case CALLER:
+                  if (nodeListStack.peek().get(i).metaData.callers > j*stepValue){
+                    assignBucket++;
+                  }
+                  break;
+            case PGODATA:
+                  if (nodeListStack.peek().get(i).metaData.PGOData > j*stepValue){
+                    assignBucket++;
+                  }
+                  break;
+            case BITCODESIZE:
+                  if (nodeListStack.peek().get(i).metaData.bitCodeSize > j*stepValue){
+                    assignBucket++;
+                  }
+                  break;
+            case RECURSIVE:
+                  if (nodeListStack.peek().get(i).metaData.recursive > j*stepValue){
+                    assignBucket++;
+                  }
+                  break;
+          }   
+      
       }
       
       // clamp our values within a certain range
@@ -252,7 +301,7 @@ class Buckets extends DataLayer{
     // functions called.
     // This function cycles through all of the nodes and generates a numerical value that can be sorted by
     // for some attribute that we care about
-    this.generateHeatForCalleeAttribute(scaledHeight);
+    generateHeatForCalleeAttribute(scaledHeight, false);
     
     sortNodesBy();
     

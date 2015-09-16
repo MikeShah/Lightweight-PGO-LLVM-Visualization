@@ -50,6 +50,9 @@ public class DetailsPane extends PApplet {
   */
   void initGUI(){
       detailsPanel = new ControlP5(this);
+      
+      
+// ==================================v Mark/Output v==================================      
               // create a new button for something
               detailsPanel.addButton("AnnotateSelected")
                    //.setValue(0) // Note that setting the value forces a call to this function (which sort of makes sense, as it will call your function at least once to set things up to align with the GUI).
@@ -76,40 +79,11 @@ public class DetailsPane extends PApplet {
                    .setPosition(width-180,60)
                    .setSize(180,19)
                    ;
+                   
+// ==================================^ Mark/Output ^================================== 
 
-              detailsPanel.addTextfield("StartsWith")
-                 .setPosition(width-180,80)
-                 .setSize(180,19)
-                 .setFocus(true)
-                 .setColor(color(255,0,0))
-                 ;   
-                 
-             detailsPanel.addButton("SelectFunctions")
-                 .setPosition(width-90,100)
-                 .setSize(90,19)
-                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;   
-                 
-             detailsPanel.addRange("CallSites")
-                 // disable broadcasting since setRange and setRangeValues will trigger an event
-                 .setBroadcast(false) 
-                 .setPosition(width-180,120)
-                 .setSize(140,heightOfGUIElements)
-                 .setHandleSize(10)
-                 .setRange(0,maxNumberOfCallsites)
-                 .setRangeValues(callSiteMin,callSiteMax)
-                 // after the initialization we turn broadcast back on again
-                 .setBroadcast(true)
-                 .setColorForeground(color(255,40))
-                 .setColorBackground(color(255,40))
-                 ;
-                 
-              // create a new button for outputting Dot files
-              detailsPanel.addButton("CalleeSelectionFilters")
-                 .setPosition(width-180,140)
-                 .setSize(180,19)
-                 ;
-                 
+
+// ==================================v Selectiont v==================================    
               detailsPanel.addSlider("SelectionDepth")
                  .setRange( 0, 15 )
                  .setPosition(width-360,0)
@@ -137,14 +111,61 @@ public class DetailsPane extends PApplet {
                  ;
                  
                  
+               detailsPanel.addTextfield("StartsWith")
+                 .setPosition(width-360,80)
+                 .setSize(180,19)
+                 .setFocus(true)
+                 .setColor(color(255,0,0))
+                 ;   
+                 
+             detailsPanel.addButton("SelectFunctions")
+                 .setPosition(width-270,100)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
+                 
+             detailsPanel.addRange("SelectionRange")
+                 // disable broadcasting since setRange and setRangeValues will trigger an event
+                 .setBroadcast(false) 
+                 .setPosition(width-360,120)
+                 .setSize(140,heightOfGUIElements)
+                 .setHandleSize(10)
+                 .setRange(0,maxSelectionRange)
+                 .setRangeValues(selectionRangeMin,selectionRangeMax)
+                 // after the initialization we turn broadcast back on again
+                 .setBroadcast(true)
+                 .setColorForeground(color(255,40))
+                 .setColorBackground(color(255,40))
+                 ;
+                 
+              // create a new button for outputting Dot files
+              detailsPanel.addButton("CalleeSelectionFilters")
+                 .setPosition(width-360,140)
+                 .setSize(180,19)
+                 ;
+              detailsPanel.addButton("CallerSelectionFilters")
+                 .setPosition(width-360,160)
+                 .setSize(180,19)
+                 ;      
+              detailsPanel.addButton("PGODataSelectionFilters")
+                 .setPosition(width-360,180)
+                 .setSize(180,19)
+                 ;          
+              detailsPanel.addButton("BitCodeSizeSelectionFilters")
+                 .setPosition(width-360,200)
+                 .setSize(180,19)
+                 ;        
+// ==================================^ Selectiont ^================================== 
+                 
+// ==================================v Sorting v================================== 
               detailsPanel.addTextlabel("sortingByLabel")
                 .setText("Sort By")
-                .setPosition(width-360,80)
+                .setPosition(width-540,0)
                 .setColorValue(0xffffffff)
                 ;
                     
               detailsPanel.addRadioButton("sortBy")
-                 .setPosition(width-360,100)
+                 .setPosition(width-540,20)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -160,12 +181,12 @@ public class DetailsPane extends PApplet {
              
               detailsPanel.addTextlabel("colorByLabel")
                 .setText("Color By")
-                .setPosition(width-270,80)
+                .setPosition(width-450,0)
                 .setColorValue(0xffffffff)
                 ;                 
                  
              detailsPanel.addRadioButton("colorizeBy")
-                 .setPosition(width-270,100)
+                 .setPosition(width-450,20)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -178,7 +199,8 @@ public class DetailsPane extends PApplet {
                  .addItem("_BITCODESIZE",BITCODESIZE)
                  .addItem("_RECURSIVE",RECURSIVE)
                  ;
-                  
+                 
+// ==================================^ Sorting ^================================== 
 /*                   
               // Capture Console output here.
               myConsoleTextarea = detailsPanel.addTextarea("txt")
@@ -210,13 +232,13 @@ public class DetailsPane extends PApplet {
   }
 
   public void settings() {
-    size(1440, 200, P3D);
+    size(1440, 220, P3D);
     smooth();
   }
   public void setup() { 
     println("setup DetailsPane");
     surface.setTitle("Details View");
-    surface.setLocation(0, 800);
+    surface.setLocation(0, 820);
     println("setup DetailsPane end");
   }
 
@@ -266,7 +288,10 @@ public class DetailsPane extends PApplet {
   
   
   
-  
+  /*
+      Set the values for how the visualization sorts,
+      and then update the layouts
+  */
   void sortBy(int a){
     println("sortby: "+a);
     cd.setSortBy(a);
@@ -278,6 +303,10 @@ public class DetailsPane extends PApplet {
         bw.m_buckets.update();
   }
   
+  /*
+      Set the values for how the visualization colors,
+      and then update the layouts
+  */
   void colorizeBy(int a){
     println("colorizeBy: "+a);
     cd.setColorizeBy(a);
@@ -406,10 +435,10 @@ public class DetailsPane extends PApplet {
     */
     
       // Get the values from the CallSites range slider.
-      if(theEvent.isFrom("CallSites")) {
-        callSiteMin = int(theEvent.getController().getArrayValue(0));
-        callSiteMax = int(theEvent.getController().getArrayValue(1));
-        println("range update, done. ("+callSiteMin+","+callSiteMax+")");
+      if(theEvent.isFrom("SelectionRange")) {
+        selectionRangeMin = int(theEvent.getController().getArrayValue(0));
+        selectionRangeMax = int(theEvent.getController().getArrayValue(1));
+        println("range update, done. ("+selectionRangeMin+","+selectionRangeMax+")");
       }
       
         println("exited okay from Details Pane");
@@ -417,12 +446,39 @@ public class DetailsPane extends PApplet {
     
     /*
       Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
     */
     public void CalleeSelectionFilters(int theValue){
-      // Apply the relevant filters
-      cd.selectCallSites(callSiteMin, callSiteMax);
-      hw.m_histogram.selectCallSites(callSiteMin, callSiteMax);
-      bw.m_buckets.selectCallSites(callSiteMin, callSiteMax);
+      cd.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+      hw.m_histogram.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void CallerSelectionFilters(int theValue){  
+      cd.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+      hw.m_histogram.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void PGODataSelectionFilters(int theValue){
+      cd.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+      hw.m_histogram.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void BitCodeSizeSelectionFilters(int theValue){
+      cd.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+      hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
     }
     
 }

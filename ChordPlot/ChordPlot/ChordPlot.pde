@@ -39,7 +39,7 @@ nodeLinkSystem encodings;
 
 int programStart = 0;
 
-String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago.ll";
+String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago_merged.ll";
 
 void settings(){
   size(900 ,900, P3D);

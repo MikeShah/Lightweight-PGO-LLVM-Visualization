@@ -44,9 +44,7 @@ class ChordNode{
   void getMetaData(nodeMetaData n){
     metaData.copyMetaData(metaData);
   }
-  
-
-  
+    
   /*
     A Mode of 0 (by default) if we render in 2D as ellipses
     A mode of 1 if we would like to render in 3D as spheres.

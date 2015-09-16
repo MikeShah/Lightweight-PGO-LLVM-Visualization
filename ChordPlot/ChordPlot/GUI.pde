@@ -12,9 +12,9 @@ Accordion accordion;
 ButtonBar breadCrumbsBar;
 
 /* Global values for our sliders */
-int callSiteMin = 20;
-int callSiteMax = 100;
-int maxNumberOfCallsites = 255;
+int selectionRangeMin = 20;
+int selectionRangeMax = 100;
+int maxSelectionRange = 255;
 
 
 // How far many levels to draw to callees when we highlight over nodes.
@@ -93,7 +93,6 @@ public void theBreadCrumbsBar(int n){
     if(cd.nodeListStack.size()==1){
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").clear();
     }
-
   }else if(mouseButton == RIGHT){
     println("Clearing Stack to this node", n);
     while(cd.nodeListStack.size()>n+1){
