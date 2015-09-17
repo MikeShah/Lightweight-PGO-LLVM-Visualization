@@ -147,20 +147,34 @@ class ChordNode{
 */
 
   /*
-  
+      Bring up information about the node.
+      
+      Attempt to fit box to the screen. Note this behavior may be confusing
   */
   public void onRightClick(){
      if(mouseButton == RIGHT){
        float _w = 500;
-       float _h = 200;
+       float _h = 300;
        float padding = 5;
+       
+       // Find the mouse position and move text box so that it always fits on the screen
+       float display_x = x;
+       float display_y = y;
+       
+       if(mouseX + _w > width){
+         display_x -= ((mouseX+_w)-width);
+       }
+       if(mouseY + _h > height){
+         display_y -= ((mouseY+_h)-height);
+       }
+       
        
        pushMatrix();
          translate(0,0,MySimpleCamera.cameraZ+20);
          fill(192,192);
-         rect(x,y,_w,_h);
+         rect(display_x,display_y,_w,_h);
          fill(0,255);
-         text("MetaData: "+metaData.getAllMetadata(),x+padding,y+padding,_w-padding,_h-padding);
+         text("MetaData: "+metaData.getAllMetadata(),display_x+padding,display_y+padding,_w-padding,_h-padding);
        popMatrix();
        
      }

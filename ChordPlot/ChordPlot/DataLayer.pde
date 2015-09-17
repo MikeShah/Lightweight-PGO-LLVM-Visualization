@@ -145,6 +145,18 @@ public class DataLayer implements VisualizationLayout{
       temp.metaData.columnNumber = m.columnNumber;
       temp.metaData.sourceFile   = m.sourceFile;
       
+      // Encoding information
+      temp.metaData.stroke_encode   = m.stroke_encode;
+      temp.metaData.strokeValue   = m.strokeValue;
+      temp.metaData.blink_encode   = m.blink_encode;
+      temp.metaData.blink_color   = m.blink_color;
+      temp.metaData.symbol_encode   = m.symbol_encode;
+      temp.metaData.symbol   = m.symbol;
+      temp.metaData.rect_encode   = m.rect_encode;
+      temp.metaData.small_rect_color   = m.small_rect_color;
+      temp.metaData.spin_small_rect   = m.spin_small_rect;
+      temp.metaData.spin_rotation   = m.spin_rotation;
+            
       /*
           Copy all of the callee and caller information
       */
@@ -519,13 +531,18 @@ public class DataLayer implements VisualizationLayout{
   }  
     
   
-    /*
+  /*
       Filter Design pattern
       
       1.) Create a new ArrayList<ChordNode>
       2.) Loop through all nodes that are on the top of the stack
       3.) If they do not meet the criteria, then do not select them.
   */
+  
+  /*
+  
+  DEPRECATED: Replaced by 'selectRange'
+  
   synchronized public void selectCallSites(int min, int max){
       String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
 
@@ -538,6 +555,61 @@ public class DataLayer implements VisualizationLayout{
       breadCrumbsString += result;
   }
   
+  */
+  
+  /*
+      Type - The encoding type
+      
+      Value - true or false if we are encoding
+  */
+  synchronized public void encodeNodesWith(int type, boolean value){
+      String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
+
+      int iterations = nodeListStack.peek().size();
+      
+      for(int i =0; i < iterations;i++){
+        if(nodeListStack.peek().get(i).selected && value==true){
+            nodeListStack.peek().get(i).metaData.stroke_encode = true;
+            nodeListStack.peek().get(i).metaData.strokeValue   = 255;
+            nodeListStack.peek().get(i).metaData.blink_encode  = true;
+            nodeListStack.peek().get(i).metaData.blink_color   = 255;
+            nodeListStack.peek().get(i).metaData.symbol_encode = true;
+            nodeListStack.peek().get(i).metaData.symbol        = "a";
+            nodeListStack.peek().get(i).metaData.rect_encode   = true;
+            nodeListStack.peek().get(i).metaData.small_rect_color  = 255;
+            nodeListStack.peek().get(i).metaData.spin_small_rect   = true;
+            nodeListStack.peek().get(i).metaData.spin_rotation     = 25;     
+        }else if(nodeListStack.peek().get(i).selected && value==false){
+            nodeListStack.peek().get(i).metaData.stroke_encode = false;
+            nodeListStack.peek().get(i).metaData.strokeValue   = 255;
+            nodeListStack.peek().get(i).metaData.blink_encode  = false;
+            nodeListStack.peek().get(i).metaData.blink_color   = 255;
+            nodeListStack.peek().get(i).metaData.symbol_encode = false;
+            nodeListStack.peek().get(i).metaData.symbol        = "a";
+            nodeListStack.peek().get(i).metaData.rect_encode   = false;
+            nodeListStack.peek().get(i).metaData.small_rect_color  = 255;
+            nodeListStack.peek().get(i).metaData.spin_small_rect   = false;
+            nodeListStack.peek().get(i).metaData.spin_rotation     = 25;              
+        }
+      }
+      breadCrumbsString += result;
+  }
+  
+  /*
+      Selects all encoded nodes
+  */
+  synchronized public void selectEncodedNodes(){
+      int iterations = nodeListStack.peek().size();
+      
+      for(int i =0; i < iterations;i++){
+        if( nodeListStack.peek().get(i).metaData.stroke_encode || nodeListStack.peek().get(i).metaData.blink_encode || 
+            nodeListStack.peek().get(i).metaData.symbol_encode || nodeListStack.peek().get(i).metaData.rect_encode || 
+            nodeListStack.peek().get(i).metaData.spin_small_rect){
+            // If we have an encoding, mark it as true
+            nodeListStack.peek().get(i).selected=true;
+            }
+      }
+  }
   
    /*
       Filter Design pattern

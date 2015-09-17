@@ -41,7 +41,7 @@ class nodeLinkSystem extends PApplet{
     
   public void setup() {
      surface.setTitle("Encodings");
-     surface.setLocation(1440, 0);
+     surface.setLocation(1600, 0);
   }
   
 

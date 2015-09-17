@@ -26,7 +26,7 @@ class BucketsWindow extends commonWidget {
   public void setup() {
       println("setup Buckets");
       surface.setTitle(windowTitle);
-      surface.setLocation(1440, 400);
+      surface.setLocation(980, 0);
       println("setup Buckets end");
   }
   

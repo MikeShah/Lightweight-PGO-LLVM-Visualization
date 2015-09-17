@@ -200,6 +200,24 @@ public class DetailsPane extends PApplet {
                  .addItem("_RECURSIVE",RECURSIVE)
                  ;
                  
+             detailsPanel.addButton("EncodeSelected")
+                 .setPosition(width-540,180)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
+                 
+             detailsPanel.addButton("UnEncodeSelected")
+                 .setPosition(width-540,200)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
+                 
+             detailsPanel.addButton("SelectEncoded")
+                 .setPosition(width-450,180)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
+                 
 // ==================================^ Sorting ^================================== 
 /*                   
               // Capture Console output here.
@@ -232,20 +250,20 @@ public class DetailsPane extends PApplet {
   }
 
   public void settings() {
-    size(1440, 220, P3D);
+    size(1440, 320, P3D);
     smooth();
   }
   public void setup() { 
     println("setup DetailsPane");
     surface.setTitle("Details View");
-    surface.setLocation(0, 820);
+    surface.setLocation(1440, 720);
     println("setup DetailsPane end");
   }
 
   public void draw() {
     background(145,160,176);
     
-    int xSize = width-360;
+    int xSize = width-540;
     int ySize = height;
     
     fill(0); stroke(0,255);
@@ -364,8 +382,7 @@ public class DetailsPane extends PApplet {
         // Apply the relevant filters
         cd.functionStartsWithSelect(theText);
         hw.m_histogram.functionStartsWithSelect(theText);
-        //bw.m_buckets.functionStartsWithSelect(theText);
-
+        //bw.m_buckets.functionStartsWithSelect(theText); // cannot select buckets which contain functions...could be a future functionality. TODO: Should their be some heuristic?
     }
   }
   
@@ -479,6 +496,25 @@ public class DetailsPane extends PApplet {
       cd.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
       hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
       bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+    }
+    
+    /*
+      Encode Selected
+    */
+    public void EncodeSelected(){
+      cd.encodeNodesWith(1,true);
+    }
+    /*
+      UnEncode Selected
+    */
+    public void UnEncodeSelected(){
+      cd.encodeNodesWith(1,false);
+    }
+    /* 
+      Select all the nodes we have encoded
+    */
+    public void SelectEncoded(){
+      cd.selectEncodedNodes();
     }
     
 }

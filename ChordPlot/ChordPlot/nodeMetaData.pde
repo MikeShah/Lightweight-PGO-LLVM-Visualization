@@ -74,7 +74,6 @@ class nodeMetaData implements Comparable<nodeMetaData>{
       sourceFile="no/information/available";
     }
     
-    
     c = 0;
     
     calleeLocations = new ChordNodeList();

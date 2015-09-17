@@ -73,10 +73,14 @@ class ChordDiagram extends DataLayer{
     // We will lose the optimalSize * the number of rows we have, so we need
     // to adjust the optimalSize to make up for this.
     
-    // recompute once more
-    pixelsAvailable = (width-padding-padding-optimalSize)*(height-padding-padding-optimalSize);
-    // Since we need a square, take the sqrt
-    optimalSize = (sqrt(pixelsAvailable/ nodeListStack.peek().size()));
+    // recompute once more if we have more than one node
+    // WHY: If the size is 1, then (width-padding-padding) - optimalSize will equal 0, thus hiding our node
+    if(nodeListStack.peek().size()!=1){
+      pixelsAvailable = (width-padding-padding-optimalSize)*(height-padding-padding-optimalSize);
+      // Since we need a square, take the sqrt
+      optimalSize = (sqrt(pixelsAvailable/ nodeListStack.peek().size()));
+    }
+
 
     
     println("==============plotPointsOnGrid==============");println("nodeListStack.peek().size():"+nodeListStack.peek().size());
