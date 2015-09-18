@@ -77,7 +77,6 @@ void setup(){
   bw = new BucketsWindow(filename);
   
   
-  
   encodings = new nodeLinkSystem();
   
   /* What we are encoding(the attribute), and how it is decoded(the visual presentation)*/

@@ -1,53 +1,52 @@
-lib/Transforms/myModulePass2/CMakeFiles/mymodulepass2.dir/MyModulePass2.cpp.o: \
- /home/mdshah/Desktop/llvm-7-8-15/lib/Transforms/myModulePass2/MyModulePass2.cpp \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Statistic.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Atomic.h \
- include/llvm/Support/DataTypes.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Valgrind.h \
- include/llvm/Config/llvm-config.h \
+lib/Transforms/myAnnotation/CMakeFiles/myannotation.dir/MyAnnotation.cpp.o: \
+ /home/mdshah/Desktop/llvm-7-8-15/lib/Transforms/myAnnotation/MyAnnotation.cpp \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Pass.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Compiler.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Optional.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/None.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/AlignOf.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Module.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/iterator_range.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Comdat.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/StringRef.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DataLayout.h \
+ include/llvm/Config/llvm-config.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassSupport.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Pass.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/InitializePasses.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassInfo.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassRegistry.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm-c/Core.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm-c/Support.h \
+ include/llvm/Support/DataTypes.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/DenseMap.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/DenseMapInfo.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Hashing.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Host.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/StringMap.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/StringRef.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Allocator.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/SmallVector.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/iterator_range.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/AlignOf.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/MathExtras.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/SwapByteOrder.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/type_traits.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Memory.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/PointerLikeTypeTraits.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/EpochTracker.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DerivedTypes.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Type.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm-c/Core.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm-c/Support.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/APFloat.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/APInt.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/ArrayRef.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/SmallPtrSet.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/CBindingWrapping.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Casting.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/ErrorHandling.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Pass.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassSupport.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Pass.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/InitializePasses.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassInfo.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassRegistry.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/RWMutex.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Threading.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Atomic.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Valgrind.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/PassAnalysisSupport.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Module.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Comdat.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DataLayout.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DerivedTypes.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Type.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/APFloat.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/APInt.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/ArrayRef.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/None.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/ErrorHandling.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Function.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Optional.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Argument.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Twine.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/ilist_node.h \
@@ -83,29 +82,11 @@ lib/Transforms/myModulePass2/CMakeFiles/mymodulepass2.dir/MyModulePass2.cpp.o: \
  include/llvm/Config/Targets.def include/llvm/Config/AsmPrinters.def \
  include/llvm/Config/AsmParsers.def include/llvm/Config/Disassemblers.def \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/raw_ostream.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/CallSite.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Instructions.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/InstrTypes.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/MDBuilder.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Constants.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DebugInfoMetadata.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Dwarf.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/Dwarf.def \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/DebugInfoFlags.def \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Analysis/BranchProbabilityInfo.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/CFG.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/Statistic.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Analysis/LoopInfo.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/DenseSet.h \
  /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/GraphTraits.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/BranchProbability.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/FileSystem.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/IntrusiveRefCntPtr.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/SmallString.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Support/TimeValue.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/SCCIterator.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Analysis/InlineCost.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Analysis/CallGraphSCCPass.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Analysis/CallGraph.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/ADT/STLExtras.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/Intrinsics.h \
- include/llvm/IR/Intrinsics.gen \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/ValueHandle.h \
- /home/mdshah/Desktop/llvm-7-8-15/include/llvm/Transforms/IPO/InlinerPass.h
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/CFG.h \
+ /home/mdshah/Desktop/llvm-7-8-15/include/llvm/IR/InstIterator.h

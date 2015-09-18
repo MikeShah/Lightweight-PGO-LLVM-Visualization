@@ -178,13 +178,7 @@ class Buckets extends DataLayer{
   
   // How wide to draw our buckets in the actual visualization (see draw call)
   int bucketWidth = 50;
-  
-  // For now there is an assumption that these
-  // are all positive values
-  float maxValue  = 0;
-  float minValue  = 0;
-  float stepValue = 5;
-  
+   
   int scaledHeight = 250; // Normalize visualization height and values to this
   
   // Default Constructor for the Buckets
@@ -208,9 +202,41 @@ class Buckets extends DataLayer{
   private void plotPoints2D(){
     //println("buckets plotPoints2D");
     bucketLists.clear();
+    println("==== Sorting by: " +sortBy);
     
+    float minValue = 0;
+    float maxValue = 1;
+        
+      // Compute the max and the min values based on how we are sorting.
+      switch(sortBy){
+        case CALLEE:
+              minValue = minCallees;
+              maxValue = maxCallees;
+              break;
+        case CALLER:
+              minValue = minCallers;
+              maxValue = maxCallers;
+              break;
+        case PGODATA:
+              minValue = minPGO;
+              maxValue = maxPGO;
+              break;
+        case BITCODESIZE:
+              minValue = minBitCodeSize;
+              maxValue = maxBitCodeSize;
+              break;
+        case RECURSIVE:
+              // Do nothing, minValue and maxValue are 0 and 1 by default
+              break;
+      } 
+
+    // Float
+    // The step value is how big of a range of items the buckets get
+    float stepValue = (maxValue - minValue) / 10;  // TODO: This assumes positive values, may need to fix in the future.
+    //stepValue = 5;
+
     // How many buckets do we allocate in our arrayList
-    numberOfBuckets = (int) ((maxValue - minValue)/stepValue);
+    numberOfBuckets = 10;//(int) ((maxValue - minValue)/stepValue);
     
     // Allocate memory for all of the buckets we will need.
     for(int i = 0; i < numberOfBuckets; ++i){
@@ -231,8 +257,7 @@ class Buckets extends DataLayer{
       int assignBucket = 0;
       // Increment which bucket we need to put our node in based on the step value.
       // If the attribute we're analyzing is less then the bucket size, then we know we have finished.
-      for(int j = 0; j < bucketLists.size(); j++){
-        
+      for(int j = 0; j < bucketLists.size(); j++){       
         // Assign buckets  
         switch(sortBy){
             case CALLEE:
@@ -260,13 +285,12 @@ class Buckets extends DataLayer{
                     assignBucket++;
                   }
                   break;
-          }   
-      
+        }
       }
       
-      // clamp our values within a certain range
-      if(assignBucket <= 0)                 {  assignBucket = 0;  }
-      if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }  // Clump maximum values here
+      // clamp our values within the number of buckets we have
+      if(assignBucket < 0)                 {  assignBucket = 0;  }
+      if(assignBucket > numberOfBuckets-1) {  assignBucket = numberOfBuckets-1;  }  
       
       // All of the nodes that are within the right bucket get assigned to their proper bucket.
       nodeListStack.peek().get(i).bucket = assignBucket;
@@ -274,6 +298,9 @@ class Buckets extends DataLayer{
       // This will allos us to quickly highlight over a bucket, and select the nodes that fall in that subset.
       bucketLists.get(assignBucket).add(nodeListStack.peek().get(i));
     }
+    
+    // Set the yBounds to the max value that our visualization scales to.
+    yBounds = (int)map(maxValue, minValue, maxValue, 0, 350);
     
     // Clean up our buckets, so if there is nothing in one, get rid of it.
     for(int i = 0; i < bucketLists.size(); ++i){
@@ -313,6 +340,9 @@ class Buckets extends DataLayer{
     storeLineDrawings();
   }
     
+  /*
+  
+  // DEPRECATED: Now should be using the DataLayer version
   
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
@@ -337,6 +367,8 @@ class Buckets extends DataLayer{
       nodeListStack.peek().get(i).metaData.c = nodeListStack.peek().get(i).metaData.callees;
     }
   }
+  */
+  
   
   /*
       Useful for being used in update where we don't need to do anything else with the data.
@@ -349,7 +381,7 @@ class Buckets extends DataLayer{
   public void fastUpdate(){
     //println("buckets fastUpdate");
     // Modify all of the positions in our nodeList
-    this.generateHeatForCalleeAttribute(scaledHeight);
+    // this.generateHeatForCalleeAttribute(scaledHeight); // TODO: We may need this if we call fastUpdate independently, but for now all calls are using update()
     if(this.layout <= 0){
       //this.generateHeatForCalleeAttribute(scaledHeight);
       plotPoints2D();
@@ -378,6 +410,11 @@ class Buckets extends DataLayer{
         }
   }
   
+  
+  /*
+  
+  DEPRECATED: Because Processing needs to render everything in the main thread
+              we cannot have other draw routines, even if they're in different windows(which really should have their own drawing thread...).
   
   // Draw using our rendering modes
   //
@@ -441,4 +478,5 @@ class Buckets extends DataLayer{
     
       }
   }
+  */
 }

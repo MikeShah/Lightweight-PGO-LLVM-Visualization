@@ -277,9 +277,7 @@ public class DetailsPane extends PApplet {
     dataString.setText(s);
   }
   
-  
   /*
-    TODO: Remove me
     
     Temporary function to quickly select nodes with metadata.
   */
@@ -287,7 +285,6 @@ public class DetailsPane extends PApplet {
     cd.selectMetaData();
   }
   /*
-    TODO: Remove me
     
     Temporary function to quickly select functions with attributes.
   */
@@ -296,7 +293,6 @@ public class DetailsPane extends PApplet {
   }
   
   /*
-    TODO: Remove me
     
     Temporary function to quickly select functions with line information .
   */

@@ -43,7 +43,16 @@ public class DataLayer implements VisualizationLayout{
   int sortBy = CALLEE;
   int colorizeBy = CALLEE;
   
-  
+  // Store the max and min from the ChordNode metadata
+  // Used primiarily when generateHeat is called
+  float minCallees = 0;
+  float maxCallees = 0;
+  float minCallers = 0;
+  float maxCallers = 0;
+  float minPGO = 0;
+  float maxPGO = 0;
+  float minBitCodeSize = 0;
+  float maxBitCodeSize = 0;
 
   
   
@@ -213,20 +222,6 @@ public class DataLayer implements VisualizationLayout{
   // Here maxHeight represents how many pixels we scale to (
   // (i.e. the maximum value in the set will equal this)
   void generateHeatForCalleeAttribute(float maxHeight, boolean setShape){
-
-    
-        // Find the max and min from the ChordNode metadata
-    float minCallees = 0;
-    float maxCallees = 0;
-    
-    float minCallers = 0;
-    float maxCallers = 0;
-    
-    float minPGO = 0;
-    float maxPGO = 0;
-    
-    float minBitCodeSize = 0;
-    float maxBitCodeSize = 0;
         
     for(int i =0; i < nodeListStack.peek().size();i++){
       minCallees = min(minCallees,nodeListStack.peek().get(i).metaData.callees);
@@ -240,10 +235,7 @@ public class DataLayer implements VisualizationLayout{
       
       minBitCodeSize = min(minBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
       maxBitCodeSize = max(maxBitCodeSize,nodeListStack.peek().get(i).metaData.bitCodeSize);
-      
     }
-    println("themin:"+minCallees);
-    println("themax:"+maxCallees);
     // Then map that value into the ChordNode so that it can render correctly.
     // We scale from 
     for(int i =0; i < nodeListStack.peek().size();i++){
