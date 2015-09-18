@@ -56,7 +56,7 @@ void setup(){
   
   ortho(-width/2.0, width/2.0, -height/2.0, height/2.0); // same as ortho()
 
-  //String filename = "/home/mdshah/Desktop/LLVMSample/tlou_pgo.dot"; // has branch weights
+  //String filename = "/home/mdshah/Desktop/LLVMSample/blah.dot"; // has branch weights
   //String filename = "output.dot"; // legacy version of dot file loader
   String filename = "horde3d.dot";
   
