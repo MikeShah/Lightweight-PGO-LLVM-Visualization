@@ -6,7 +6,7 @@ import time
 # No need to touch anything else
 #
 # In general this is the program name without any extensions.
-PROGRAM_1 = 'merged'
+PROGRAM_1 = 'chicago'
 
 PROGRAM_1_GENERATE = PROGRAM_1+'.cpp' # Name of the .cpp file generated
 PROGRAM_1_OUT = PROGRAM_1+'.ll'       # The textual bitcode representation output
