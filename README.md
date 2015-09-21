@@ -1,5 +1,10 @@
 # Lightweight-PGO-LLVM-Visualization
 
+Dependencies:
+For Chordplot you will need to download controlP5 library. When you do that, then move controlP5 into Processing's libraries folder and restart Processing.
+
+
+
 README
 
 Download CMake (version 2.8)
