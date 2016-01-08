@@ -256,7 +256,7 @@ public class DetailsPane extends PApplet {
   public void setup() { 
     println("setup DetailsPane");
     surface.setTitle("Details View");
-    surface.setLocation(1440, 720);
+    surface.setLocation(0, 720);
     println("setup DetailsPane end");
   }
 

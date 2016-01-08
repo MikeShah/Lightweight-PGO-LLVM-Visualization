@@ -82,7 +82,7 @@ class BucketsWindow extends commonWidget {
                                   text("range "+m_buckets.bucketLists.get(i).m_min+"-"+m_buckets.bucketLists.get(i).m_max,xBucketPosition,m_buckets.yPosition+20);
                   
                                   // Unhighlight all of the previous buckets that were highlighted.
-                                  if(p_buckets != i){
+                                  if(p_buckets != i || m_x <= 0){
                                     p_buckets_old = p_buckets;
                                     p_buckets = i;
                                     cd.highlightNodes(m_buckets.bucketLists.get(i),true);
@@ -114,7 +114,8 @@ class BucketsWindow extends commonWidget {
                                         }
                                   }
                               }
-                                  text("selected: "+i+" prev: "+p_buckets+" prev2: "+p_buckets_old,200,200);
+                                  // Useful debugging statement for selecting the correct bucket
+                                  //text("selected: "+i+" prev: "+p_buckets+" prev2: "+p_buckets_old,200,200);
                                   fill(255,255,0,255); stroke(255);
                           }
                           

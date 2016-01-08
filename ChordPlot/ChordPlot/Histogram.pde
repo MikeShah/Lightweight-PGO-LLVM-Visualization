@@ -21,7 +21,7 @@ class HistogramWindow extends commonWidget {
   public void setup() { 
       println("setup Histogram");
       surface.setTitle(windowTitle);
-      surface.setLocation(1440, 350);
+      surface.setLocation(0, 350);
       println("setup Histogram end");
   }
   

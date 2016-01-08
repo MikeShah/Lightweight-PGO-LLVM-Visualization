@@ -35,7 +35,7 @@ ChordDiagram cd;
 HistogramWindow hw;
 BucketsWindow bw;
 
-nodeLinkSystem encodings;
+//nodeLinkSystem encodings;
 
 int programStart = 0;
 
@@ -77,9 +77,9 @@ void setup(){
   bw = new BucketsWindow(filename);
   
   
-  encodings = new nodeLinkSystem();
+ // encodings = new nodeLinkSystem();
   
-  /* What we are encoding(the attribute), and how it is decoded(the visual presentation)*/
+  /* //What we are encoding(the attribute), and how it is decoded(the visual presentation)
   nodeLink recursive_enc =   new nodeLink("recursive",0,0,0,true,false);       encodings.addNode(recursive_enc);
   nodeLink callsite_enc =    new nodeLink("Callsite",0,80,0,true,false);       encodings.addNode(callsite_enc);
   nodeLink bitcode_enc =     new nodeLink("BitCode Size",0,160,0,true,false);  encodings.addNode(bitcode_enc);
@@ -89,7 +89,7 @@ void setup(){
   nodeLink stroke_dec =     new nodeLink("stroke color",200,160,0,false,true);    encodings.addNode(stroke_dec);
   nodeLink rectangle_dec =  new nodeLink("Rectangle",200,240,0,false,true);       encodings.addNode(rectangle_dec);
   nodeLink rectspin_dec =   new nodeLink("Rectangle Spin",200,320,0,false,true);  encodings.addNode(rectspin_dec);
-
+*/
   
   bw.m_buckets.debug();
   
@@ -112,7 +112,7 @@ void draw(){
    noFill();
    noStroke();
    fill(255);stroke(255);
-   text("FPS :"+frameRate,width-100,height-20);
+   text("FPS :"+int(frameRate),width-100,height-20);
    text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
    text("'p' - Open bitcode file to function",5,height-70);
    text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
