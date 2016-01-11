@@ -94,7 +94,8 @@ println("b");
     Update our function list
   */
   
-  
+  // FIXME: Was suppose to update the function list within each window.
+  //        Most likely just a broken feature.
   synchronized public void updateFunctionList(){
     /*
     // Update the functions list with all of the applicable functions

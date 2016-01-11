@@ -428,8 +428,7 @@ public class DataLayer implements VisualizationLayout{
           nodeListStack.peek().get(i).selected = false; // deselect the node?
           ChordNode temp = nodeListStack.peek().get(i);
           //println(temp.printAll());
-          
-          selectedNodes.add(nodeListStack.peek().get(i));
+          selectedNodes.add(temp);
         }
       }
       
@@ -948,7 +947,6 @@ public class DataLayer implements VisualizationLayout{
   /*
       Quickly select node and all of its callees up to the specified depth
   */
-  
   synchronized public void selectCallees(ChordNode cn, boolean value, int theDepth){
     int iterations = nodeListStack.peek().size();
     
@@ -1006,6 +1004,9 @@ public class DataLayer implements VisualizationLayout{
      }
      
      breadCrumbsString += "select Callers";
+  }
+  
+  synchronized public void getCallTree(ChordNode cn, boolean value, int theDepth){
   }
   
   

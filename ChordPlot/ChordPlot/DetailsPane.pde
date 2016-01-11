@@ -315,6 +315,7 @@ public class DetailsPane extends PApplet {
         cd.update();
         hw.m_histogram.update();
         bw.m_buckets.update();
+        ctw.m_calltree.update();
   }
   
   /*

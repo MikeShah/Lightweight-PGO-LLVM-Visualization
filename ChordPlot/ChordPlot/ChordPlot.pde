@@ -22,6 +22,7 @@ public static final int CALLER       = 1;
 public static final int PGODATA      = 2;
 public static final int BITCODESIZE  = 3;
 public static final int RECURSIVE    = 4;
+public static final int FILENAME     = 5;
 
 /*
   Create a second window
@@ -34,6 +35,8 @@ ChordDiagram cd;
 
 HistogramWindow hw;
 BucketsWindow bw;
+
+CallTreeWindow ctw;
 
 //nodeLinkSystem encodings;
 
@@ -75,7 +78,7 @@ void setup(){
   // Try to speed up loading times.
   hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
-  
+  ctw = new CallTreeWindow(filename);
   
  // encodings = new nodeLinkSystem();
   

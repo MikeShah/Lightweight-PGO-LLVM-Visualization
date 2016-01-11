@@ -228,6 +228,10 @@ class Buckets extends DataLayer{
               break;
         case RECURSIVE:
               // Do nothing, minValue and maxValue are 0 and 1 by default
+        case FILENAME:
+              // Each file will be assigned an integer from 0 to however many files there are.
+              minValue = 1;
+              maxValue = 10;
               break;
       } 
 

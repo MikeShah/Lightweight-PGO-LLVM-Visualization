@@ -203,7 +203,7 @@ class ChordNode{
             }
             
             if(keyPressed){
-                if      (key == 's'){
+                if (key == 's'){
                   cd.select(this,true);
                 }else if(key == 'e'){
                   cd.select(this,false);
@@ -411,7 +411,9 @@ class ChordNode{
                     fill(255,0,0); stroke(255,0,0);
                     // TODO: FIXME: calleeLocations does not currently store rectWidth, only the position. So in the future
                     // we will have a problem if we have nodes that are not all square shaped. Remember, we are in Java land, in C++ this would be easy to fix...
+                    strokeWeight(2);
                     line(x+rectWidth/2,y-rectHeight/2,metaData.callerLocations.get(i).x+rectWidth/2,metaData.callerLocations.get(i).y-rectHeight/2);
+                    strokeWeight(1);
                   popMatrix();
                   ChordNode blah = metaData.callerLocations.get(i);
                   blah.drawToCallers(depth-1);     
