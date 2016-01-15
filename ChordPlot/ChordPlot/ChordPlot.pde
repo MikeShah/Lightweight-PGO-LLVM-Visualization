@@ -61,8 +61,8 @@ void setup(){
 
   //String filename = "/home/mdshah/Desktop/LLVMSample/blah.dot"; // has branch weights
   //String filename = "output.dot"; // legacy version of dot file loader
-  String filename = "horde3d.dot";
-  //String filename = "VisualizationInput.dot"; // Attempt to load Soot data
+  //String filename = "horde3d.dot";
+  String filename = "VisualizationInput.dot"; // Attempt to load Soot data
 
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across

@@ -1059,6 +1059,7 @@ public class DataLayer implements VisualizationLayout{
     for(int j = 0; j < iterations; ++j){
         if(nodeListStack.peek().get(j).metaData.attributes.length() >0){
           nodeListStack.peek().get(j).selected = true; // Modify the node we have found. 
+          println(nodeListStack.peek().get(j).metaData.name);
         }
      }
   }
