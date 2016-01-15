@@ -78,6 +78,13 @@ class DotGraph{
   */
   public nodeMetaData processStruct(String line){
     //"_ZL10crc32_byteh"[shape=record,label="_ZL10crc32_byteh|{Attributes|zeroext}|{Metadata}|{Annotations}|{PGO Data}|{Perf Data}|{Opcodes|alloca 1|and 2|call 1|getelementptr 1|load 4|lshr 1|ret 1|store 2|xor 2|zext 2}|"];
+
+    
+    // Find out what our function name is
+    int funNameStart = line.indexOf("\"", 1);
+        // 
+    String functionName = line.substring(0, funNameStart+1);
+    
     // Replace the delimiters with spaces and then we can easily split the line
     // Once the line is split, we can populate the metaData
     line = line.replace("|"," ");
@@ -86,11 +93,7 @@ class DotGraph{
     line = line.replace(";"," ");
     line = line.replace("]"," ");
     line = line.trim(); //Get rid of tabs
-    
-    // Find out what our function name is
-    int funNameStart = line.indexOf("\"", 1);
-    // 
-    String functionName = line.substring(0, funNameStart+1);
+
     
     int labelStart = line.indexOf("label=");
     String restOfLine = line.substring(labelStart,line.length());
@@ -246,6 +249,7 @@ class DotGraph{
               nodeMetaData md = processStruct(s);
             
               fullNodeList.put(md.name, md);
+              println(md.name);
             }
         }
       
@@ -260,17 +264,28 @@ class DotGraph{
             // Split the line, parse it, and retrieve our
             // source and destination nodes.
             String[] tokens = line.split(" ");
-            
+
             // Create temporary nodes with the ones we found
             nodeMetaData src = (nodeMetaData)fullNodeList.get(tokens[0]);
             nodeMetaData dst = (nodeMetaData)fullNodeList.get(tokens[2]);
-                                                              
+            
+           /*
+            println("------line:"+line);
+            if(src==null){println("src is null");}
+            if(dst==null){println("dst is null");}
+            for(int k =0; k < tokens.length;++k){
+              println(tokens[k]);
+            }
+                        println(src.name);
+            println(dst.name);
+            */            
+
             // If a function calls itself, then mark it as recursive.
             if(src.name.equals(dst.name)){
               src.recursive = 1;
               dst.recursive = 1;
             }
-            
+            println("hi");
             // If the function exists, then add a new destination
             if(graph.containsKey(src)){
               LinkedHashSet<nodeMetaData> temp = (LinkedHashSet<nodeMetaData>)(graph.get(src));
