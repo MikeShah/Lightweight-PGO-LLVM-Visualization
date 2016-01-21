@@ -62,7 +62,7 @@ void controlEvent(ControlEvent theEvent) {
 
 // Histogram
 public void Histogram(int theValue) {
-  hw.m_histogram.showData = !hw.m_histogram.showData;
+  // hw.m_histogram.showData = !hw.m_histogram.showData;
 }
 
 // Microarray
@@ -78,16 +78,16 @@ public void theBreadCrumbsBar(int n){
   if(mouseButton == LEFT){
     println("-------------------------------------------Setting Stack to this node", n);
     ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-                            hw.m_histogram.nodeListStack.pop();
+                            // hw.m_histogram.nodeListStack.pop();
                               bw.m_buckets.nodeListStack.pop();
     
     if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
       filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
       cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
-      hw.m_histogram.update();
+      // hw.m_histogram.update();
       bw.m_buckets.update();
 
-      hw.updateFunctionList();
+      // hw.updateFunctionList();
       bw.updateFunctionList();
     }
     if(cd.nodeListStack.size()==1){
@@ -97,16 +97,16 @@ public void theBreadCrumbsBar(int n){
     println("Clearing Stack to this node", n);
     while(cd.nodeListStack.size()>n+1){
       ChordNodeList temp = (ChordNodeList)cd.nodeListStack.pop();
-                              hw.m_histogram.nodeListStack.pop();
+                              // hw.m_histogram.nodeListStack.pop();
                                 bw.m_buckets.nodeListStack.pop();
       
       if(temp!=null){  // If we didn't pop anything off of the stack, then do not remove any items
         filtersPanel.get(ButtonBar.class, "theBreadCrumbsBar").removeItem(temp.name);
         cd.update(); // Make a call to update the visualization // FIXME: See if I can use fastUpdate() to speed things up
-        hw.m_histogram.update();
+        // hw.m_histogram.update();
         bw.m_buckets.update();
         
-        hw.updateFunctionList();
+        // hw.updateFunctionList();
         bw.updateFunctionList();
       }
       if(cd.nodeListStack.size()==1){

@@ -31,9 +31,8 @@ DetailsPane dp;
 
 /* Create our visualizations */
 ChordDiagram cd;
-//Histogram h;
 
-HistogramWindow hw;
+// HistogramWindow hw;
 BucketsWindow bw;
 
 CallTreeWindow ctw;
@@ -43,6 +42,8 @@ CallTreeWindow ctw;
 int programStart = 0;
 
 String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago_merged.ll";
+
+String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
 
 void settings(){
   size(900 ,900, P3D);
@@ -62,8 +63,8 @@ void setup(){
   //String filename = "/home/mdshah/Desktop/LLVMSample/blah.dot"; // has branch weights
   //String filename = "output.dot"; // legacy version of dot file loader
   //String filename = "horde3d.dot";
-  String filename = "VisualizationInput.dot"; // Attempt to load Soot data
-
+  String filename = "./ProjectTemplate/VisualizationInput.dot"; // Attempt to load Soot data
+  
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across
   // the entire codebase.
@@ -76,7 +77,7 @@ void setup(){
   dp.setDataString("File Loaded: "+filename);
   
   // Try to speed up loading times.
-  hw = new HistogramWindow(filename);
+  // hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
   ctw = new CallTreeWindow(filename);
   
@@ -112,15 +113,7 @@ void draw(){
   // Refresh the screen
   background(128);
    
-   noFill();
-   noStroke();
-   fill(255);stroke(255);
-   text("FPS :"+int(frameRate),width-100,height-20);
-   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+")",5,height-20);
-   text("'p' - Open bitcode file to function",5,height-70);
-   text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
-   text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes | 'o' open source in editor",5,height-30);
-   fill(255);
+  text("FPS :"+int(frameRate),width-40,height-10);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

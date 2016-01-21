@@ -7,14 +7,24 @@ class CallTreeWindow extends commonWidget {
   CallTree m_calltree;
   String filename;
 
+  float seek_pos = 0.0; // The actual position to display the slider
+  int traceStep = 0; // The current instruction in trace to play.
+  int numberOfSteps; // How many items there are in the trace
+  boolean play = false;
+
+  List<String> functionCalls;
+
   public CallTreeWindow(String filename){
     this.filename = filename;
     println("a from CallTreeWindow");
     m_calltree = new CallTree(filename,0,height-30,0);
+    
+    functionCalls = new LinkedList<String>();
+    loadTrace();
   }
   
   public void settings() {
-    size(1440, 350, P3D);
+    size(900, 120, P3D);
     smooth();
   }
     
@@ -23,10 +33,25 @@ class CallTreeWindow extends commonWidget {
       surface.setLocation(0, 350);
   }
   
-  int p_node_old = -1;
-  int p_node = -1;
-  Set<Integer> selectedNodes = new HashSet<Integer>();
-  
+  /*
+    Loads the trace file and setups up the animation window.
+  */
+  public void loadTrace(){
+    // Note that the filename provided must be an absolute path, or the file directly in the data folder.
+    String[] lines = loadStrings(traceFileName);
+    println("Loading trace");
+    for(String s: lines){
+      functionCalls.add(s);
+      println(s);
+      // (1) Start parsing trace
+      // (2) Be able to walk through each step 1 at a time, perhaps display function name
+      // (3) Add a step button
+      // (4) Maybe highlight step animation in orange?
+    }
+    
+    numberOfSteps = functionCalls.size();
+  }
+    
   /*
     Interactive rendering loop
     
@@ -36,36 +61,85 @@ class CallTreeWindow extends commonWidget {
   public void draw() {
     
     if(m_calltree != null){
-    
+      // Refresh the screen    
+      background(0,64,128);
+              
       float m_x = mouseX;
       float m_y = mouseY;   
     
-      // Refresh the screen    
-      background(0,64,128);
-        text("FPS :"+frameRate,width-100,height-20);
-        text("(x,y) => ("+m_x+","+m_y+")",width-200,height-20);
-           
-         
-          // Main loop that draws
-          for(int i =0; i < cd.nodeListStack.peek().size();i++){ // FIXME: Well, this visualization is only useful if it is directly attached to the 'cd', so just work with that data directly.
-                                                                          //        Current bug is                           
-            ChordNode temp = (ChordNode)cd.nodeListStack.peek().get(i);
-            
-            if(temp.selected==true){
-                   if(mouseButton==RIGHT){
-                       // Pass a data string to our child applet and store it here.
-                       dp.setDataString("Data:"+temp.metaData.getAllMetadata());
-                   }
-                              
-                  // If our node has been selected, then highlight it green
-                  if(selectedNodes.contains(i)){
-                    fill(0,255,0,255); stroke(255);
-                  }
-                  
-                  // Draw rectangle for each of the buckets.
-                  rect(temp.x,temp.y - temp.rectHeight,temp.rectWidth,temp.rectHeight);
+        text("FPS :"+frameRate,width-100,height-20);          
+            // Play
+              fill(255); rect(0,0,20,20);
+              if(m_x < 20 && m_y < 20){
+                fill(192); rect(0,0,20,20);
+                if(mouseButton==LEFT){
+                  fill(128); rect(0,0,20,20);
+                  play = true;
                 }
-          }
+              }
+              fill(0); triangle(6,4,14,10,6,16);  // The actual triangle
+              
+              // Pause
+              fill(255); rect(20,0,20,20);
+              if(m_x > 20 && m_x < 40 && m_y < 20){
+                fill(192); rect(20,0,20,20);
+                if(mouseButton==LEFT){
+                  fill(128); rect(20,0,20,20);
+                  play = false;
+                }
+              }
+              fill(0); rect(25,4,3,13); rect(31,4,3,13); // The bars
+              
+              // Restart
+              fill(255); rect(40,0,20,20);
+              if(m_x > 40 && m_x < 60 && m_y < 20){
+                fill(192); rect(40,0,20,20);
+                if(mouseButton==LEFT){
+                  fill(128); rect(40,0,20,20);
+                  play = false;
+                  seek_pos = 0;
+                  traceStep = 0;
+                }
+              }
+              fill(0); rect(44,4,12,12);// The stop
+            
+            
+            // Select each node as it plays
+            
+            // Deselect each node as it plays
+            
+            
+            // If we're playing, move our slider
+            // and increment the instruction we're on.
+            float timeLineLength = width-10;
+            if(play){
+                seek_pos += timeLineLength / numberOfSteps-1;
+                traceStep += 1;
+                if(traceStep > numberOfSteps-1){
+                  play = false;
+                }
+              
+                // Loop that finds our node and highlights it in the visualization
+                for(int i =0; i < cd.nodeListStack.peek().size();i++){                        
+                    ChordNode temp = (ChordNode)cd.nodeListStack.peek().get(i);
+                    if(traceStep>-1 && traceStep < functionCalls.size()-1){
+                      if(temp.metaData.name.equals("\""+functionCalls.get(traceStep)+"\"")){
+                        //temp.selected = true;
+                        temp.highlighted = true;
+                      }
+                    }
+                }
+            }
+            
+            // Timeline
+            line(0,40,timeLineLength,40);
+            // Rect place in time
+            fill(255);
+            rect(seek_pos,30,3,20);
+            text(str(traceStep),seek_pos,30.0);
+            if(traceStep>-1 && traceStep < functionCalls.size()-1){
+              text(functionCalls.get(traceStep),5,30.0);
+            }
         
     }
   }
@@ -106,6 +180,7 @@ class CallTree extends DataLayer{
       Currently there is only one layout supported.
   */
   public void setLayout(int layout){
+    /*
     this.layout = layout;
         
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
@@ -125,6 +200,7 @@ class CallTree extends DataLayer{
     // Quick hack so the visualization can render quickly, also calculates the number of callees from the caller
     // This is called after we have positioned all of our nodes in the visualization
     storeLineDrawings();
+    */
   }
   
   /*
@@ -159,6 +235,7 @@ class CallTree extends DataLayer{
       This is where we are actually rendering each rectangle
   */
   public void draw(int mode){
+    /*
     if(showData){
            // Draw a background
           pushMatrix();
@@ -173,6 +250,7 @@ class CallTree extends DataLayer{
             temp.render(2);
           }
       }
+      */
   }
   
   

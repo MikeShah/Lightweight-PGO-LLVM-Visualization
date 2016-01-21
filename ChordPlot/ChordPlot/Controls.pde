@@ -67,9 +67,9 @@ void keyPressed() {
           cd.pushSelectedNodes();
           cd.update(); // Make a call to update the visualization
           
-          hw.m_histogram.pushSelectedNodes();
-          hw.m_histogram.update(); // Make a call to update the visualization
-          hw.updateFunctionList();
+         // hw.m_histogram.pushSelectedNodes();
+         // hw.m_histogram.update(); // Make a call to update the visualization
+         // hw.updateFunctionList();
           
           //bw.m_buckets.setNodeListStack(cd.nodeListStack);
           bw.m_buckets.pushSelectedNodes(cd.nodeListStack.peek());
@@ -91,16 +91,20 @@ void keyPressed() {
   if(key== ' '){
       // Apply the relevant filters
       cd.deselectAllNodes();
-      hw.m_histogram.deselectAllNodes();  bw.selectedBuckets.clear();
-      bw.m_buckets.deselectAllNodes();    hw.selectedNodes.clear();
+      // hw.m_histogram.deselectAllNodes();  
+      bw.selectedBuckets.clear();
+      bw.m_buckets.deselectAllNodes();    
+      // hw.selectedNodes.clear();
   }
   
   // Invert all of the nodes that have been selected
   if(key== 'i'){
       // Apply the relevant filters
       cd.invertSelectAllNodes();
-      hw.m_histogram.invertSelectAllNodes();  bw.selectedBuckets.clear();
-      bw.m_buckets.invertSelectAllNodes();    hw.selectedNodes.clear();
+      // hw.m_histogram.invertSelectAllNodes();
+      bw.selectedBuckets.clear();
+      bw.m_buckets.invertSelectAllNodes();
+      // hw.selectedNodes.clear();
   }
   
 }

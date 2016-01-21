@@ -99,7 +99,7 @@ public class DetailsPane extends PApplet {
                  ;
                  
                // create a new button for selecting Attributes
-              detailsPanel.addButton("AttributesFunctions")
+              detailsPanel.addButton("SelectAttributesFunctions")
                  .setPosition(width-360,40)
                  .setSize(180,19)
                  ;
@@ -265,6 +265,16 @@ public class DetailsPane extends PApplet {
     
     int xSize = width-540;
     int ySize = height;
+   
+   // Draw the help
+   noFill();
+   noStroke();
+   fill(255);stroke(255);
+   text("Camera Position ("+MySimpleCamera.cameraX+","+MySimpleCamera.cameraY+","+MySimpleCamera.cameraZ+") | FPS :"+int(frameRate),width-250,height-20);
+   text("'p' - Open bitcode file to function",5,height-70);
+   text("Enter - Push nodes | Space - Deselect/Unhighlihgt all | Arrowkeys for Camera | Left-Mouse select/deselect | Right-Mouse more Info | Hold 's' or 'e' to select/deselect node you hover over",5,height-50);
+   text("'a' - select all callees of current node | 'h' to hide lines being drawn | 'c' - Show callers of node | 'b' selects all caller nodes | 'o' open source in editor | 'i' to invert selection",5,height-30);
+   fill(255);
     
     fill(0); stroke(0,255);
     if(dataString!=null){
@@ -282,6 +292,7 @@ public class DetailsPane extends PApplet {
     Temporary function to quickly select nodes with metadata.
   */
   void SelectMetaDataFunctions(){
+    println("SelectMetaDataFunctions");
     cd.selectMetaData();
   }
   /*
@@ -289,6 +300,7 @@ public class DetailsPane extends PApplet {
     Temporary function to quickly select functions with attributes.
   */
   void SelectAttributesFunctions(){
+    println("SelectAttributesFunctions");
     cd.selectAttributes();
   }
   
@@ -309,11 +321,11 @@ public class DetailsPane extends PApplet {
   void sortBy(int a){
     println("sortby: "+a);
     cd.setSortBy(a);
-    hw.m_histogram.setSortBy(a);
+    // hw.m_histogram.setSortBy(a);
     bw.m_buckets.setSortBy(a);
     
         cd.update();
-        hw.m_histogram.update();
+        // hw.m_histogram.update();
         bw.m_buckets.update();
         ctw.m_calltree.update();
   }
@@ -325,11 +337,11 @@ public class DetailsPane extends PApplet {
   void colorizeBy(int a){
     println("colorizeBy: "+a);
     cd.setColorizeBy(a);
-    hw.m_histogram.setColorizeBy(a);
+    // hw.m_histogram.setColorizeBy(a);
     bw.m_buckets.setColorizeBy(a);
     
         cd.update();
-        hw.m_histogram.update();
+        // hw.m_histogram.update();
         bw.m_buckets.update();
   }
   
@@ -378,7 +390,7 @@ public class DetailsPane extends PApplet {
       
         // Apply the relevant filters
         cd.functionStartsWithSelect(theText);
-        hw.m_histogram.functionStartsWithSelect(theText);
+        // hw.m_histogram.functionStartsWithSelect(theText);
         //bw.m_buckets.functionStartsWithSelect(theText); // cannot select buckets which contain functions...could be a future functionality. TODO: Should their be some heuristic?
     }
   }
@@ -464,7 +476,7 @@ public class DetailsPane extends PApplet {
     */
     public void CalleeSelectionFilters(int theValue){
       cd.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
-      hw.m_histogram.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
       bw.m_buckets.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
     }
     /*
@@ -473,7 +485,7 @@ public class DetailsPane extends PApplet {
     */
     public void CallerSelectionFilters(int theValue){  
       cd.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
-      hw.m_histogram.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
       bw.m_buckets.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
     }
     /*
@@ -482,7 +494,7 @@ public class DetailsPane extends PApplet {
     */
     public void PGODataSelectionFilters(int theValue){
       cd.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
-      hw.m_histogram.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
       bw.m_buckets.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
     }
     /*
@@ -491,7 +503,7 @@ public class DetailsPane extends PApplet {
     */
     public void BitCodeSizeSelectionFilters(int theValue){
       cd.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
-      hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
       bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
     }
     
