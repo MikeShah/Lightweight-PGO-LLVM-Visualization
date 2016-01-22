@@ -250,14 +250,16 @@ private:
         std::string s="";
         llvm::raw_string_ostream ss(s);
         // Get the arguments of that function
-        for (Function::arg_iterator AI = m_function->arg_begin(), AE = m_function->arg_end(); AI != AE; ++AI){
+        for (Function::arg_iterator AI = m_function->arg_begin(), AE = m_function->arg_end(); AI != AE; ++AI){/*
             Argument *Arg = AI;
             ss << Arg->getArgNo() << "\t" << Arg->getName() << "\t" << LLVMTypeAsString(Arg->getType()) << "\n" ;
             m_arguments.push_back(ss.str());
             s.clear();
-            ss.flush();
+            ss.flush(); */
         }
     }
+
+
 
     // This function stores the opCodeCalls for each function
     void storeOpCodes(){
@@ -266,7 +268,7 @@ private:
             // Grab all of the basic blocks, and then iterate through their opcodes
             for(BasicBlock::iterator i = bb->begin(), e=bb->end(); i!= e; ++i){
                 // Store the line information
-                getLineInformation(i); // TODO: Either only update this once, or map it to every single instruction for better granulatrity.
+                getLineInformation(&*i); // TODO: Either only update this once, or map it to every single instruction for better granulatrity.
                 // If the opcode is not in our map, then add it in, otherwise increment it.
                 if(opcodeCounter.find(i->getOpcodeName())==opcodeCounter.end()){
                     opcodeCounter[i->getOpcodeName()] = 1;
@@ -644,7 +646,7 @@ private:
         // When we create function data with the function, the Constructor in FunctionData will
         // run many information gathering functions on it.
         for(Module::FunctionListType::iterator it = functions.begin(), it_end = functions.end(); it != it_end; ++it){
-            FunctionData* d = new FunctionData(it);
+            FunctionData* d = new FunctionData(&*it);
             functionList.push_back(d);
         }
     }

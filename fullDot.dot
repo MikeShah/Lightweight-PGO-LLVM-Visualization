@@ -1,0 +1,19 @@
+digraph {
+node [shape=record];
+"__cxx_global_var_init"[shape=record,label="__cxx_global_var_init|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData|entry }|{Opcodes|call 2|ret 1}|{BitCodeSize|1}|{LineInformation|1|1|/n/a}|"];
+"_ZNSt8ios_base4InitC1Ev"[shape=record,label="_ZNSt8ios_base4InitC1Ev|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData}|{BitCodeSize|0}|{LineInformation|1|1|no/information/found}|"];
+"_ZNSt8ios_base4InitD1Ev"[shape=record,label="_ZNSt8ios_base4InitD1Ev|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData}|{BitCodeSize|0}|{LineInformation|1|1|no/information/found}|"];
+"__cxa_atexit"[shape=record,label="__cxa_atexit|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData}|{BitCodeSize|0}|{LineInformation|1|1|no/information/found}|"];
+"_Z7addblahii"[shape=record,label="_Z7addblahii|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData|entry }|{Opcodes|add 1|alloca 2|load 2|ret 1|store 2}|{BitCodeSize|1}|{LineInformation|1|1|/n/a}|"];
+"main"[shape=record,label="main|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData|entry }|{Opcodes|alloca 1|call 4|ret 1|store 1}|{BitCodeSize|1}|{LineInformation|1|1|/n/a}|"];
+"_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc"[shape=record,label="_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc|{Attributes|dereferenceable=272|dereferenceable=272}|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData}|{BitCodeSize|0}|{LineInformation|1|1|no/information/found}|"];
+"_ZNSolsEi"[shape=record,label="_ZNSolsEi|{Attributes|dereferenceable=272}|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData}|{BitCodeSize|0}|{LineInformation|1|1|no/information/found}|"];
+"_GLOBAL__sub_I_hello.cpp"[shape=record,label="_GLOBAL__sub_I_hello.cpp|{Metadata }|{Annotations}|{PGOData}|{PerfData}|{ControlFlowData|entry }|{Opcodes|call 1|ret 1}|{BitCodeSize|1}|{LineInformation|1|1|/n/a}|"];
+"__cxx_global_var_init" -> "_ZNSt8ios_base4InitC1Ev" [ label="0"];
+"__cxx_global_var_init" -> "__cxa_atexit" [ label="0"];
+"main" -> "_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc" [ label="0"];
+"main" -> "_Z7addblahii" [ label="0"];
+"main" -> "_ZNSolsEi" [ label="0"];
+"main" -> "_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc" [ label="0"];
+"_GLOBAL__sub_I_hello.cpp" -> "__cxx_global_var_init" [ label="0"];
+}
