@@ -40,7 +40,14 @@ class BucketsWindow extends commonWidget {
     if(m_buckets!=null){
         float m_x = mouseX;
         float m_y = mouseY; 
-    
+        
+        // Every 250 milliseconds we're allowed to click
+        if(millis() - lastTime > 250){
+          canClick = true;
+        }else{
+          canClick = false;
+        }
+        
         int m_bucketsSizeTotal = 0;
         
                      if(m_buckets.showData){
@@ -95,9 +102,9 @@ class BucketsWindow extends commonWidget {
                                   }
                                   
                                   // If the mouse is pressed
-                                  if(mousePressed==true ){
+                                  if(mousePressed==true){
                                       // TODO: Do not make me a hard link
-                                        if(mouseButton==LEFT){
+                                        if(mouseButton==LEFT && canClick){ lastTime = millis();
                                           if(selectedBuckets.contains(i)){
                                             cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
                                             selectedBuckets.remove(i);

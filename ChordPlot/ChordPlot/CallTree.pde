@@ -13,6 +13,8 @@ class CallTreeWindow extends commonWidget {
   boolean play = false;
 
   List<String> functionCalls;
+  
+
 
   public CallTreeWindow(String filename){
     this.filename = filename;
@@ -31,6 +33,7 @@ class CallTreeWindow extends commonWidget {
   public void setup() { 
       surface.setTitle(windowTitle);
       surface.setLocation(0, 350);
+      lastTime = millis();
   }
   
   /*
@@ -42,11 +45,6 @@ class CallTreeWindow extends commonWidget {
     println("Loading trace");
     for(String s: lines){
       functionCalls.add(s);
-      println(s);
-      // (1) Start parsing trace
-      // (2) Be able to walk through each step 1 at a time, perhaps display function name
-      // (3) Add a step button
-      // (4) Maybe highlight step animation in orange?
     }
     
     numberOfSteps = functionCalls.size();
@@ -66,13 +64,27 @@ class CallTreeWindow extends commonWidget {
               
       float m_x = mouseX;
       float m_y = mouseY;   
-    
+      float timeLineLength = width-10;
+      boolean step = false;  // Should we move forward
+      
+      // (1) Start parsing trace
+      // (2) Be able to walk through each step 1 at a time, perhaps display function name
+      // (3) Add a step button
+      // (4) Maybe highlight step animation in orange?
+      
+      // Every half second we're allowed to click
+      if(millis() - lastTime > 250){
+        canClick = true;
+      }else{
+        canClick = false;
+      }
+      
         text("FPS :"+frameRate,width-100,height-20);          
             // Play
               fill(255); rect(0,0,20,20);
               if(m_x < 20 && m_y < 20){
                 fill(192); rect(0,0,20,20);
-                if(mouseButton==LEFT){
+                if(mouseButton==LEFT && canClick){ lastTime = millis();
                   fill(128); rect(0,0,20,20);
                   play = true;
                 }
@@ -83,7 +95,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(20,0,20,20);
               if(m_x > 20 && m_x < 40 && m_y < 20){
                 fill(192); rect(20,0,20,20);
-                if(mouseButton==LEFT){
+                if(mouseButton==LEFT && canClick){ lastTime = millis();
                   fill(128); rect(20,0,20,20);
                   play = false;
                 }
@@ -94,15 +106,46 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(40,0,20,20);
               if(m_x > 40 && m_x < 60 && m_y < 20){
                 fill(192); rect(40,0,20,20);
-                if(mouseButton==LEFT){
+                if(mouseButton==LEFT && canClick){ lastTime = millis();
                   fill(128); rect(40,0,20,20);
                   play = false;
                   seek_pos = 0;
                   traceStep = 0;
                 }
               }
-              fill(0); rect(44,4,12,12);// The stop
-            
+              fill(0); rect(44,4,12,12);// The stop icon
+              
+              // Step Backward
+              fill(255); rect(60,0,20,20);
+              if(m_x > 60 && m_x < 80 && m_y < 20){
+                fill(192); rect(60,0,20,20);
+                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                  fill(128); rect(60,0,20,20);
+                  play = false;
+                  step = true;
+                  if(traceStep-1 > -1){
+                    traceStep -= 1;
+                    seek_pos -= timeLineLength / numberOfSteps-1;
+                  }
+                }
+              }
+              fill(0); triangle(73,4,63,10,73,16); rect(75,4,3,13);   // The actual triangle and bar
+              
+              // Step Forward
+              fill(255); rect(80,0,20,20);
+              if(m_x > 80 && m_x < 100 && m_y < 20){
+                fill(192); rect(80,0,20,20);
+                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                  fill(128); rect(80,0,20,20);
+                  play = false;
+                  step = true;
+                  if(traceStep+1 < numberOfSteps-1){
+                    traceStep += 1;
+                    seek_pos += timeLineLength / numberOfSteps-1;
+                  }
+                }
+              }
+              fill(0); rect(83,4,3,13); triangle(88,4,97,10,88,16);  // The actual triangle and bar
             
             // Select each node as it plays
             
@@ -111,15 +154,16 @@ class CallTreeWindow extends commonWidget {
             
             // If we're playing, move our slider
             // and increment the instruction we're on.
-            float timeLineLength = width-10;
             if(play){
                 seek_pos += timeLineLength / numberOfSteps-1;
                 traceStep += 1;
                 if(traceStep > numberOfSteps-1){
                   play = false;
                 }
-              
-                // Loop that finds our node and highlights it in the visualization
+            }
+            
+            // Loop that finds our node and highlights it in the visualization
+            if(play || step){
                 for(int i =0; i < cd.nodeListStack.peek().size();i++){                        
                     ChordNode temp = (ChordNode)cd.nodeListStack.peek().get(i);
                     if(traceStep>-1 && traceStep < functionCalls.size()-1){
@@ -130,6 +174,7 @@ class CallTreeWindow extends commonWidget {
                     }
                 }
             }
+            step = false;
             
             // Timeline
             line(0,40,timeLineLength,40);
@@ -138,7 +183,7 @@ class CallTreeWindow extends commonWidget {
             rect(seek_pos,30,3,20);
             text(str(traceStep),seek_pos,30.0);
             if(traceStep>-1 && traceStep < functionCalls.size()-1){
-              text(functionCalls.get(traceStep),5,30.0);
+              text(functionCalls.get(traceStep),5,60.0);
             }
         
     }

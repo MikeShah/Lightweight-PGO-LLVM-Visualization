@@ -22,6 +22,10 @@ class commonWidget extends PApplet{
   
   ScrollableList FunctionsScrollListWidget;
   
+  // Used to create delay on user interface
+  float lastTime;
+  boolean canClick = false; // If enough time passes, then canClick switches.
+  
   /*
       Initialize all of the GUI components.
       Ideally this connects to the dataLayer.
