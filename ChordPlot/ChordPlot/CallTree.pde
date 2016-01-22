@@ -71,7 +71,7 @@ class CallTreeWindow extends commonWidget {
       // (2) Be able to walk through each step 1 at a time, perhaps display function name
       // (3) Add a step button
       // (4) Maybe highlight step animation in orange?
-      
+       
       // Every half second we're allowed to click
       if(millis() - lastTime > 250){
         canClick = true;
