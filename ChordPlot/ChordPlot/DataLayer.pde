@@ -553,7 +553,7 @@ public class DataLayer implements VisualizationLayout{
       
       Value - true or false if we are encoding
   */
-  synchronized public void encodeNodesWith(int type, boolean value){
+  synchronized public void encodeNodesWith(int type, boolean value, String _symbol,boolean AnimateEncoding,boolean RectangleEncoding,boolean SymbolEncodoing){
       String result = "Callsites "+selectionRangeMin+"-"+selectionRangeMax;
 
       int iterations = nodeListStack.peek().size();
@@ -564,11 +564,11 @@ public class DataLayer implements VisualizationLayout{
             nodeListStack.peek().get(i).metaData.strokeValue   = 255;
             nodeListStack.peek().get(i).metaData.blink_encode  = true;
             nodeListStack.peek().get(i).metaData.blink_color   = 255;
-            nodeListStack.peek().get(i).metaData.symbol_encode = true;
-            nodeListStack.peek().get(i).metaData.symbol        = "a";
-            nodeListStack.peek().get(i).metaData.rect_encode   = true;
+            nodeListStack.peek().get(i).metaData.symbol_encode = SymbolEncodoing;
+            nodeListStack.peek().get(i).metaData.symbol        = _symbol;
+            nodeListStack.peek().get(i).metaData.rect_encode   = RectangleEncoding;
             nodeListStack.peek().get(i).metaData.small_rect_color  = 255;
-            nodeListStack.peek().get(i).metaData.spin_small_rect   = true;
+            nodeListStack.peek().get(i).metaData.spin_small_rect   = AnimateEncoding;
             nodeListStack.peek().get(i).metaData.spin_rotation     = 25;     
         }else if(nodeListStack.peek().get(i).selected && value==false){
             nodeListStack.peek().get(i).metaData.stroke_encode = false;
@@ -576,7 +576,7 @@ public class DataLayer implements VisualizationLayout{
             nodeListStack.peek().get(i).metaData.blink_encode  = false;
             nodeListStack.peek().get(i).metaData.blink_color   = 255;
             nodeListStack.peek().get(i).metaData.symbol_encode = false;
-            nodeListStack.peek().get(i).metaData.symbol        = "a";
+            nodeListStack.peek().get(i).metaData.symbol        = "";
             nodeListStack.peek().get(i).metaData.rect_encode   = false;
             nodeListStack.peek().get(i).metaData.small_rect_color  = 255;
             nodeListStack.peek().get(i).metaData.spin_small_rect   = false;

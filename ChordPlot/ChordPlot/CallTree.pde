@@ -11,6 +11,7 @@ class CallTreeWindow extends commonWidget {
   int traceStep = 0; // The current instruction in trace to play.
   int numberOfSteps; // How many items there are in the trace
   boolean play = false;
+  boolean select = true;  // If this is true, then when the animation plays, nodes are selected.
 
   List<String> functionCalls;
   
@@ -28,9 +29,11 @@ class CallTreeWindow extends commonWidget {
   public void settings() {
     size(900, 120, P3D);
     smooth();
+    
   }
     
   public void setup() { 
+      windowTitle = "Trace Player";
       surface.setTitle(windowTitle);
       surface.setLocation(0, 350);
       lastTime = millis();
@@ -73,7 +76,7 @@ class CallTreeWindow extends commonWidget {
       // (4) Maybe highlight step animation in orange?
        
       // Every half second we're allowed to click
-      if(millis() - lastTime > 250){
+      if(millis() - lastTime > 500){
         canClick = true;
       }else{
         canClick = false;
@@ -84,7 +87,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(0,0,20,20);
               if(m_x < 20 && m_y < 20){
                 fill(192); rect(0,0,20,20);
-                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                   fill(128); rect(0,0,20,20);
                   play = true;
                 }
@@ -95,7 +98,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(20,0,20,20);
               if(m_x > 20 && m_x < 40 && m_y < 20){
                 fill(192); rect(20,0,20,20);
-                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                   fill(128); rect(20,0,20,20);
                   play = false;
                 }
@@ -106,7 +109,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(40,0,20,20);
               if(m_x > 40 && m_x < 60 && m_y < 20){
                 fill(192); rect(40,0,20,20);
-                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                   fill(128); rect(40,0,20,20);
                   play = false;
                   seek_pos = 0;
@@ -119,7 +122,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(60,0,20,20);
               if(m_x > 60 && m_x < 80 && m_y < 20){
                 fill(192); rect(60,0,20,20);
-                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                   fill(128); rect(60,0,20,20);
                   play = false;
                   step = true;
@@ -135,7 +138,7 @@ class CallTreeWindow extends commonWidget {
               fill(255); rect(80,0,20,20);
               if(m_x > 80 && m_x < 100 && m_y < 20){
                 fill(192); rect(80,0,20,20);
-                if(mouseButton==LEFT && canClick){ lastTime = millis();
+                if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                   fill(128); rect(80,0,20,20);
                   play = false;
                   step = true;
@@ -148,7 +151,21 @@ class CallTreeWindow extends commonWidget {
               fill(0); rect(83,4,3,13); triangle(88,4,97,10,88,16);  // The actual triangle and bar
             
             // Select each node as it plays
+            if(m_x > 100 && m_x < 160 && m_y < 20){
+              fill(192); rect(100,0,50,20);
+              if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
+                select = !select;
+              }
+            }
+            if(select){
+              fill(128); rect(100,0,50,20);
+              fill(0); text("select",105,15);
+            }else{
+              fill(255); rect(100,0,50,20);
+              fill(0); text("Highlight",105,15);
+            }
             
+              
             // Deselect each node as it plays
             
             
@@ -168,8 +185,11 @@ class CallTreeWindow extends commonWidget {
                     ChordNode temp = (ChordNode)cd.nodeListStack.peek().get(i);
                     if(traceStep>-1 && traceStep < functionCalls.size()-1){
                       if(temp.metaData.name.equals("\""+functionCalls.get(traceStep)+"\"")){
-                        //temp.selected = true;
-                        temp.highlighted = true;
+                        if(select){
+                          temp.selected = true;
+                        }else{
+                          temp.highlighted = true;
+                        }
                       }
                     }
                 }
@@ -200,7 +220,7 @@ class CallTree extends DataLayer{
   public CallTree(String file, float xPosition, float yPosition, int layout){
     this.visualizationName = "CallTree";
     println("a m_calltree");
-    super.init(file, xPosition, yPosition,layout);
+    //super.init(file, xPosition, yPosition,layout);
     println("b m_calltree");
     // Set a layout
     this.setLayout(layout);
@@ -211,6 +231,7 @@ class CallTree extends DataLayer{
 
   // Get all of the points into our node list
   private void plotPoints2D(){
+    /*
     float xPos = xPosition;
     
     for(int i =0; i < nodeListStack.peek().size();i++){
@@ -219,6 +240,7 @@ class CallTree extends DataLayer{
       xPos += defaultWidth+1;
       xBounds = xPos;
     }
+    */
   }
   
   /*
@@ -257,6 +279,7 @@ class CallTree extends DataLayer{
       computations.
   */
   public void fastUpdate(){
+    /*
     // Modify all of the positions in our nodeList
     if(this.layout <= 0){
       plotPoints2D();
@@ -264,6 +287,7 @@ class CallTree extends DataLayer{
       println("No other other layout, using default");
       plotPoints2D();
     }
+    */
   }
   
   // After we filter our data, make an update
@@ -271,7 +295,9 @@ class CallTree extends DataLayer{
   // active data.
   @Override
   public void update(){
+    /*
      this.setLayout(layout);
+     */
   }
     
   /*

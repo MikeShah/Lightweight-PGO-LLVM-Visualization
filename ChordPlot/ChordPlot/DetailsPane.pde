@@ -45,6 +45,11 @@ public class DetailsPane extends PApplet {
   Textarea myConsoleTextarea;
   Println console;
   
+  // Encoding options for the nodes
+  boolean AnimateEncoding = false;
+  boolean RectangleEncoding = false;
+  boolean SymbolEncodoing = false;
+  
   /*
       Build the GUI for the Details Pane
   */
@@ -204,6 +209,14 @@ public class DetailsPane extends PApplet {
                  .setPosition(width-540,180)
                  .setSize(90,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ; 
+      
+      
+             detailsPanel.addTextfield("EncodeSymbol")
+                 .setPosition(width-630,180)
+                 .setSize(90,19)
+                 .setFocus(true)
+                 .setColor(color(255,0,0))
                  ;   
                  
              detailsPanel.addButton("UnEncodeSelected")
@@ -216,8 +229,24 @@ public class DetailsPane extends PApplet {
                  .setPosition(width-450,180)
                  .setSize(90,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;   
-                 
+                 ;
+             
+             
+             detailsPanel.addToggle("AnimateEncoding")
+               .setPosition(width-450,200)
+               .setSize(40,20)
+               ;
+               
+             detailsPanel.addToggle("RectangleEncoding")
+               .setPosition(width-450,220)
+               .setSize(40,20)
+               ;
+               
+             detailsPanel.addToggle("SymbolEncodoing")
+               .setPosition(width-450,240)
+               .setSize(40,20)
+               ;
+               
 // ==================================^ Sorting ^================================== 
 /*                   
               // Capture Console output here.
@@ -511,13 +540,16 @@ public class DetailsPane extends PApplet {
       Encode Selected
     */
     public void EncodeSelected(){
-      cd.encodeNodesWith(1,true);
+      String theText = detailsPanel.get(Textfield.class,"EncodeSymbol").getText(); 
+      if(theText.length() > 0){
+        cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
+      }
     }
     /*
       UnEncode Selected
     */
     public void UnEncodeSelected(){
-      cd.encodeNodesWith(1,false);
+      cd.encodeNodesWith(1,false,"",false,false,false);
     }
     /* 
       Select all the nodes we have encoded

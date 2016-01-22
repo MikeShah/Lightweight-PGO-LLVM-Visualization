@@ -113,7 +113,7 @@ void draw(){
   // Refresh the screen
   background(128);
    
-  text("FPS :"+int(frameRate),width-40,height-10);
+  text("FPS :"+int(frameRate),width-50,height-20);
    
    pushMatrix();
      translate(MySimpleCamera.cameraX,MySimpleCamera.cameraY,MySimpleCamera.cameraZ);

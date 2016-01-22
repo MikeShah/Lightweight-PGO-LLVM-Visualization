@@ -25,6 +25,7 @@ class BucketsWindow extends commonWidget {
     
   public void setup() {
       println("setup Buckets");
+      windowTitle = "Bucket Selection";
       surface.setTitle(windowTitle);
       surface.setLocation(980, 0);
       println("setup Buckets end");
@@ -104,7 +105,7 @@ class BucketsWindow extends commonWidget {
                                   // If the mouse is pressed
                                   if(mousePressed==true){
                                       // TODO: Do not make me a hard link
-                                        if(mouseButton==LEFT && canClick){ lastTime = millis();
+                                        if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                                           if(selectedBuckets.contains(i)){
                                             cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
                                             selectedBuckets.remove(i);
