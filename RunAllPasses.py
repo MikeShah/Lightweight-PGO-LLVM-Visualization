@@ -6,7 +6,7 @@ import time
 # No need to touch anything else
 #
 # In general this is the program name without any extensions.
-PROGRAM_1 = 'chicago'
+PROGRAM_1 = 'hello'
 
 PROGRAM_1_GENERATE = PROGRAM_1+'.cpp' # Name of the .cpp file generated
 PROGRAM_1_OUT = PROGRAM_1+'.ll'       # The textual bitcode representation output
@@ -48,6 +48,6 @@ print('|=========Running Module Pass 2 ===========|')
 os.system('../llvm/bin/opt -load ../llvm/lib/mymodulepass2.so -mymodulepass2 '+DIR+PROGRAM_1_OUT)
 
 ############### Command line to perform myAnnotation Pass ##################
-print('|=========Running Module Pass 2 ===========|')
+print('|=========Running Annotation Pass ===========|')
 os.system('../llvm/bin/opt -load ../llvm/lib/myannotation.so -myannotation '+DIR+PROGRAM_1_OUT+' -o '+DIR+PROGRAM_1_OUT+'annotated.bc')
 os.system('../llvm/bin/llvm-dis '+DIR+PROGRAM_1_OUT+'annotated.bc -o ' + DIR+PROGRAM_1_OUT+'annotated.ll')

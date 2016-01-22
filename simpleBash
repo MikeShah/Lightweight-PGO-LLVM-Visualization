@@ -1,0 +1,2 @@
+../llvm/bin/clang -emit-llvm -S ./RandomPrograms/hello.cpp -o ./RandomPrograms/hello.ll
+python RunAllPasses.py
