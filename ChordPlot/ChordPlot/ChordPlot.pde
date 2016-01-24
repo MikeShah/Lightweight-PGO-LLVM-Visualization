@@ -43,7 +43,8 @@ int programStart = 0;
 
 String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago_merged.ll";
 
-String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
+//String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
+String traceFileName = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt";
 
 void settings(){
   size(900 ,900, P3D);
@@ -64,6 +65,7 @@ void setup(){
   //String filename = "output.dot"; // legacy version of dot file loader
   //String filename = "horde3d.dot";
   String filename = "./ProjectTemplate/VisualizationInput.dot"; // Attempt to load Soot data
+  filename = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/fullDotOgre.dot";
   
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across

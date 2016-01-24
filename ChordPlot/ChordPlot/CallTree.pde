@@ -44,6 +44,7 @@ class CallTreeWindow extends commonWidget {
   */
   public void loadTrace(){
     // Note that the filename provided must be an absolute path, or the file directly in the data folder.
+    
     String[] lines = loadStrings(traceFileName);
     println("Loading trace");
     for(String s: lines){

@@ -285,7 +285,7 @@ class DotGraph{
               src.recursive = 1;
               dst.recursive = 1;
             }
-            println("hi");
+
             // If the function exists, then add a new destination
             if(graph.containsKey(src)){
               LinkedHashSet<nodeMetaData> temp = (LinkedHashSet<nodeMetaData>)(graph.get(src));
