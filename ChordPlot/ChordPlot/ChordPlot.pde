@@ -43,8 +43,8 @@ int programStart = 0;
 
 String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago_merged.ll";
 
-//String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
-String traceFileName = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt";
+String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
+//String traceFileName = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt";
 
 void settings(){
   size(900 ,900, P3D);
@@ -62,10 +62,11 @@ void setup(){
   ortho(-width/2.0, width/2.0, -height/2.0, height/2.0); // same as ortho()
 
   //String filename = "/home/mdshah/Desktop/LLVMSample/blah.dot"; // has branch weights
-  //String filename = "output.dot"; // legacy version of dot file loader
-  //String filename = "horde3d.dot";
+  
+  // Uncomment out the dataset you want to use.
   String filename = "./ProjectTemplate/VisualizationInput.dot"; // Attempt to load Soot data
-  filename = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/fullDotOgre.dot";
+  filename = "horde3d.dot"; // Horde3D
+  filename = "fullDotOgre.dot";  // Load Ogre Data
   
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across

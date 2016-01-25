@@ -73,7 +73,8 @@ public class NodeListStack{
   */
   public void push(ChordNodeList activeNodeList){
         stack.push(activeNodeList);
-        // FIXME: Put this back in the code computeSummaryStatistics();
+        // FIXME: Put this back in the code 
+        computeSummaryStatistics();
   }
   
   /*
@@ -85,7 +86,8 @@ public class NodeListStack{
   */
   public ChordNodeList pop(){
       if(stack.size()>1){
-        // FIXME: Put this back in the code computeSummaryStatistics();
+        // FIXME: Put this back in the code 
+        computeSummaryStatistics();
         return stack.pop();
       }
     return null;
@@ -109,7 +111,6 @@ public class NodeListStack{
 
          summaryStatistics.callers = 0; // Total number of caller functions
          summaryStatistics.callees = 0; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
-         println("might crash");
          ChordNodeList temp = stack.peek();
          println("temp.size():"+temp.size());
          
@@ -128,7 +129,11 @@ public class NodeListStack{
            bottomOfStackCallers = summaryStatistics.callers; // Total number of caller functions
            bottomOfStackCallees = summaryStatistics.callees; // Total number of callees (i.e. the sum of all of the call sites for each caller function).
          }
-                 
+          
+         if(iterations >0){
+           println("Average callers per method:"+((float)bottomOfStackCallers/(float)iterations));
+           println("Average calleree on stack:" +((float)bottomOfStackCallees/(float)iterations));  
+         }
          println("Total Callers:"+summaryStatistics.callers + " of "+bottomOfStackCallers);
          println("Total Callees:"+summaryStatistics.callees + " of "+bottomOfStackCallees);
          printStack();

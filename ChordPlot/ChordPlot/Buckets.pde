@@ -201,7 +201,7 @@ class Buckets extends DataLayer{
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics
-    // nodeListStack.computeSummaryStatistics(); // FIXME: Put this back in the code 
+    // nodeListStack.computeSummaryStatistics(); // FIXME: Probably not needed
   } 
 
   // Get all of the points into our node list

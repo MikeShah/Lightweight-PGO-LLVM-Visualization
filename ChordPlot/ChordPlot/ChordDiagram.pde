@@ -16,7 +16,8 @@ class ChordDiagram extends DataLayer{
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics
-    // FIXME: Put this back in the code nodeListStack.computeSummaryStatistics();
+    // FIXME: Put this back in the code 
+    nodeListStack.computeSummaryStatistics();
   }
   
 

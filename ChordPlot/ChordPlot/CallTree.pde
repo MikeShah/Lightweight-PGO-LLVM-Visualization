@@ -226,7 +226,7 @@ class CallTree extends DataLayer{
     // Set a layout
     this.setLayout(layout);
     // Compute initial statistics
-    //FIXME: Put me back in later nodeListStack.computeSummaryStatistics();
+    //FIXME: Probably not needed in this layers nodeListStack.computeSummaryStatistics(); // 
   }
   
 

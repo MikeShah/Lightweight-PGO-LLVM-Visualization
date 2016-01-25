@@ -238,7 +238,6 @@ class DotGraph{
   */
   synchronized public void readStructDOT(String file){
     println("readStructDOT");
-    println("Something is blowing up here");
       String[] lines = loadStrings(file);   
       // Do one iteration through the list to build the nodes
       println("read in file with "+lines.length+" lines");
@@ -249,7 +248,7 @@ class DotGraph{
               nodeMetaData md = processStruct(s);
             
               fullNodeList.put(md.name, md);
-              println(md.name);
+              //println(md.name);
             }
         }
       
