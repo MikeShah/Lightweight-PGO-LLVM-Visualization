@@ -83,89 +83,17 @@ public class DetailsPane extends PApplet {
 // ==================================^ Mark/Output ^================================== 
 
 
-// ==================================v Selectiont v==================================    
-              detailsPanel.addSlider("SelectionDepth")
-                 .setRange( 0, 15 )
-                 .setPosition(width-360,0)
-                 .plugTo( this, "SelectionDepth" )
-                 .setValue( 1 )
-                 .setLabel("SelectionDepth")
-                 ;
-  
-                // create a new button for selecting metaData
-              detailsPanel.addButton("SelectMetaDataFunctions")
-                 .setPosition(width-360,20)
-                 .setSize(180,19)
-                 ;
-                 
-               // create a new button for selecting Attributes
-              detailsPanel.addButton("SelectAttributesFunctions")
-                 .setPosition(width-360,40)
-                 .setSize(180,19)
-                 ;
-                 
-               // create a new button for selecting Line Information
-              detailsPanel.addButton("LineInformationFunctions")
-                 .setPosition(width-360,60)
-                 .setSize(180,19)
-                 ;
-                 
-                 
-               detailsPanel.addTextfield("StartsWith")
-                 .setPosition(width-360,80)
-                 .setSize(180,19)
-                 .setFocus(true)
-                 .setColor(color(255,0,0))
-                 ;   
-                 
-             detailsPanel.addButton("SelectFunctions")
-                 .setPosition(width-270,100)
-                 .setSize(90,19)
-                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;   
-                 
-             detailsPanel.addRange("SelectionRange")
-                 // disable broadcasting since setRange and setRangeValues will trigger an event
-                 .setBroadcast(false) 
-                 .setPosition(width-360,120)
-                 .setSize(140,heightOfGUIElements)
-                 .setHandleSize(10)
-                 .setRange(0,maxSelectionRange)
-                 .setRangeValues(selectionRangeMin,selectionRangeMax)
-                 // after the initialization we turn broadcast back on again
-                 .setBroadcast(true)
-                 .setColorForeground(color(255,40))
-                 .setColorBackground(color(255,40))
-                 ;
-                 
-              // create a new button for outputting Dot files
-              detailsPanel.addButton("CalleeSelectionFilters")
-                 .setPosition(width-360,140)
-                 .setSize(180,19)
-                 ;
-              detailsPanel.addButton("CallerSelectionFilters")
-                 .setPosition(width-360,160)
-                 .setSize(180,19)
-                 ;      
-              detailsPanel.addButton("PGODataSelectionFilters")
-                 .setPosition(width-360,180)
-                 .setSize(180,19)
-                 ;          
-              detailsPanel.addButton("BitCodeSizeSelectionFilters")
-                 .setPosition(width-360,200)
-                 .setSize(180,19)
-                 ;        
-// ==================================^ Selectiont ^================================== 
+
                  
 // ==================================v Sorting v================================== 
               detailsPanel.addTextlabel("sortingByLabel")
                 .setText("Sort By")
-                .setPosition(width-540,0)
+                .setPosition(width-450,0)
                 .setColorValue(0xffffffff)
                 ;
                     
               detailsPanel.addRadioButton("sortBy")
-                 .setPosition(width-540,20)
+                 .setPosition(width-450,20)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -181,12 +109,12 @@ public class DetailsPane extends PApplet {
              
               detailsPanel.addTextlabel("colorByLabel")
                 .setText("Color By")
-                .setPosition(width-450,0)
+                .setPosition(width-360,0)
                 .setColorValue(0xffffffff)
                 ;                 
                  
              detailsPanel.addRadioButton("colorizeBy")
-                 .setPosition(width-450,20)
+                 .setPosition(width-360,20)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -287,7 +215,7 @@ public class DetailsPane extends PApplet {
   public void draw() {
     background(145,160,176);
     
-    int xSize = width-540;
+    int xSize = width-450;
     int ySize = height;
    
    // Draw the help
@@ -311,30 +239,7 @@ public class DetailsPane extends PApplet {
     dataString.setText(s);
   }
   
-  /*
-    
-    Temporary function to quickly select nodes with metadata.
-  */
-  void SelectMetaDataFunctions(){
-    println("SelectMetaDataFunctions");
-    cd.selectMetaData();
-  }
-  /*
-    
-    Temporary function to quickly select functions with attributes.
-  */
-  void SelectAttributesFunctions(){
-    println("SelectAttributesFunctions");
-    cd.selectAttributes();
-  }
   
-  /*
-    
-    Temporary function to quickly select functions with line information .
-  */
-  void LineInformationFunctions(){
-    cd.selectLineInformation();
-  }
   
   /*
       Set the values for how the visualization sorts,
@@ -377,9 +282,7 @@ public class DetailsPane extends PApplet {
   }
   
   
-  void SelectionDepth(int theDepth) {
-    CalleeDepth = theDepth;
-  }
+
   
   /*
        When this button is pressed, we output a 
@@ -400,66 +303,7 @@ public class DetailsPane extends PApplet {
   }
   
 
-  /*
-      Search for functions that match the string and just select it
-  */
- public void SelectFunctions() {
-    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
-    if(theText.length() > 0){
-      
-        // Apply the relevant filters
-        cd.functionStartsWithSelect(theText);
-        // hw.m_histogram.functionStartsWithSelect(theText);
-        //bw.m_buckets.functionStartsWithSelect(theText); // cannot select buckets which contain functions...could be a future functionality. TODO: Should their be some heuristic?
-    }
-  }
-  
-  
-  /*
-      TODO: Implement highlighting as you start to type
-      
-      Will need to test on very large programs to see if
-      the 
-  */
-  /*
-  public void StartsWith(){
-    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
-    if(theText.length() > 0){
-      println("Typing in"+theText);
-    }
-  }
-  */
-  
-  /*
-      Search for functions that match the string
  
- DEPRECATED: We just want to select things quickly, not necessarily
- immedietely push. All pushing needs to be done with enter
- 
-  public void FindFunction() {
-    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
-    if(theText.length() > 0){
-      
-        String FilterString = cd.nodeListStack.peek().name;
-        // Apply the relevant filters
-        cd.functionStartsWith(theText);
-        cd.update(); // Make a call to update the visualization
-        
-        hw.m_histogram.functionStartsWith(theText);
-        hw.m_histogram.update(); // Make a call to update the visualization
-        hw.updateFunctionList();
-        
-        bw.m_buckets.functionStartsWith(theText);
-        bw.m_buckets.update();
-        bw.updateFunctionList();
-        
-        // Add our item to the list
-        breadCrumbsBar.addItem(FilterString,cd.nodeListStack.size()-1);
-        // Update the functions list with anything we have found.
-
-    }
-  }
-   */
  
   
     // function controlEvent will be invoked with every value change 
@@ -479,52 +323,12 @@ public class DetailsPane extends PApplet {
       }
     */
     
-      // Get the values from the CallSites range slider.
-      if(theEvent.isFrom("SelectionRange")) {
-        selectionRangeMin = int(theEvent.getController().getArrayValue(0));
-        selectionRangeMax = int(theEvent.getController().getArrayValue(1));
-        println("range update, done. ("+selectionRangeMin+","+selectionRangeMax+")");
-      }
+
       
         println("exited okay from Details Pane");
     }
     
-    /*
-      Apply a Filter based on the options we have selected.
-      Makes use of the Range Slider
-    */
-    public void CalleeSelectionFilters(int theValue){
-      cd.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
-      // hw.m_histogram.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
-      bw.m_buckets.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
-    }
-    /*
-      Apply a Filter based on the options we have selected.
-      Makes use of the Range Slider
-    */
-    public void CallerSelectionFilters(int theValue){  
-      cd.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
-      // hw.m_histogram.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
-      bw.m_buckets.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
-    }
-    /*
-      Apply a Filter based on the options we have selected.
-      Makes use of the Range Slider
-    */
-    public void PGODataSelectionFilters(int theValue){
-      cd.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
-      // hw.m_histogram.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
-      bw.m_buckets.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
-    }
-    /*
-      Apply a Filter based on the options we have selected.
-      Makes use of the Range Slider
-    */
-    public void BitCodeSizeSelectionFilters(int theValue){
-      cd.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
-      // hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
-      bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
-    }
+    
     
 
     

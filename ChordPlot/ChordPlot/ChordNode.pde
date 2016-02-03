@@ -14,10 +14,13 @@ class ChordNode{
 
   // Selecting nodes
   boolean selected = false; // By default, we show everything, so we render all nodes
+  // Color of the node when it is selected.
+  int r = 0;
+  int g = 255;
+  int b = 0;
   
   // Highlighted
   boolean highlighted = false; // By default, nodes are not highlighted. This is the same as selection, but does not show the call sites
-  
   
   /*
       The most default constructor that will be used
@@ -86,10 +89,12 @@ class ChordNode{
           if( dist(x,y,MySimpleCamera.xSelection,MySimpleCamera.ySelection) < nodeSize || selected){
               fill(0);
               stroke(255);
-              if(selected) { fill(0,255,0); }
+              if(selected) { fill(r,g,b); }
               ellipse(x,y,nodeSize*2,nodeSize*2);
               
-              fill(0,255,0);
+              // Fill in the nodes color
+              fill(r,g,b);
+              
               pushMatrix();
                 translate(0,0,MySimpleCamera.cameraZ+1);  // Translate forward
                 drawToCallees(CalleeDepth);
@@ -117,7 +122,7 @@ class ChordNode{
   private void render3D(){
      if( dist(x,y,0,MySimpleCamera.xSelection,MySimpleCamera.ySelection,0) < nodeSize || selected){
         fill(0);
-        if(selected){fill(0,255,0);}
+        if(selected){fill(r,g,b);}
         
         pushMatrix();
         translate(x,y,z);
@@ -195,7 +200,7 @@ class ChordNode{
                pushMatrix();
                  translate(0,0,MySimpleCamera.cameraZ+20);
                  fill(192,192);
-                 if (selected) {fill(0,255,0);}  // Provide feedback if we're hovering over a selected node.
+                 if (selected) {fill(r,g,b);}  // Provide feedback if we're hovering over a selected node.
                  rect(x,y,metaData.name.length()*8,20);
                  fill(0,255);
                  text(metaData.name,x,y+10);
@@ -252,7 +257,7 @@ class ChordNode{
         if( selected || (mouseX > x && MySimpleCamera.xSelection < (x+rectWidth) && MySimpleCamera.ySelection < y && MySimpleCamera.ySelection > (y-rectHeight))){ 
             fill(0);
             stroke(255);
-            if(selected){ stroke(255,0,0); fill(0,255,0); }
+            if(selected){ stroke(255,0,0); fill(r,g,b); }
             
             rect(x,y-rectHeight,rectWidth,rectHeight);
             pushMatrix();
@@ -337,7 +342,7 @@ class ChordNode{
     This is used in drawToCallees to distinguish items.
   */
   public void drawOutline(float xMark, float yMark){          
-      fill(0,255,0); stroke(0,0,255);
+      fill(r,g,b); stroke(0,0,255);
       strokeWeight(4);  // Thicker
       line(xMark, yMark, xMark, yMark-rectWidth);
       line(xMark+rectWidth, yMark, xMark+rectWidth, yMark-rectWidth);

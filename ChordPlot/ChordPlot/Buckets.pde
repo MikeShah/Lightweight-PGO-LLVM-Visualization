@@ -7,6 +7,20 @@ class BucketsWindow extends commonWidget {
   Buckets m_buckets;
   String filename;
 
+  int p_buckets_old = -1;
+  int p_buckets = -1;
+  Set<Integer> selectedBuckets = new HashSet<Integer>();
+
+  // Colors for the picker
+  int r = 192;
+  int g = 192;
+  int b = 192;
+  int a = 255;
+
+  // GUI interface for bucket selection
+  ControlP5 cp5;
+  ColorPicker cp;
+  
   public BucketsWindow(String filename){
     this.filename = filename;
     println("a");
@@ -19,7 +33,7 @@ class BucketsWindow extends commonWidget {
   }
   
   public void settings() {
-    size(600, 325, P3D);
+    size(755, 320, P3D);
     smooth();
   }
     
@@ -29,16 +43,208 @@ class BucketsWindow extends commonWidget {
       surface.setTitle(windowTitle);
       surface.setLocation(980, 0);
       println("setup Buckets end");
+      
+      cp5 = new ControlP5(this);
+      cp = cp5.addColorPicker("picker")
+            .setPosition(500, 0)
+            .setColorValue(color(0, 255, 0, 255))
+            ;
+            
+            
+// ==================================v Selectiont v==================================    
+              cp5.addSlider("SelectionDepth")
+                 .setRange( 0, 15 )
+                 .setPosition(width-255,80)
+                 .plugTo( this, "SelectionDepth" )
+                 .setValue( 1 )
+                 .setLabel("SelectionDepth")
+                 ;
+  
+                // create a new button for selecting metaData
+              cp5.addButton("SelectMetaDataFunctions")
+                 .setPosition(width-255,100)
+                 .setSize(180,19)
+                 ;
+                 
+               // create a new button for selecting Attributes
+              cp5.addButton("SelectAttributesFunctions")
+                 .setPosition(width-255,120)
+                 .setSize(180,19)
+                 ;
+                 
+               // create a new button for selecting Line Information
+              cp5.addButton("LineInformationFunctions")
+                 .setPosition(width-255,140)
+                 .setSize(180,19)
+                 ;
+                 
+                 
+               cp5.addTextfield("StartsWith")
+                 .setPosition(width-255,160)
+                 .setSize(180,19)
+                 .setFocus(true)
+                 .setColor(color(255,0,0))
+                 ;   
+                 
+             cp5.addButton("SelectFunctions")
+                 .setPosition(width-255+90,180)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;   
+                 
+             cp5.addRange("SelectionRange")
+                 // disable broadcasting since setRange and setRangeValues will trigger an event
+                 .setBroadcast(false) 
+                 .setPosition(width-255,200)
+                 .setSize(140,heightOfGUIElements)
+                 .setHandleSize(10)
+                 .setRange(0,maxSelectionRange)
+                 .setRangeValues(selectionRangeMin,selectionRangeMax)
+                 // after the initialization we turn broadcast back on again
+                 .setBroadcast(true)
+                 .setColorForeground(color(255,40))
+                 .setColorBackground(color(255,40))
+                 ;
+                 
+              // create a new button for outputting Dot files
+              cp5.addButton("CalleeSelectionFilters")
+                 .setPosition(width-255,220)
+                 .setSize(180,19)
+                 ;
+              cp5.addButton("CallerSelectionFilters")
+                 .setPosition(width-255,240)
+                 .setSize(180,19)
+                 ;      
+              cp5.addButton("PGODataSelectionFilters")
+                 .setPosition(width-255,260)
+                 .setSize(180,19)
+                 ;          
+              cp5.addButton("BitCodeSizeSelectionFilters")
+                 .setPosition(width-255,280)
+                 .setSize(180,19)
+                 ;        
+// ==================================^ Selectiont ^================================== 
   }
   
-  int p_buckets_old = -1;
-  int p_buckets = -1;
-  Set<Integer> selectedBuckets = new HashSet<Integer>();
+/*
+    Temporary function to quickly select nodes with metadata.
+  */
+  void SelectMetaDataFunctions(){
+    println("SelectMetaDataFunctions");
+    cd.selectMetaData();
+  }
+  /*
+    
+    Temporary function to quickly select functions with attributes.
+  */
+  void SelectAttributesFunctions(){
+    println("SelectAttributesFunctions");
+    cd.selectAttributes();
+  }
+  
+  /*
+    
+    Temporary function to quickly select functions with line information .
+  */
+  void LineInformationFunctions(){
+    cd.selectLineInformation();
+  }
 
+ /*
+      Search for functions that match the string and just select it
+  */
+ public void SelectFunctions() {
+    String theText = cp5.get(Textfield.class,"StartsWith").getText(); 
+    if(theText.length() > 0){
+        // Apply the relevant filters
+        cd.functionStartsWithSelect(theText);
+        // hw.m_histogram.functionStartsWithSelect(theText);
+        //bw.m_buckets.functionStartsWithSelect(theText); // cannot select buckets which contain functions...could be a future functionality. TODO: Should their be some heuristic?
+    }
+  }
+  
+  
+  /*
+      TODO: Implement highlighting as you start to type
+      
+      Will need to test on very large programs to see if
+      the 
+  */
+  /*
+  public void StartsWith(){
+    String theText = detailsPanel.get(Textfield.class,"StartsWith").getText(); 
+    if(theText.length() > 0){
+      println("Typing in"+theText);
+    }
+  }
+  */
+  
+   
+   /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void CalleeSelectionFilters(int theValue){
+      cd.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(CALLEE,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void CallerSelectionFilters(int theValue){  
+      cd.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(CALLER,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void PGODataSelectionFilters(int theValue){
+      cd.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(PGODATA,selectionRangeMin, selectionRangeMax);
+    }
+    /*
+      Apply a Filter based on the options we have selected.
+      Makes use of the Range Slider
+    */
+    public void BitCodeSizeSelectionFilters(int theValue){
+      cd.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+      // hw.m_histogram.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+      bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
+    }
+
+
+// How many nodes to select
+  void SelectionDepth(int theDepth) {
+    CalleeDepth = theDepth;
+  }
+
+public void controlEvent(ControlEvent theEvent) {
+  // when a value change from a ColorPicker is received, extract the ARGB values
+  // from the controller's array value
+    if(theEvent.isFrom(cp)) {
+      r = int(theEvent.getArrayValue(0));
+      g = int(theEvent.getArrayValue(1));
+      b = int(theEvent.getArrayValue(2));
+      a = int(theEvent.getArrayValue(3));
+    }
+  
+        // Get the values from the CallSites range slider.
+      if(theEvent.isFrom("SelectionRange")) {
+        selectionRangeMin = int(theEvent.getController().getArrayValue(0));
+        selectionRangeMax = int(theEvent.getController().getArrayValue(1));
+        println("range update, done. ("+selectionRangeMin+","+selectionRangeMax+")");
+      }
+}
   
   public void draw() {
      
     if(m_buckets!=null){
+        cp.getColorValue();  // Get the color values
         float m_x = mouseX;
         float m_y = mouseY; 
         
@@ -52,7 +258,7 @@ class BucketsWindow extends commonWidget {
         int m_bucketsSizeTotal = 0;
         
                      if(m_buckets.showData){
-                      background(0,64,164); fill(0); stroke(0); text("FPS: "+frameRate,20,height-20);
+                      background(0,64,164); fill(0); stroke(0); text("FPS: "+frameRate,width-120,height-20);
                       //pushMatrix();
                         //translate(0,0,MySimpleCamera.cameraZ);
                         // Draw some bounds
@@ -107,6 +313,7 @@ class BucketsWindow extends commonWidget {
                                       // TODO: Do not make me a hard link
                                         if(mouseButton==LEFT && canClick){ lastTime = millis(); canClick = false;
                                           if(selectedBuckets.contains(i)){
+                                            cd.setNodesColors(m_buckets.bucketLists.get(i),r,g,b); // Update all effected nodes selection color
                                             cd.toggleActiveNodes(m_buckets.bucketLists.get(i));
                                             selectedBuckets.remove(i);
                                           }
@@ -138,7 +345,6 @@ class BucketsWindow extends commonWidget {
                         }
                       
                       //popMatrix();
-                
                   } 
                   
                   
@@ -155,8 +361,8 @@ class BucketsWindow extends commonWidget {
                     sortingString = "Contains Recursion";
                   }
                   
-                  text("Total Nodes: "+m_bucketsSizeTotal,20,10);
-                  text("Sorting by: "+sortingString,20,30);
+                  text("Total Nodes: "+m_bucketsSizeTotal,width-350,120);
+                  text("Sorting by: "+sortingString,width-350,160);
                   
                   
     } // m_buckets != null
@@ -427,7 +633,7 @@ class Buckets extends DataLayer{
   /*
   
   DEPRECATED: Because Processing needs to render everything in the main thread
-              we cannot have other draw routines, even if they're in different windows(which really should have their own drawing thread...).
+              we cannot have other draw routines, even if they're in different windows(which really should have their own drawing thread..).
   
   // Draw using our rendering modes
   //

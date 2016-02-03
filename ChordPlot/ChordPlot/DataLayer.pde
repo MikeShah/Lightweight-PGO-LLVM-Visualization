@@ -800,6 +800,33 @@ public class DataLayer implements VisualizationLayout{
       
   }
   
+    // This command takes in a ChordNodeList from one visualization
+  // and then highlights the other visualizations nodes on the top of its stack.
+  //
+  // We can also unhighlight nodes by passing in a value of 'false'
+  //
+  synchronized public void setNodesColors(ChordNodeList cnl, int r, int g, int b){
+
+      Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
+      Map<String,Integer> nameToIndex = new HashMap<String,Integer>();
+      int iterations = nodeListStack.peek().size();
+      for(int i =0; i < iterations; ++i){
+        nameToIndex.put(nodeListStack.peek().get(i).metaData.name,i);
+      }
+      
+      // Now look through our list
+      for(int i =0; i < cnl.size(); ++i){
+          // If something from cnl is in our stack
+          // then we record the index and edit our actual nodeListStack
+          if(topOfStackMap.containsKey(cnl.get(i).metaData.name)){
+            int index = nameToIndex.get(cnl.get(i).metaData.name);
+            nodeListStack.peek().get(index).r = r;
+            nodeListStack.peek().get(index).g = g;
+            nodeListStack.peek().get(index).b = b;
+          }
+      }
+  }
+  
   /* 
       Highlight exactly one node
       
