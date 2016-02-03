@@ -4,6 +4,12 @@ class ChordNode{
   float x;
   float y;
   float z;
+  
+  // Special x,y for the force-directed graph window
+  float fdg_x;
+  float fdg_y;
+  
+  
   public nodeMetaData metaData;
   int nodeSize = 3; // needed if we are rendering 2D circles or spheres
     
@@ -40,6 +46,7 @@ class ChordNode{
     this.x = x;
     this.y = y;
     this.z = z;
+   
     
     this.metaData = nmd;   
   }
