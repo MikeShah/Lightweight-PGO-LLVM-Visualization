@@ -45,11 +45,6 @@ public class DetailsPane extends PApplet {
   //Textarea myConsoleTextarea;
   //Println console;
   
-  // Encoding options for the nodes
-  boolean AnimateEncoding = false;
-  boolean RectangleEncoding = false;
-  boolean SymbolEncodoing = false;
-  
   /*
       Build the GUI for the Details Pane
   */
@@ -285,7 +280,7 @@ public class DetailsPane extends PApplet {
   public void setup() { 
     println("setup DetailsPane");
     surface.setTitle("Details View");
-    surface.setLocation(0, 720);
+    surface.setLocation(0, 600);
     println("setup DetailsPane end");
   }
 

@@ -7,6 +7,7 @@ public class EncodingWindow extends PApplet {
   ControlP5 encodingPanel;
   
   // Encoding options for the nodes
+  // By naming the same as the toggle button, the controller will use these guys.
   boolean AnimateEncoding = false;
   boolean RectangleEncoding = false;
   boolean SymbolEncodoing = false;
@@ -18,69 +19,63 @@ public class EncodingWindow extends PApplet {
       encodingPanel = new ControlP5(this);
   
              encodingPanel.addButton("EncodeSelected")
-                 .setPosition(width-540,180)
+                 .setPosition(0,0)
                  .setSize(90,19)
                  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
                  ; 
+                 
+             encodingPanel.addButton("UnEncodeSelected")
+                 .setPosition(90,0)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;
+                 
+             encodingPanel.addButton("SelectEncoded")
+                 .setPosition(180,0)
+                 .setSize(90,19)
+                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+                 ;                 
       
              encodingPanel.addTextfield("EncodeSymbol")
-                 .setPosition(width-630,180)
+                 .setPosition(0,40)
                  .setSize(90,19)
                  .setFocus(true)
                  .setColor(color(255,0,0))
                  ;   
-                 
-             encodingPanel.addButton("UnEncodeSelected")
-                 .setPosition(width-540,200)
-                 .setSize(90,19)
-                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;   
-                 
-             encodingPanel.addButton("SelectEncoded")
-                 .setPosition(width-450,180)
-                 .setSize(90,19)
-                 .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-                 ;
-             
              
              encodingPanel.addToggle("AnimateEncoding")
-               .setPosition(width-450,200)
+               .setPosition(95,40)
                .setSize(40,20)
                ;
                
              encodingPanel.addToggle("RectangleEncoding")
-               .setPosition(width-450,220)
+               .setPosition(95,80)
                .setSize(40,20)
                ;
                
              encodingPanel.addToggle("SymbolEncodoing")
-               .setPosition(width-450,240)
+               .setPosition(95,120)
                .setSize(40,20)
-               ;
-               
-// ==================================^ Sorting ^==================================              
+               ;               
   }
-  
   
   
   public EncodingWindow() {
     super();
     PApplet.runSketch(new String[]{this.getClass().getName()}, this);
-    // Initialize a string of data that we can use to pass
-    // between our different windows.
     
     // Setup the GUI
     initGUI();
   }
 
   public void settings() {
-    size(720, 320, P3D);
+    size(360, 320, P3D);
     smooth();
   }
   public void setup() { 
     println("setup EncodingPane");
     surface.setTitle("Encoding View");
-    surface.setLocation(0, 720);
+    surface.setLocation(0, 0);
     println("setup EncodingPane end");
   }
 
@@ -95,6 +90,9 @@ public class EncodingWindow extends PApplet {
     
     fill(0); stroke(0,255);
   }
+    
+    void controlEvent(ControlEvent theEvent) {
+    }
     
     /*
       Encode Selected
@@ -115,6 +113,7 @@ public class EncodingWindow extends PApplet {
       Select all the nodes we have encoded
     */
     public void SelectEncoded(){
+      println("Trying to select stuff");
       cd.selectEncodedNodes();
     }
     
