@@ -29,13 +29,18 @@ public static final int FILENAME     = 5;
 */
 DetailsPane dp;
 
+/*
+  Create an encoding window
+*/
+EncodingWindow ew;
+
 /* Create our visualizations */
 ChordDiagram cd;
 
 // HistogramWindow hw;
 BucketsWindow bw;
 
-CallTreeWindow ctw;
+AnimationWindow aw;
 
 //nodeLinkSystem encodings;
 
@@ -43,8 +48,9 @@ int programStart = 0;
 
 String llbitcodefile = " /home/mdshah/Desktop/LLVMSample/RandomPrograms/chicago_merged.ll";
 
-String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt";
-//String traceFileName = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt";
+//String traceFileName = "C:\\Users\\mshah08\\Desktop\\Lightweight-PGO-LLVM-Visualization\\ChordPlot\\ChordPlot\\data\\ProjectTemplate\\trace.txt"; // Windows
+//String traceFileName = "/home/mike/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt";         // Unix
+String   traceFileName = "/Users/michaelshah/Desktop/Lightweight-PGO-LLVM-Visualization/ChordPlot/ChordPlot/data/ProjectTemplate/trace.txt"; // MAC
 
 void settings(){
   size(900 ,900, P3D);
@@ -66,7 +72,7 @@ void setup(){
   // Uncomment out the dataset you want to use.
   String filename = "./ProjectTemplate/VisualizationInput.dot"; // Attempt to load Soot data
   filename = "horde3d.dot"; // Horde3D
-  filename = "fullDotOgre.dot";  // Load Ogre Data
+  //filename = "fullDotOgre.dot";  // Load Ogre Data
   
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across
@@ -79,10 +85,12 @@ void setup(){
   dp = new DetailsPane();
   dp.setDataString("File Loaded: "+filename);
   
+  ew = new EncodingWindow();
+  
   // Try to speed up loading times.
   // hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
-  ctw = new CallTreeWindow(filename);
+  aw = new AnimationWindow(filename);
   
  // encodings = new nodeLinkSystem();
   

@@ -42,8 +42,8 @@ public class DetailsPane extends PApplet {
   ControlP5 detailsPanel;
   
   // re-route output from text to this details pane.
-  Textarea myConsoleTextarea;
-  Println console;
+  //Textarea myConsoleTextarea;
+  //Println console;
   
   // Encoding options for the nodes
   boolean AnimateEncoding = false;
@@ -205,6 +205,8 @@ public class DetailsPane extends PApplet {
                  .addItem("_RECURSIVE",RECURSIVE)
                  ;
                  
+                 
+                 /*
              detailsPanel.addButton("EncodeSelected")
                  .setPosition(width-540,180)
                  .setSize(90,19)
@@ -246,7 +248,7 @@ public class DetailsPane extends PApplet {
                .setPosition(width-450,240)
                .setSize(40,20)
                ;
-               
+               */
 // ==================================^ Sorting ^================================== 
 /*                   
               // Capture Console output here.
@@ -263,8 +265,6 @@ public class DetailsPane extends PApplet {
               console = detailsPanel.addConsole(myConsoleTextarea);//
 */              
   }
-  
-  
   
   public DetailsPane() {
     super();
@@ -341,8 +341,6 @@ public class DetailsPane extends PApplet {
     cd.selectLineInformation();
   }
   
-  
-  
   /*
       Set the values for how the visualization sorts,
       and then update the layouts
@@ -356,7 +354,7 @@ public class DetailsPane extends PApplet {
         cd.update();
         // hw.m_histogram.update();
         bw.m_buckets.update();
-        ctw.m_calltree.update();
+        aw.m_calltree.update();
   }
   
   /*
@@ -373,9 +371,6 @@ public class DetailsPane extends PApplet {
         // hw.m_histogram.update();
         bw.m_buckets.update();
   }
-  
- 
-  
   
   /*
       This function annotates the selected nodes.
@@ -536,26 +531,6 @@ public class DetailsPane extends PApplet {
       bw.m_buckets.selectRange(BITCODESIZE,selectionRangeMin, selectionRangeMax);
     }
     
-    /*
-      Encode Selected
-    */
-    public void EncodeSelected(){
-      String theText = detailsPanel.get(Textfield.class,"EncodeSymbol").getText(); 
-      if(theText.length() > 0){
-        cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
-      }
-    }
-    /*
-      UnEncode Selected
-    */
-    public void UnEncodeSelected(){
-      cd.encodeNodesWith(1,false,"",false,false,false);
-    }
-    /* 
-      Select all the nodes we have encoded
-    */
-    public void SelectEncoded(){
-      cd.selectEncodedNodes();
-    }
+
     
 }

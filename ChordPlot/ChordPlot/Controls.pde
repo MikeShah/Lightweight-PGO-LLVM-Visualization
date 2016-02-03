@@ -76,7 +76,7 @@ void keyPressed() {
           bw.m_buckets.update();
           bw.updateFunctionList(); // TODO Does nothing, remove?
           
-          ctw.m_calltree.update();
+          aw.m_calltree.update();
           
             breadCrumbsBar.addItem(FilterString+breadCrumbsString,cd.nodeListStack.size()-1);
             // Note that we also clean up the breadCrumbString which logged all of our actions.
