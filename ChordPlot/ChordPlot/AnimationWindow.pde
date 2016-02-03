@@ -13,7 +13,13 @@ class AnimationWindow extends commonWidget {
   boolean play = false;
   boolean select = true;  // If this is true, then when the animation plays, nodes are selected.
 
+  // The function calls in the trace
   List<String> functionCalls;
+  
+  // List of attributes
+  // This is a conservative analysis 
+  int totalBitCodes = 0;  // How many bitcodes have been executed
+  int lineCount = 0;      // How many lines of code have been executed.
   
 
 
@@ -83,7 +89,7 @@ class AnimationWindow extends commonWidget {
         canClick = false;
       }
       
-        text("FPS :"+frameRate,width-100,height-20);          
+        text("Instructions Executed: "+totalBitCodes+" | FPS :"+frameRate,width-300,height-20);          
             // Play
               fill(255); rect(0,0,20,20);
               if(m_x < 20 && m_y < 20){
@@ -115,6 +121,7 @@ class AnimationWindow extends commonWidget {
                   play = false;
                   seek_pos = 0;
                   traceStep = 0;
+                  totalBitCodes = 0;
                 }
               }
               fill(0); rect(44,4,12,12);// The stop icon
@@ -188,6 +195,7 @@ class AnimationWindow extends commonWidget {
                       if(temp.metaData.name.equals("\""+functionCalls.get(traceStep)+"\"")){
                         if(select){
                           temp.selected = true;
+                          totalBitCodes += temp.metaData.bitCodeSize;
                         }else{
                           temp.highlighted = true;
                         }
