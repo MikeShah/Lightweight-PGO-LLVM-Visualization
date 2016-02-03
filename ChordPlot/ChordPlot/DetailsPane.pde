@@ -240,7 +240,6 @@ public class DetailsPane extends PApplet {
   }
   
   
-  
   /*
       Set the values for how the visualization sorts,
       and then update the layouts

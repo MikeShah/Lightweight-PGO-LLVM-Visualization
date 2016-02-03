@@ -40,7 +40,11 @@ ChordDiagram cd;
 // HistogramWindow hw;
 BucketsWindow bw;
 
+// Animation window
 AnimationWindow aw;
+
+// Small Force-directed graph window
+forceDirectedGraphWindow fdgw;
 
 //nodeLinkSystem encodings;
 
@@ -91,6 +95,8 @@ void setup(){
   // hw = new HistogramWindow(filename);
   bw = new BucketsWindow(filename);
   aw = new AnimationWindow(filename);
+  
+  fdgw = new forceDirectedGraphWindow();
   
  // encodings = new nodeLinkSystem();
   

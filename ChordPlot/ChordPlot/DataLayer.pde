@@ -311,7 +311,7 @@ public class DataLayer implements VisualizationLayout{
       Map<String,ChordNode> topOfStackMap = nodeListStack.getTopStackMap();
       
       // Indexes
-      // Create a map tha tis a string, and the value is the index into the top of the stack
+      // Create a map that is a string, and the value is the index into the top of the stack
       Map<String, Integer> topOfStackMapQuickAccess = new HashMap<String,Integer>();
       for(int i = 0; i < iterations; ++i){
         topOfStackMapQuickAccess.put(nodeListStack.peek().get(i).metaData.name,i);
@@ -1135,6 +1135,35 @@ public class DataLayer implements VisualizationLayout{
         output.close();
   }
   
+    /* **************************
+          Call Graph Metrics
+     ************************** */
+  // Returns a string if a path exists wherby a calls b
+  // That is, 'a' is a parent, great-grandparent, great-great-grandparent, etc. of 'b'.
+  public String aCallB(ChordNode a, ChordNode b){
+      String result = "No path from: "+a.metaData.name+" to "+b.metaData.name;
+      String path = "No path exists";  // Build a path.
+      
+      Queue<ChordNode> bfs = new LinkedList<ChordNode>();
+      bfs.add(a);
+      
+      while(!bfs.isEmpty()){
+          
+          ChordNode temp = bfs.remove();
+          
+          // Searches the list
+          for(int i =0; i< temp.metaData.calleeLocations.size(); ++i){
+              if(temp.metaData.calleeLocations.get(i).metaData.name.equals(b.metaData.name)){
+                result="yup a path exists!";
+              }
+              bfs.add(temp.metaData.calleeLocations.get(i));
+          }
+      }
+      
+      return result;
+  }
+     
+  
   // Generally this method should be overridden.
   // It is called whenver we need to update what data is active
   // on the visualization. Generally after filtering we would want
@@ -1162,6 +1191,7 @@ public class DataLayer implements VisualizationLayout{
     text("Visualization not rendering",xPosition,yPosition);
   }
   
+
 
 
   
