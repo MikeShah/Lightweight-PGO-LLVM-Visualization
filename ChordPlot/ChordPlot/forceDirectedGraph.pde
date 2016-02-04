@@ -12,9 +12,7 @@ public class forceDirectedGraphWindow extends PApplet {
   
   int simulationSteps = 0;
   int maxSimulationSteps = 10000;
-  
-  
-  
+    
   /*
       Build the GUI for the Details Pane
   */
@@ -69,30 +67,29 @@ public class forceDirectedGraphWindow extends PApplet {
       simulationSteps += 1;
     }
     
-      drawEdges();
-      drawNodes();
-      
-  }
-  
-  
-  //
-  void drawEdges(){
+      // For each of our edges
       for(int i =0; i < nodes.size(); ++i){
+        // Search all of the callees
+        for(int j=0; j < nodes.get(i).metaData.calleeLocations.size();++j){
+          // if any of the callees are in our nodelist, then draw an edge
+          for(int k=0; k < nodes.size(); ++k){
+              if(nodes.get(k).metaData.name.equals(nodes.get(i).metaData.calleeLocations.get(j).metaData.name)){
+                  line(nodes.get(i).fdg_x, nodes.get(i).fdg_y,   nodes.get(k).fdg_x,nodes.get(k).fdg_y);
+              }
+          }
+        }
         
       }
-  }
-  
-  // Draw all of the nodes in the graph
-  void drawNodes(){
-      // Draw nodes
+      
+          // Draw nodes
       for(int i =0; i < nodes.size(); ++i){
           stroke(0); fill(0);
           // Draw the actual node last (Might need to do this in a separate loop so things do not overlap
           ellipse(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
       }
   }
+  
       
-    
   // Generates a force-directed graph from the
   // top level nodes
   public void getNodes(){
