@@ -12,6 +12,10 @@ public class EncodingWindow extends PApplet {
   boolean RectangleEncoding = true;
   boolean SymbolEncodoing = true;
   
+  // Parameters to store encodings
+  String theText="";  
+  float spinRotation = 0;
+  
   /*
       Build the GUI for the Details Pane
   */
@@ -66,10 +70,11 @@ public class EncodingWindow extends PApplet {
     
     // Setup the GUI
     initGUI();
+       
   }
 
   public void settings() {
-    size(360, 320, P3D);
+    size(360, 320);
     smooth();
   }
   public void setup() { 
@@ -86,9 +91,45 @@ public class EncodingWindow extends PApplet {
     noFill();
     noStroke();
     fill(255);stroke(255);
-    text("FPS :"+int(frameRate),width-250,height-40);
+    text("FPS :"+int(frameRate),width-250,height-40); 
     
-    fill(0); stroke(0,255);
+
+    float rectHeight = 80;
+    float rectWidth = 80;
+    float x = 50;
+    float y = 100;
+  
+      if(SymbolEncodoing){
+         // Apply Encodings
+         fill(0,0,0);
+         stroke(0,0,0);
+         textSize(rectHeight);
+         text(theText,x,y);
+         textSize(12);
+       }
+     
+       if(RectangleEncoding){
+           fill(255); stroke(0);
+           float halfWidth = rectWidth/2;
+           float halfHeight = rectHeight/2;
+            
+           pushMatrix();
+           if(AnimateEncoding){
+             rectMode(CENTER);  // Set rectMode to CENTER
+             translate(x+halfWidth,y-halfWidth);
+             rotate(radians(spinRotation));
+             rect(0,0,halfWidth,halfHeight);
+             rectMode(CORNER);  // Set rectMode to CENTER
+             spinRotation++;
+           }
+           else{
+             rect(x+halfWidth/2,y-halfWidth*1.5,halfWidth,halfHeight);
+           }   
+           popMatrix();
+       }
+        
+      fill(192); stroke(0,255);
+      rect(x,y,80,80);
   }
     
     void controlEvent(ControlEvent theEvent) {
@@ -98,7 +139,7 @@ public class EncodingWindow extends PApplet {
       Encode Selected
     */
     public void EncodeSelected(){
-      String theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
+      theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
       //if(theText.length() > 0){
         cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
       //}
