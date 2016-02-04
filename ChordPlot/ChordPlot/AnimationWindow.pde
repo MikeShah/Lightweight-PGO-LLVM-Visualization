@@ -33,7 +33,7 @@ class AnimationWindow extends commonWidget {
   }
   
   public void settings() {
-    size(900, 120, P3D);
+    size(755, 120, P3D);
     smooth();
     
   }
@@ -41,7 +41,7 @@ class AnimationWindow extends commonWidget {
   public void setup() { 
       windowTitle = "Trace Player";
       surface.setTitle(windowTitle);
-      surface.setLocation(0, 350);
+      surface.setLocation(900, 650);
       lastTime = millis();
   }
   

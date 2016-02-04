@@ -8,9 +8,9 @@ public class EncodingWindow extends PApplet {
   
   // Encoding options for the nodes
   // By naming the same as the toggle button, the controller will use these guys.
-  boolean AnimateEncoding = false;
-  boolean RectangleEncoding = false;
-  boolean SymbolEncodoing = false;
+  boolean AnimateEncoding = true;
+  boolean RectangleEncoding = true;
+  boolean SymbolEncodoing = true;
   
   /*
       Build the GUI for the Details Pane
@@ -75,7 +75,7 @@ public class EncodingWindow extends PApplet {
   public void setup() { 
     println("setup EncodingPane");
     surface.setTitle("Encoding View");
-    surface.setLocation(0, 0);
+    surface.setLocation(900, 320);
     println("setup EncodingPane end");
   }
 
@@ -99,9 +99,9 @@ public class EncodingWindow extends PApplet {
     */
     public void EncodeSelected(){
       String theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
-      if(theText.length() > 0){
+      //if(theText.length() > 0){
         cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
-      }
+      //}
     }
     /*
       UnEncode Selected

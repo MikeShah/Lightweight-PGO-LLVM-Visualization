@@ -45,7 +45,7 @@ public class forceDirectedGraphWindow extends PApplet {
   public void setup() { 
     println("setup ForceDirectedGraphWindow");
     surface.setTitle("Force Directed Graph");
-    surface.setLocation(0, 0);
+    surface.setLocation(1260, 320);
     println("ForceDirectedGraphWindow end");
   }
   
@@ -69,15 +69,28 @@ public class forceDirectedGraphWindow extends PApplet {
       simulationSteps += 1;
     }
     
+      drawEdges();
+      drawNodes();
+      
+  }
+  
+  
+  //
+  void drawEdges(){
+      for(int i =0; i < nodes.size(); ++i){
+        
+      }
+  }
+  
+  // Draw all of the nodes in the graph
+  void drawNodes(){
       // Draw nodes
       for(int i =0; i < nodes.size(); ++i){
-          
           stroke(0); fill(0);
           // Draw the actual node last (Might need to do this in a separate loop so things do not overlap
           ellipse(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
       }
   }
-  
       
     
   // Generates a force-directed graph from the
