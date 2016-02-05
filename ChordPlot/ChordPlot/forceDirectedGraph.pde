@@ -50,6 +50,7 @@ public class forceDirectedGraphWindow extends PApplet {
     surface.setTitle("Force Directed Graph");
     surface.setLocation(1260, 320);
     println("ForceDirectedGraphWindow end");
+    frameRate(60);
   }
   
   public void SimulateFDG(){
@@ -93,8 +94,8 @@ public class forceDirectedGraphWindow extends PApplet {
                   for(int i =0; i < nodes.size(); ++i){
                     for(int j =0; j < nodes.size(); ++j){
                         // Repulse nodes by adding more distance 
-                       // nodes.get(i).force.x += -(nodes.get(i).fdg_x - nodes.get(j).fdg_x) * repulseNodes;
-                       // nodes.get(i).force.y += -(nodes.get(i).fdg_y - nodes.get(j).fdg_y) * repulseNodes;
+                       nodes.get(i).force.x += -(nodes.get(i).fdg_x - nodes.get(j).fdg_x) * repulseNodes;
+                       nodes.get(i).force.y += -(nodes.get(i).fdg_y - nodes.get(j).fdg_y) * repulseNodes;
                     }
                   } // for(int i =0; i < nodes.size(); ++i){
           
@@ -126,7 +127,6 @@ public class forceDirectedGraphWindow extends PApplet {
       
           // Draw nodes
       for(int i =0; i < nodes.size(); ++i){
-          stroke(0); fill(0);
           
           // Set the nodes boundaries
           if(nodes.get(i).fdg_x > width){
@@ -146,8 +146,14 @@ public class forceDirectedGraphWindow extends PApplet {
           }          
           
           // Draw the actual node last (Might need to do this in a separate loop so things do not overlap
-         
-          ellipse(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
+
+          if(dist(mouseX,mouseY,nodes.get(i).fdg_x, nodes.get(i).fdg_y)<5){
+            stroke(192); fill(192);
+          }
+          else{
+            stroke(0); fill(0);
+          }
+          rect(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
       }
       
       

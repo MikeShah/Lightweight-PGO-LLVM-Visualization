@@ -88,12 +88,12 @@ public class DetailsPane extends PApplet {
 // ==================================v Sorting v================================== 
               detailsPanel.addTextlabel("sortingByLabel")
                 .setText("Sort By")
-                .setPosition(width-450,0)
+                .setPosition(width-180,80)
                 .setColorValue(0xffffffff)
                 ;
                     
               detailsPanel.addRadioButton("sortBy")
-                 .setPosition(width-450,20)
+                 .setPosition(width-180,100)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -109,12 +109,12 @@ public class DetailsPane extends PApplet {
              
               detailsPanel.addTextlabel("colorByLabel")
                 .setText("Color By")
-                .setPosition(width-360,0)
+                .setPosition(width-90,80)
                 .setColorValue(0xffffffff)
                 ;                 
                  
              detailsPanel.addRadioButton("colorizeBy")
-                 .setPosition(width-360,20)
+                 .setPosition(width-90,100)
                  .setSize(40,20)
                  .setColorForeground(color(120))
                  .setColorActive(color(255))
@@ -210,12 +210,13 @@ public class DetailsPane extends PApplet {
     surface.setTitle("Details View");
     surface.setLocation(0, 600);
     println("setup DetailsPane end");
+    frameRate(60);
   }
 
   public void draw() {
     background(145,160,176);
     
-    int xSize = width-450;
+    int xSize = width-180;
     int ySize = height;
    
    // Draw the help

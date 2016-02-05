@@ -74,7 +74,7 @@ public class EncodingWindow extends PApplet {
   }
 
   public void settings() {
-    size(300, 220);
+    size(280, 200);
     smooth();
   }
   public void setup() { 
@@ -82,6 +82,7 @@ public class EncodingWindow extends PApplet {
     surface.setTitle("Encoding View");
     surface.setLocation(900, 320);
     println("setup EncodingPane end");
+    frameRate(60);
   }
 
   public void draw() {

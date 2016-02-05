@@ -89,7 +89,7 @@ class AnimationWindow extends commonWidget {
         canClick = false;
       }
       
-        text("Instructions Executed: "+totalBitCodes+" | FPS :"+frameRate,width-300,height-20);          
+        text("Instructions Executed: "+totalBitCodes+" | FPS :"+frameRate,160,15);          
             // Play
               fill(255); rect(0,0,20,20);
               if(m_x < 20 && m_y < 20){
