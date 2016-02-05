@@ -311,15 +311,6 @@ class ChordNode{
    if(metaData.stroke_encode){
      
    } 
-    
-   if(metaData.symbol_encode){
-       // Apply Encodings
-       fill(metaData.c,0,0);
-       stroke(metaData.c,0,0);
-       textSize(rectHeight);
-       text(metaData.symbol,x,y);
-       textSize(12);
-   }
    
    if(metaData.rect_encode){
        fill(metaData.small_rect_color); stroke(255-metaData.small_rect_color);
@@ -340,9 +331,15 @@ class ChordNode{
        }   
        popMatrix();
    }
-   
-
-   
+          
+   if(metaData.symbol_encode){
+       // Apply Encodings
+       fill(metaData.c,0,0);
+       stroke(metaData.c,0,0);
+       textSize(rectHeight);
+       text(metaData.symbol,x,y);
+       textSize(12);
+   }
    
    
 

@@ -74,7 +74,7 @@ public class EncodingWindow extends PApplet {
   }
 
   public void settings() {
-    size(360, 320);
+    size(300, 220);
     smooth();
   }
   public void setup() { 
@@ -85,6 +85,8 @@ public class EncodingWindow extends PApplet {
   }
 
   public void draw() {
+    // Reset the text size
+    textSize(12);
     background(145,160,176);
     
     // Draw the help
@@ -96,18 +98,12 @@ public class EncodingWindow extends PApplet {
 
     float rectHeight = 80;
     float rectWidth = 80;
-    float x = 50;
-    float y = 100;
+    float x = 0;
+    float y = 40;
   
-      if(SymbolEncodoing){
-         // Apply Encodings
-         fill(0,0,0);
-         stroke(0,0,0);
-         textSize(rectHeight);
-         text(theText,x,y);
-         textSize(12);
-       }
-     
+    fill(192); stroke(0,255);
+    rect(x,y+rectHeight/2,80,80);
+      
        if(RectangleEncoding){
            fill(255); stroke(0);
            float halfWidth = rectWidth/2;
@@ -116,20 +112,27 @@ public class EncodingWindow extends PApplet {
            pushMatrix();
            if(AnimateEncoding){
              rectMode(CENTER);  // Set rectMode to CENTER
-             translate(x+halfWidth,y-halfWidth);
+             translate(x+halfWidth,y+rectHeight);
              rotate(radians(spinRotation));
              rect(0,0,halfWidth,halfHeight);
              rectMode(CORNER);  // Set rectMode to CENTER
              spinRotation++;
            }
            else{
-             rect(x+halfWidth/2,y-halfWidth*1.5,halfWidth,halfHeight);
+             rect(x+halfWidth/2,y+halfHeight,halfWidth,halfHeight);
            }   
            popMatrix();
        }
-        
-      fill(192); stroke(0,255);
-      rect(x,y,80,80);
+       if(SymbolEncodoing){
+         // Apply Encodings
+         fill(0);
+         stroke(0);
+         textSize(30);
+         text(theText,x+rectWidth/2,y+rectHeight);
+         textSize(rectHeight);
+         theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
+       }
+
   }
     
     void controlEvent(ControlEvent theEvent) {
@@ -140,9 +143,7 @@ public class EncodingWindow extends PApplet {
     */
     public void EncodeSelected(){
       theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
-      //if(theText.length() > 0){
-        cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
-      //}
+      cd.encodeNodesWith(1,true,theText,AnimateEncoding,RectangleEncoding,SymbolEncodoing);
     }
     /*
       UnEncode Selected

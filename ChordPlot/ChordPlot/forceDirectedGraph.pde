@@ -65,31 +65,6 @@ public class forceDirectedGraphWindow extends PApplet {
         
     fill(0); stroke(0,255);
      
-          // Draw nodes
-      for(int i =0; i < nodes.size(); ++i){
-          stroke(0); fill(0);
-          
-          // Set the nodes boundaries
-          if(nodes.get(i).fdg_x > width){
-             nodes.get(i).fdg_x = width;
-          }
-          // Set the nodes boundaries
-          if(nodes.get(i).fdg_x < 0){
-             nodes.get(i).fdg_x = 0;
-          }
-          // Set the nodes boundaries
-          if(nodes.get(i).fdg_y > height){
-             nodes.get(i).fdg_y = height;
-          }
-          // Set the nodes boundaries
-          if(nodes.get(i).fdg_y < 0){
-             nodes.get(i).fdg_y = 0;
-          }          
-          
-          // Draw the actual node last (Might need to do this in a separate loop so things do not overlap
-         
-          ellipse(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
-      }
       
       // Perform the actual simulation and apply physical forces to the nodes
       if(simulationSteps < maxSimulationSteps){
@@ -145,6 +120,34 @@ public class forceDirectedGraphWindow extends PApplet {
                       }
                     }
                   }  
+      }
+      
+      
+      
+          // Draw nodes
+      for(int i =0; i < nodes.size(); ++i){
+          stroke(0); fill(0);
+          
+          // Set the nodes boundaries
+          if(nodes.get(i).fdg_x > width){
+             nodes.get(i).fdg_x = width;
+          }
+          // Set the nodes boundaries
+          if(nodes.get(i).fdg_x < 0){
+             nodes.get(i).fdg_x = 0;
+          }
+          // Set the nodes boundaries
+          if(nodes.get(i).fdg_y > height){
+             nodes.get(i).fdg_y = height;
+          }
+          // Set the nodes boundaries
+          if(nodes.get(i).fdg_y < 0){
+             nodes.get(i).fdg_y = 0;
+          }          
+          
+          // Draw the actual node last (Might need to do this in a separate loop so things do not overlap
+         
+          ellipse(nodes.get(i).fdg_x, nodes.get(i).fdg_y, 5, 5);
       }
       
       
