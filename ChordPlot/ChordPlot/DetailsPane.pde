@@ -41,6 +41,7 @@ public class DetailsPane extends PApplet {
   // Our control panel
   ControlP5 detailsPanel;
   
+  Textarea myTextArea;
   // re-route output from text to this details pane.
   //Textarea myConsoleTextarea;
   //Println console;
@@ -51,6 +52,15 @@ public class DetailsPane extends PApplet {
   void initGUI(){
       detailsPanel = new ControlP5(this);
       
+      myTextArea = detailsPanel.addTextarea("txt")
+                  .setPosition(0,0)
+                  .setSize(width-180,height)
+                  .setFont(createFont("arial",12))
+                  .setLineHeight(14)
+                  .setColor(color(128))
+                  .setColorBackground(color(255,100))
+                  .setColorForeground(color(255,100));
+                  ;
       
 // ==================================v Mark/Output v==================================      
               // create a new button for something
@@ -231,7 +241,8 @@ public class DetailsPane extends PApplet {
     
     fill(0); stroke(0,255);
     if(dataString!=null){
-      text(dataString.getString(), 0,0, xSize, ySize);
+      myTextArea.setText(dataString.getString());
+      //text(dataString.getString(), 0,0, xSize, ySize);
     }
   }
   
