@@ -74,7 +74,7 @@ public class EncodingWindow extends PApplet {
   }
 
   public void settings() {
-    size(280, 200);
+    size(270, 180);
     smooth();
   }
   public void setup() { 
@@ -129,7 +129,9 @@ public class EncodingWindow extends PApplet {
          fill(0);
          stroke(0);
          textSize(30);
+         textAlign(CENTER);
          text(theText,x+rectWidth/2,y+rectHeight);
+         textAlign(LEFT);
          textSize(rectHeight);
          theText = encodingPanel.get(Textfield.class,"EncodeSymbol").getText(); 
        }
