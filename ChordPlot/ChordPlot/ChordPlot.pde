@@ -74,7 +74,7 @@ void setup(){
   //String filename = "/home/mdshah/Desktop/LLVMSample/blah.dot"; // has branch weights
   
   // Uncomment out the dataset you want to use.
-  String filename = "./Blender/fullDot.dot"; // Attempt to load Soot data
+  String filename = "./fullDotOgre.dot"; // Attempt to load Soot data
   //  filename = "horde3d.dot"; // Horde3D
   //filename = "fullDotOgre.dot";  // Load Ogre Data
   

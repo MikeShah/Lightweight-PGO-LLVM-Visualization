@@ -57,7 +57,7 @@ public class DetailsPane extends PApplet {
                   .setSize(width-180,height)
                   .setFont(createFont("arial",12))
                   .setLineHeight(14)
-                  .setColor(color(128))
+                  .setColor(color(0))
                   .setColorBackground(color(255,100))
                   .setColorForeground(color(255,100));
                   ;
