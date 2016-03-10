@@ -75,8 +75,9 @@ void setup(){
   
   // Uncomment out the dataset you want to use.
   String filename = "./fullDotOgre.dot"; // Attempt to load Soot data
-  //  filename = "horde3d.dot"; // Horde3D
+   filename = "horde3d.dot"; // Horde3D
   //filename = "fullDotOgre.dot";  // Load Ogre Data
+  filename = "Sunflow/VisualizatoinInput.dot";
   
   // Our base visualizations
   // It is best practice to intialize this first since we reference 'cd' across
