@@ -38,6 +38,8 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   int columnNumber;
   String sourceFile;
   
+  String packageName;  // If in Java, store the package name
+  
   // Encodings
   float c;  // the color of the node
   boolean stroke_encode=false;
@@ -57,6 +59,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   public nodeMetaData(String name, String extra_information, String attributes, String annotations, String metaData, String OpCodes, int PGOData, String PerfData, String ControlFlowData, int bitCodeSize, int lineNumber, int columnNumber, String sourceFile){
     
     this.name = name;
+    this.packageName = name.substring(2,name.indexOf(':'));
     this.extra_information = extra_information;
     this.attributes=attributes;
     this.annotations=annotations;
@@ -84,6 +87,8 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   
   public nodeMetaData(String name){
     this.name = name;
+    this.packageName = name.substring(2,name.indexOf(':'));
+    
     c = 0;
     
     calleeLocations = new ChordNodeList();
@@ -107,6 +112,7 @@ class nodeMetaData implements Comparable<nodeMetaData>{
   public String getAllMetadata(){
     String result = "";
     result += "\nname: "+name + "\n";
+    result += "Namespace/Package: "+packageName + "\n";
     result += "Callees: "+callees +"/"+ max_callees + " Callers:" + callers +"/" + max_callers+ " recursive:" + recursive + " maxNestedLoopCount: " + maxNestedLoopCount + "\n";    
     result += "attributes: "+attributes + "\n";
     result += "metaData: "+metaData + "\n";
